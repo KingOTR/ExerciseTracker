@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/authpanel.tsx","./src/components/dashboardlayout.tsx","./src/components/musclevolumepanel.tsx","./src/lib/firebase.ts","./src/pages/gympage.tsx","./src/pages/sectionpage.tsx"],"version":"5.6.3"}

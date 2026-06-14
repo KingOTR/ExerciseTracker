@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: transparent !important;
+      overflow: visible;
+      width: 100%;
+      height: auto;
+    }
+    body.theme-dark { color-scheme: dark; }
+    body.theme-light { color-scheme: light; }
+    #atlas-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 2px;
+      width: 100%;
+      height: auto;
+      line-height: 0;
+    }
+    .chart {
+      flex: 1 1 50%;
+      max-width: 50%;
+      line-height: 0;
+      overflow: visible;
+    }
+    .body-chart-container {
+      padding: 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+      line-height: 0 !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      display: block !important;
+    }
+    .body-chart-svg {
+      width: 100% !important;
+      height: auto !important;
+      max-width: 100% !important;
+      display: block;
+      overflow: visible;
+    }
+    .body-chart-container > div { padding: 0 !important; }
+    .body-chart-view-label { display: none !important; }
+    body.theme-dark .body-chart-background path {
+      fill: #1e293b !important;
+      stroke: #334155 !important;
+      opacity: 0.35;
+    }
+    body.theme-light .body-chart-background path {
+      fill: #e2e8f0 !important;
+      stroke: #cbd5e1 !important;
+      opacity: 0.4;
+    }
+    body.theme-dark .body-chart-muscle {
+      stroke: #64748b !important;
+      stroke-width: 0.08 !important;
+    }
+    body.theme-light .body-chart-muscle {
+      stroke: #475569 !important;
+      stroke-width: 0.08 !important;
+    }
+    .body-chart-muscle { pointer-events: auto !important; cursor: pointer !important; }
+  </style>
+  <script src="body-muscles.umd.min.js"></script>
+</head>
+<body class="theme-light">
+  <div id="atlas-row">
+    <div id="front" class="chart"></div>
+    <div id="back" class="chart"></div>
+  </div>
+  <script>
+    let frontChart = null;
+    let backChart = null;
+
+    function notifyMuscleTap(id) {
+      if (!id || !window.AndroidBridge || typeof AndroidBridge.onMuscleClicked !== "function") return;
+      AndroidBridge.onMuscleClicked(id);
+    }
+
+    function muscleTapFromEvent(ev) {
+      var node = ev.target;
+      while (node && node !== document.body) {
+        var id = node.id || node.getAttribute("data-muscle-id") || node.getAttribute("data-name");
+        if (id && id.indexOf("body-chart") < 0 && id !== "front" && id !== "back" && id !== "atlas-row") {
+          ev.preventDefault();
+          ev.stopPropagation();
+          notifyMuscleTap(id);
+          return;
+        }
+        node = node.parentElement;
+      }
+    }
+
+    function ensureCharts() {
+      if (typeof BodyMuscles === "undefined") return false;
+      const { BodyChart, ViewSide } = BodyMuscles;
+      if (!frontChart) {
+        var opts = {
+          view: ViewSide.FRONT,
+          bodyState: {},
+          showViewLabel: false,
+          enableTransitions: false,
+          onMuscleClick: notifyMuscleTap,
+        };
+        frontChart = new BodyChart(document.getElementById("front"), opts);
+        backChart = new BodyChart(document.getElementById("back"), {
+          view: ViewSide.BACK,
+          bodyState: {},
+          showViewLabel: false,
+          enableTransitions: false,
+          onMuscleClick: notifyMuscleTap,
+        });
+      }
+      return true;
+    }
+
+    function fitChartsToContainer() {
+      document.querySelectorAll(".body-chart-svg").forEach(function (svg) {
+        svg.style.setProperty("width", "100%", "important");
+        svg.style.setProperty("height", "auto", "important");
+        svg.style.setProperty("max-height", "none", "important");
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      });
+      document.querySelectorAll(".body-chart-container").forEach(function (el) {
+        el.style.setProperty("height", "auto", "important");
+        el.style.setProperty("padding", "0", "important");
+      });
+      var row = document.getElementById("atlas-row");
+      if (row && window.AndroidBridge && typeof AndroidBridge.onAtlasHeight === "function") {
+        var h = Math.ceil(row.getBoundingClientRect().height);
+        if (h > 20) AndroidBridge.onAtlasHeight(h);
+      }
+    }
+
+    window.attachMuscleTapHandlers = function () {
+      document.querySelectorAll(".body-chart-muscle").forEach(function (el) {
+        el.style.pointerEvents = "auto";
+        el.style.cursor = "pointer";
+        if (el.__etTapBound) return;
+        el.__etTapBound = true;
+        el.addEventListener("click", muscleTapFromEvent);
+        el.addEventListener("touchend", muscleTapFromEvent, { passive: false });
+      });
+    };
+
+    var NON_MUSCLE_TITLE_RE = /Head|Face|Knee|Elbow|Foot|Hand|Spine|Nape|neck/i;
+
+    function dimNonMuscleDecor() {
+      document.querySelectorAll(".body-chart-muscle title").forEach(function (t) {
+        var path = t.parentElement;
+        if (!path || path.tagName !== "PATH") return;
+        var label = (t.textContent || "").trim();
+        if (!NON_MUSCLE_TITLE_RE.test(label)) {
+          path.style.opacity = "";
+          return;
+        }
+        var aria = path.getAttribute("aria-label") || "";
+        var hasLoad = /intensity [1-9]|intensity 10/.test(aria);
+        path.style.opacity = hasLoad ? "1" : "0.14";
+      });
+    }
+
+    function applyStateObject(state) {
+      if (!ensureCharts() || !frontChart || !backChart) return;
+      var upd = { bodyState: state || {}, onMuscleClick: notifyMuscleTap };
+      frontChart.update(upd);
+      backChart.update(upd);
+      requestAnimationFrame(function () {
+        fitChartsToContainer();
+        dimNonMuscleDecor();
+        window.attachMuscleTapHandlers && window.attachMuscleTapHandlers();
+        requestAnimationFrame(function () {
+          fitChartsToContainer();
+          dimNonMuscleDecor();
+        });
+      });
+    }
+
+    window.setAtlasTheme = function (dark) {
+      document.body.classList.toggle("theme-dark", !!dark);
+      document.body.classList.toggle("theme-light", !dark);
+    };
+
+    window.updateMuscleState = function (state) {
+      applyStateObject(state || {});
+    };
+
+    function readInitialFromBridge() {
+      try {
+        var initial = window.AndroidBridge && window.AndroidBridge.getInitialState();
+        if (initial) applyStateObject(JSON.parse(initial));
+        var dark = window.AndroidBridge && window.AndroidBridge.isDarkTheme && window.AndroidBridge.isDarkTheme();
+        window.setAtlasTheme(!!dark);
+      } catch (e) {}
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", readInitialFromBridge);
+    } else {
+      readInitialFromBridge();
+    }
+  </script>
+</body>
+</html>

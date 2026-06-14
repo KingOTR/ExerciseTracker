@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://exercise-tracker.local/schemas/runs.json",
+  "title": "Run",
+  "type": "object",
+  "required": ["id", "startedAtMs", "distanceM", "durationMs", "activityType", "kmSplits"],
+  "properties": {
+    "id": { "type": "integer" },
+    "startedAtMs": { "type": "integer" },
+    "endedAtMs": { "type": ["integer", "null"] },
+    "distanceM": { "type": "number", "minimum": 0 },
+    "durationMs": { "type": "integer", "minimum": 0 },
+    "activityType": { "type": "string", "enum": ["RUN", "BIKE", "WALK"] },
+    "hrSamples": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "kmSplits": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/KmSplit" }
+    }
+  },
+  "$defs": {
+    "KmSplit": {
+      "type": "object",
+      "required": ["kind", "idx", "durationMs", "distanceM"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["KM", "MILE"] },
+        "idx": { "type": "integer", "minimum": 1 },
+        "durationMs": { "type": "integer", "minimum": 0 },
+        "distanceM": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}

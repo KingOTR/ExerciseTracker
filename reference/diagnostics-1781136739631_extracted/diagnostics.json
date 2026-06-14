@@ -1,0 +1,50 @@
+{
+  "exportedAtMs": 1781136739632,
+  "versionName": "0.7.86",
+  "versionCode": 100,
+  "package": "com.exercisetracker.app",
+  "lastCloudSyncMs": 1781133876826,
+  "lastBreadcrumb": "1781133779835: sleep_tab_open",
+  "sleepOvernight": {
+    "overnightActive": false,
+    "sessionValid": false,
+    "startedAtMs": 0,
+    "alarmTargetMs": 0,
+    "windowStartMs": 0,
+    "windowEndMs": 1800000,
+    "sampleCount": 0,
+    "lastStopReason": "append_failed:JSONException",
+    "lastHealthNote": "mic_started",
+    "lastHealthMs": 1781133790506,
+    "recoverableStale": false,
+    "alarmFired": false,
+    "alarmFiredAtMs": 0,
+    "listenServiceInProcess": false,
+    "batteryOptimizationIgnored": true,
+    "schemaVersion": 1,
+    "micGapMs": 0,
+    "micGapCount": 0,
+    "detectedGapMs": 0,
+    "detectedGapCount": 0,
+    "saveSoundClips": true,
+    "sonarBetaRequested": false,
+    "highFidelityAudio": true,
+    "mlPipeline": {
+      "yamnetLoaded": false,
+      "stagingV2Loaded": false,
+      "mlpLoaded": true,
+      "sampleRateHz": 16000,
+      "eventMode": "Bedside heuristics (snore\/talk\/cough\/noise)",
+      "stagingMode": "Distilled MLP + Mel features"
+    }
+  },
+  "processDeathSignals": {
+    "lastStopReason": "append_failed:JSONException",
+    "lastHealthNote": "mic_started",
+    "lastHealthMs": 1781133790506,
+    "listenServiceInProcess": false,
+    "overnightActive": false,
+    "recoverableStale": false,
+    "alarmFired": false
+  }
+}

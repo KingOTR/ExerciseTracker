@@ -1,0 +1,99 @@
+package com.adamglin.phosphoricons.bold;
+
+import androidx.compose.ui.graphics.ColorKt;
+import androidx.compose.ui.graphics.PathFillType;
+import androidx.compose.ui.graphics.SolidColor;
+import androidx.compose.ui.graphics.StrokeCap;
+import androidx.compose.ui.graphics.StrokeJoin;
+import androidx.compose.ui.graphics.vector.ImageVector;
+import androidx.compose.ui.graphics.vector.PathBuilder;
+import androidx.compose.ui.unit.Dp;
+import com.adamglin.phosphoricons.BoldGroup;
+import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
+
+/* compiled from: Compassrose.kt */
+@Metadata(d1 = {"\u0000\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\"\u0015\u0010\u0000\u001a\u00020\u0001*\u00020\u00028F¢\u0006\u0006\u001a\u0004\b\u0003\u0010\u0004\"\u0010\u0010\u0005\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0006"}, d2 = {"CompassRose", "Landroidx/compose/ui/graphics/vector/ImageVector;", "Lcom/adamglin/phosphoricons/BoldGroup;", "getCompassRose", "(Lcom/adamglin/phosphoricons/BoldGroup;)Landroidx/compose/ui/graphics/vector/ImageVector;", "_compassRose", "phosphor_release"}, k = 2, mv = {2, 0, 0}, xi = 48)
+/* loaded from: classes3.dex */
+public final class CompassroseKt {
+    private static ImageVector _compassRose;
+
+    public static final ImageVector getCompassRose(BoldGroup boldGroup) {
+        Intrinsics.checkNotNullParameter(boldGroup, "<this>");
+        ImageVector imageVector = _compassRose;
+        if (imageVector != null) {
+            Intrinsics.checkNotNull(imageVector);
+            return imageVector;
+        }
+        float f = (float) 24.0d;
+        ImageVector.Builder builder = new ImageVector.Builder("CompassRose", Dp.m6303constructorimpl(f), Dp.m6303constructorimpl(f), 256.0f, 256.0f, 0L, 0, false, 224, null);
+        SolidColor solidColor = new SolidColor(ColorKt.Color(4278190080L), null);
+        int m4196getButtKaPHkGw = StrokeCap.INSTANCE.m4196getButtKaPHkGw();
+        int m4207getMiterLxFBmk8 = StrokeJoin.INSTANCE.m4207getMiterLxFBmk8();
+        int m4126getNonZeroRgk1Os = PathFillType.INSTANCE.m4126getNonZeroRgk1Os();
+        PathBuilder pathBuilder = new PathBuilder();
+        pathBuilder.moveTo(247.0f, 116.39f);
+        pathBuilder.lineToRelative(-20.47f, -5.34f);
+        pathBuilder.arcTo(100.27f, 100.27f, 0.0f, false, false, 145.0f, 29.44f);
+        pathBuilder.lineTo(139.61f, 9.0f);
+        pathBuilder.arcToRelative(12.0f, 12.0f, 0.0f, false, false, -23.22f, 0.0f);
+        pathBuilder.lineToRelative(-5.34f, 20.47f);
+        pathBuilder.arcToRelative(100.27f, 100.27f, 0.0f, false, false, -81.61f, 81.61f);
+        pathBuilder.lineTo(9.0f, 116.39f);
+        pathBuilder.arcToRelative(12.0f, 12.0f, 0.0f, false, false, 0.0f, 23.22f);
+        pathBuilder.lineTo(29.44f, 145.0f);
+        pathBuilder.arcToRelative(100.27f, 100.27f, 0.0f, false, false, 81.61f, 81.61f);
+        pathBuilder.lineTo(116.39f, 247.0f);
+        pathBuilder.arcToRelative(12.0f, 12.0f, 0.0f, false, false, 23.22f, 0.0f);
+        pathBuilder.lineTo(145.0f, 226.56f);
+        pathBuilder.arcTo(100.27f, 100.27f, 0.0f, false, false, 226.56f, 145.0f);
+        pathBuilder.lineTo(247.0f, 139.61f);
+        pathBuilder.arcToRelative(12.0f, 12.0f, 0.0f, false, false, 0.0f, -23.22f);
+        pathBuilder.close();
+        pathBuilder.moveTo(200.12f, 104.16f);
+        pathBuilder.lineTo(161.81f, 94.16f);
+        pathBuilder.lineTo(151.81f, 55.85f);
+        pathBuilder.arcTo(76.32f, 76.32f, 0.0f, false, true, 200.15f, 104.16f);
+        pathBuilder.close();
+        pathBuilder.moveTo(117.32f, 100.38f);
+        pathBuilder.lineTo(128.0f, 59.54f);
+        pathBuilder.lineToRelative(10.65f, 40.84f);
+        pathBuilder.lineTo(128.0f, 111.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(128.0f, 145.0f);
+        pathBuilder.lineToRelative(10.65f, 10.65f);
+        pathBuilder.lineTo(128.0f, 196.46f);
+        pathBuilder.lineToRelative(-10.65f, -40.84f);
+        pathBuilder.close();
+        pathBuilder.moveTo(100.38f, 117.38f);
+        pathBuilder.lineTo(111.0f, 128.0f);
+        pathBuilder.lineToRelative(-10.65f, 10.65f);
+        pathBuilder.lineTo(59.54f, 128.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(155.62f, 138.68f);
+        pathBuilder.lineTo(145.0f, 128.0f);
+        pathBuilder.lineToRelative(10.65f, -10.65f);
+        pathBuilder.lineTo(196.46f, 128.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(104.16f, 55.88f);
+        pathBuilder.lineTo(94.16f, 94.19f);
+        pathBuilder.lineTo(55.85f, 104.19f);
+        pathBuilder.arcTo(76.32f, 76.32f, 0.0f, false, true, 104.16f, 55.85f);
+        pathBuilder.close();
+        pathBuilder.moveTo(55.85f, 151.88f);
+        pathBuilder.lineTo(94.16f, 161.88f);
+        pathBuilder.lineTo(104.16f, 200.19f);
+        pathBuilder.arcTo(76.32f, 76.32f, 0.0f, false, true, 55.85f, 151.84f);
+        pathBuilder.close();
+        pathBuilder.moveTo(151.85f, 200.19f);
+        pathBuilder.lineTo(161.85f, 161.88f);
+        pathBuilder.lineTo(200.16f, 151.88f);
+        pathBuilder.arcTo(76.32f, 76.32f, 0.0f, false, true, 151.84f, 200.15f);
+        pathBuilder.close();
+        ImageVector.Builder.m4534addPathoIyEayM$default(builder, pathBuilder.getNodes(), m4126getNonZeroRgk1Os, "", solidColor, 1.0f, null, 1.0f, 0.0f, m4196getButtKaPHkGw, m4207getMiterLxFBmk8, 4.0f, 0.0f, 0.0f, 0.0f, 14336, null);
+        ImageVector build = builder.build();
+        _compassRose = build;
+        Intrinsics.checkNotNull(build);
+        return build;
+    }
+}

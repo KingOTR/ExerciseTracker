@@ -1,0 +1,24 @@
+package com.google.android.gms.internal.p002firebaseauthapi;
+
+import java.security.GeneralSecurityException;
+import javax.crypto.Cipher;
+
+/* compiled from: com.google.firebase:firebase-auth@@23.1.0 */
+/* loaded from: classes3.dex */
+final class zzxm extends ThreadLocal<Cipher> {
+    @Override // java.lang.ThreadLocal
+    protected final /* synthetic */ Cipher initialValue() {
+        return zza();
+    }
+
+    private static Cipher zza() {
+        try {
+            return zzyf.zza.zza("AES/CTR/NoPadding");
+        } catch (GeneralSecurityException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    zzxm() {
+    }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://exercise-tracker.local/schemas/gym-sessions.json",
+  "title": "GymSession",
+  "type": "object",
+  "required": ["id", "startedAtMs", "sets"],
+  "properties": {
+    "id": { "type": "integer" },
+    "startedAtMs": { "type": "integer", "description": "Unix epoch milliseconds" },
+    "endedAtMs": { "type": ["integer", "null"] },
+    "freeDay": { "type": "boolean", "default": false },
+    "sets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/GymSet" }
+    }
+  },
+  "$defs": {
+    "GymSet": {
+      "type": "object",
+      "required": ["exerciseName", "setIndex"],
+      "properties": {
+        "exerciseName": { "type": "string" },
+        "setIndex": { "type": "integer", "minimum": 0 },
+        "reps": { "type": ["integer", "null"], "minimum": 0 },
+        "weightKg": { "type": ["number", "null"], "minimum": 0 },
+        "loggedAtMs": { "type": ["integer", "null"] }
+      }
+    }
+  }
+}

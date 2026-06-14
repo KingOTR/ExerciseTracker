@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DialogWindowTheme" parent="">
+        <item name="android:windowClipToOutline">false</item>
+    </style>
+    <style name="EdgeToEdgeFloatingDialogTheme" parent="@android:style/Theme.DeviceDefault.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowElevation">0dp</item>
+        <item name="android:windowClipToOutline">false</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">@integer/m3c_window_layout_in_display_cutout_mode</item>
+    </style>
+    <style name="EdgeToEdgeFloatingDialogWindowTheme" parent="">
+        <item name="android:dialogTheme">@style/EdgeToEdgeFloatingDialogTheme</item>
+    </style>
+    <style name="FloatingDialogTheme" parent="">
+        <item name="android:windowIsFloating">false</item>
+    </style>
+    <style name="FloatingDialogWindowTheme" parent="">
+        <item name="android:dialogTheme">@style/FloatingDialogTheme</item>
+        <item name="android:windowClipToOutline">false</item>
+    </style>
+    <style name="TextAppearance.Compat.Notification" parent="@android:style/TextAppearance.Material.Notification">
+    </style>
+    <style name="TextAppearance.Compat.Notification.Info" parent="@android:style/TextAppearance.Material.Notification.Info">
+    </style>
+    <style name="TextAppearance.Compat.Notification.Info.Media" parent="@style/TextAppearance.Compat.Notification.Info">
+    </style>
+    <style name="TextAppearance.Compat.Notification.Line2" parent="@style/TextAppearance.Compat.Notification.Info">
+    </style>
+    <style name="TextAppearance.Compat.Notification.Line2.Media" parent="@style/TextAppearance.Compat.Notification.Info.Media">
+    </style>
+    <style name="TextAppearance.Compat.Notification.Media" parent="@style/TextAppearance.Compat.Notification">
+    </style>
+    <style name="TextAppearance.Compat.Notification.Time" parent="@android:style/TextAppearance.Material.Notification.Time">
+    </style>
+    <style name="TextAppearance.Compat.Notification.Time.Media" parent="@style/TextAppearance.Compat.Notification.Time">
+    </style>
+    <style name="TextAppearance.Compat.Notification.Title" parent="@android:style/TextAppearance.Material.Notification.Title">
+    </style>
+    <style name="TextAppearance.Compat.Notification.Title.Media" parent="@style/TextAppearance.Compat.Notification.Title">
+    </style>
+    <style name="Theme.ExerciseTracker" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/ic_launcher_background</item>
+    </style>
+    <style name="Theme.ExerciseTracker.SleepAlarm" parent="@style/Theme.ExerciseTracker">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+    <style name="Theme.ExerciseTracker.Splash" parent="@style/Theme.ExerciseTracker">
+        <item name="android:windowBackground">@color/ic_launcher_background</item>
+    </style>
+    <style name="Theme.Hidden" parent="@android:style/Theme.DeviceDefault">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+    <style name="Theme.PlayCore.Transparent" parent="@android:style/Theme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <style name="Widget.Compat.NotificationActionContainer" parent="">
+        <item name="android:background">@drawable/notification_action_background</item>
+    </style>
+    <style name="Widget.Compat.NotificationActionText" parent="">
+        <item name="android:textAppearance">?android:attr/textAppearanceButton</item>
+        <item name="android:textSize">@dimen/notification_action_text_size</item>
+        <item name="android:textColor">@color/androidx_core_secondary_text_default_material_light</item>
+    </style>
+    <style name="maplibre_LocationComponent" parent="">
+        <item name="maplibre_accuracyAlpha">0.15</item>
+        <item name="maplibre_accuracyColor">@color/maplibre_location_layer_blue</item>
+        <item name="maplibre_backgroundDrawable">@drawable/maplibre_user_stroke_icon</item>
+        <item name="maplibre_backgroundDrawableStale">@drawable/maplibre_user_stroke_icon</item>
+        <item name="maplibre_bearingDrawable">@drawable/maplibre_user_bearing_icon</item>
+        <item name="maplibre_elevation">12dp</item>
+        <item name="maplibre_enableStaleState">true</item>
+        <item name="maplibre_foregroundDrawable">@drawable/maplibre_user_icon</item>
+        <item name="maplibre_foregroundDrawableStale">@drawable/maplibre_user_icon_stale</item>
+        <item name="maplibre_gpsDrawable">@drawable/maplibre_user_puck_icon</item>
+        <item name="maplibre_iconPaddingBottom">0</item>
+        <item name="maplibre_iconPaddingLeft">0</item>
+        <item name="maplibre_iconPaddingRight">0</item>
+        <item name="maplibre_iconPaddingTop">0</item>
+        <item name="maplibre_maxZoomIconScale">1</item>
+        <item name="maplibre_minZoomIconScale">0.6</item>
+        <item name="maplibre_pulsingLocationCircleAlpha">0.4</item>
+        <item name="maplibre_pulsingLocationCircleColor">@color/maplibre_location_layer_blue</item>
+        <item name="maplibre_pulsingLocationCircleDuration">2300</item>
+        <item name="maplibre_pulsingLocationCircleEnabled">false</item>
+        <item name="maplibre_pulsingLocationCircleFadeEnabled">true</item>
+        <item name="maplibre_pulsingLocationCircleInterpolator">decelerate</item>
+        <item name="maplibre_pulsingLocationCircleRadius">35</item>
+        <item name="maplibre_staleStateTimeout">30000</item>
+        <item name="maplibre_trackingGesturesManagement">false</item>
+        <item name="maplibre_trackingInitialMoveThreshold">@dimen/maplibre_locationComponentTrackingInitialMoveThreshold</item>
+        <item name="maplibre_trackingMultiFingerMoveThreshold">@dimen/maplibre_locationComponentTrackingMultiFingerMoveThreshold</item>
+    </style>
+</resources>

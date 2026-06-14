@@ -1,0 +1,73 @@
+package com.adamglin.phosphoricons.bold;
+
+import androidx.compose.ui.graphics.ColorKt;
+import androidx.compose.ui.graphics.PathFillType;
+import androidx.compose.ui.graphics.SolidColor;
+import androidx.compose.ui.graphics.StrokeCap;
+import androidx.compose.ui.graphics.StrokeJoin;
+import androidx.compose.ui.graphics.vector.ImageVector;
+import androidx.compose.ui.graphics.vector.PathBuilder;
+import androidx.compose.ui.unit.Dp;
+import com.adamglin.phosphoricons.BoldGroup;
+import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
+
+/* compiled from: Smileymelting.kt */
+@Metadata(d1 = {"\u0000\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\"\u0015\u0010\u0000\u001a\u00020\u0001*\u00020\u00028F¢\u0006\u0006\u001a\u0004\b\u0003\u0010\u0004\"\u0010\u0010\u0005\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0006"}, d2 = {"SmileyMelting", "Landroidx/compose/ui/graphics/vector/ImageVector;", "Lcom/adamglin/phosphoricons/BoldGroup;", "getSmileyMelting", "(Lcom/adamglin/phosphoricons/BoldGroup;)Landroidx/compose/ui/graphics/vector/ImageVector;", "_smileyMelting", "phosphor_release"}, k = 2, mv = {2, 0, 0}, xi = 48)
+/* loaded from: classes3.dex */
+public final class SmileymeltingKt {
+    private static ImageVector _smileyMelting;
+
+    public static final ImageVector getSmileyMelting(BoldGroup boldGroup) {
+        Intrinsics.checkNotNullParameter(boldGroup, "<this>");
+        ImageVector imageVector = _smileyMelting;
+        if (imageVector != null) {
+            Intrinsics.checkNotNull(imageVector);
+            return imageVector;
+        }
+        float f = (float) 24.0d;
+        ImageVector.Builder builder = new ImageVector.Builder("SmileyMelting", Dp.m6303constructorimpl(f), Dp.m6303constructorimpl(f), 256.0f, 256.0f, 0L, 0, false, 224, null);
+        SolidColor solidColor = new SolidColor(ColorKt.Color(4278190080L), null);
+        int m4196getButtKaPHkGw = StrokeCap.INSTANCE.m4196getButtKaPHkGw();
+        int m4207getMiterLxFBmk8 = StrokeJoin.INSTANCE.m4207getMiterLxFBmk8();
+        int m4126getNonZeroRgk1Os = PathFillType.INSTANCE.m4126getNonZeroRgk1Os();
+        PathBuilder pathBuilder = new PathBuilder();
+        pathBuilder.moveTo(180.0f, 136.0f);
+        pathBuilder.arcToRelative(16.0f, 16.0f, 0.0f, true, true, -16.0f, -16.0f);
+        pathBuilder.arcTo(16.0f, 16.0f, 0.0f, false, true, 180.0f, 136.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(136.0f, 92.0f);
+        pathBuilder.arcToRelative(16.0f, 16.0f, 0.0f, true, false, -16.0f, 16.0f);
+        pathBuilder.arcTo(16.0f, 16.0f, 0.0f, false, false, 136.0f, 92.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(203.83f, 51.1f);
+        pathBuilder.arcTo(108.0f, 108.0f, 0.0f, false, false, 47.5f, 200.0f);
+        pathBuilder.arcToRelative(12.0f, 12.0f, 0.0f, false, false, 17.89f, -16.0f);
+        pathBuilder.arcToRelative(84.0f, 84.0f, 0.0f, true, true, 125.22f, 0.0f);
+        pathBuilder.arcToRelative(12.0f, 12.0f, 0.0f, false, false, 17.89f, 16.0f);
+        pathBuilder.arcToRelative(108.0f, 108.0f, 0.0f, false, false, -4.67f, -148.9f);
+        pathBuilder.close();
+        pathBuilder.moveTo(140.0f, 164.0f);
+        pathBuilder.horizontalLineToRelative(-4.0f);
+        pathBuilder.curveToRelative(-19.81f, 0.0f, -44.0f, -16.61f, -44.0f, -36.0f);
+        pathBuilder.arcToRelative(36.47f, 36.47f, 0.0f, false, true, 0.5f, -6.0f);
+        pathBuilder.arcToRelative(12.0f, 12.0f, 0.0f, false, false, -23.67f, -4.0f);
+        pathBuilder.arcTo(60.67f, 60.67f, 0.0f, false, false, 68.0f, 128.0f);
+        pathBuilder.curveToRelative(0.0f, 16.1f, 8.0f, 31.46f, 22.49f, 43.25f);
+        pathBuilder.curveTo(103.58f, 181.9f, 120.17f, 188.0f, 136.0f, 188.0f);
+        pathBuilder.horizontalLineToRelative(4.0f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, true, 0.0f, 16.0f);
+        pathBuilder.lineTo(100.0f, 204.0f);
+        pathBuilder.arcToRelative(32.0f, 32.0f, 0.0f, false, false, -32.0f, 32.0f);
+        pathBuilder.arcToRelative(12.0f, 12.0f, 0.0f, false, false, 24.0f, 0.0f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, true, 8.0f, -8.0f);
+        pathBuilder.horizontalLineToRelative(40.0f);
+        pathBuilder.arcToRelative(32.0f, 32.0f, 0.0f, false, false, 0.0f, -64.0f);
+        pathBuilder.close();
+        ImageVector.Builder.m4534addPathoIyEayM$default(builder, pathBuilder.getNodes(), m4126getNonZeroRgk1Os, "", solidColor, 1.0f, null, 1.0f, 0.0f, m4196getButtKaPHkGw, m4207getMiterLxFBmk8, 4.0f, 0.0f, 0.0f, 0.0f, 14336, null);
+        ImageVector build = builder.build();
+        _smileyMelting = build;
+        Intrinsics.checkNotNull(build);
+        return build;
+    }
+}

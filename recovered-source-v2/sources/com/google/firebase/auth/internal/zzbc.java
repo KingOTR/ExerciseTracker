@@ -1,0 +1,23 @@
+package com.google.firebase.auth.internal;
+
+import android.content.Context;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.TaskCompletionSource;
+
+/* compiled from: com.google.firebase:firebase-auth@@23.1.0 */
+/* loaded from: classes4.dex */
+final class zzbc implements OnFailureListener {
+    private final /* synthetic */ TaskCompletionSource zza;
+    private final /* synthetic */ Context zzb;
+
+    zzbc(zzav zzavVar, TaskCompletionSource taskCompletionSource, Context context) {
+        this.zza = taskCompletionSource;
+        this.zzb = context;
+    }
+
+    @Override // com.google.android.gms.tasks.OnFailureListener
+    public final void onFailure(Exception exc) {
+        this.zza.setException(exc);
+        zzav.zza(this.zzb);
+    }
+}

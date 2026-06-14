@@ -1,0 +1,26 @@
+package com.google.android.gms.internal.p002firebaseauthapi;
+
+import com.google.firebase.auth.internal.zzaq;
+
+/* compiled from: com.google.firebase:firebase-auth@@23.1.0 */
+/* loaded from: classes3.dex */
+final class zzaab implements zzael<zzahz> {
+    private final /* synthetic */ zzade zza;
+    private final /* synthetic */ zzzk zzb;
+
+    zzaab(zzzk zzzkVar, zzade zzadeVar) {
+        this.zza = zzadeVar;
+        this.zzb = zzzkVar;
+    }
+
+    @Override // com.google.android.gms.internal.p002firebaseauthapi.zzaem
+    public final void zza(String str) {
+        this.zza.zza(zzaq.zza(str));
+    }
+
+    @Override // com.google.android.gms.internal.p002firebaseauthapi.zzael
+    public final /* synthetic */ void zza(zzahz zzahzVar) {
+        zzahz zzahzVar2 = zzahzVar;
+        this.zzb.zza(new zzagl(zzahzVar2.zzd(), zzahzVar2.zzb(), Long.valueOf(zzahzVar2.zza()), "Bearer"), null, null, Boolean.valueOf(zzahzVar2.zzf()), null, this.zza, this);
+    }
+}

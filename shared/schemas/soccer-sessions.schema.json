@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://exercise-tracker.local/schemas/soccer-sessions.json",
+  "title": "SoccerSession",
+  "type": "object",
+  "required": ["id", "kind", "startTimeMs", "playMin", "intensity"],
+  "properties": {
+    "id": { "type": "integer" },
+    "kind": { "type": "string", "enum": ["MATCH", "TRAINING"] },
+    "startTimeMs": { "type": "integer" },
+    "playMin": { "type": "integer", "minimum": 0 },
+    "intensity": { "type": "integer", "minimum": 1, "maximum": 10 },
+    "notes": { "type": ["string", "null"] },
+    "watchSessionId": { "type": ["integer", "null"] }
+  }
+}

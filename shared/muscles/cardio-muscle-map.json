@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "description": "Relative muscle stress distribution for cardio activities. Percentages sum to 100 per activity and scale with distance/duration/steps.",
+  "activities": [
+    {
+      "id": "RUN",
+      "label": "Running",
+      "aliases": ["run", "jog", "jogging", "trail run"],
+      "unit": "per_km",
+      "baseLoadPerUnit": 1.0,
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 12 },
+        { "muscleId": "vastus-lateralis", "percent": 14 },
+        { "muscleId": "vastus-medialis", "percent": 10 },
+        { "muscleId": "biceps-femoris", "percent": 10 },
+        { "muscleId": "semitendinosus", "percent": 8 },
+        { "muscleId": "gluteus-maximus", "percent": 18 },
+        { "muscleId": "gluteus-medius", "percent": 6 },
+        { "muscleId": "gastrocnemius-medial", "percent": 10 },
+        { "muscleId": "gastrocnemius-lateral", "percent": 8 },
+        { "muscleId": "soleus", "percent": 6 },
+        { "muscleId": "hip-flexors", "percent": 5 },
+        { "muscleId": "tibialis-anterior", "percent": 3 }
+      ],
+      "sources": [
+        "Dorn 2012 running biomechanics",
+        "Novacheck 1998 gait muscle activity",
+        "Schoenfeld lower-body running load review"
+      ]
+    },
+    {
+      "id": "BIKE",
+      "label": "Cycling",
+      "aliases": ["bike", "cycling", "ride", "indoor cycling"],
+      "unit": "per_km",
+      "baseLoadPerUnit": 0.65,
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 18 },
+        { "muscleId": "vastus-lateralis", "percent": 28 },
+        { "muscleId": "vastus-medialis", "percent": 22 },
+        { "muscleId": "biceps-femoris", "percent": 6 },
+        { "muscleId": "semitendinosus", "percent": 4 },
+        { "muscleId": "gluteus-maximus", "percent": 12 },
+        { "muscleId": "gastrocnemius-medial", "percent": 4 },
+        { "muscleId": "gastrocnemius-lateral", "percent": 3 },
+        { "muscleId": "soleus", "percent": 3 }
+      ],
+      "sources": [
+        "Ericson 1985 cycling EMG",
+        "ACE cycling muscle activation summary"
+      ]
+    },
+    {
+      "id": "SOCCER",
+      "label": "Soccer",
+      "aliases": ["football", "match", "training"],
+      "unit": "per_minute",
+      "baseLoadPerUnit": 0.35,
+      "intensityScale": true,
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 14 },
+        { "muscleId": "vastus-lateralis", "percent": 14 },
+        { "muscleId": "vastus-medialis", "percent": 10 },
+        { "muscleId": "biceps-femoris", "percent": 10 },
+        { "muscleId": "semitendinosus", "percent": 8 },
+        { "muscleId": "gluteus-maximus", "percent": 14 },
+        { "muscleId": "gluteus-medius", "percent": 8 },
+        { "muscleId": "adductors", "percent": 8 },
+        { "muscleId": "gastrocnemius-medial", "percent": 6 },
+        { "muscleId": "gastrocnemius-lateral", "percent": 5 },
+        { "muscleId": "soleus", "percent": 4 },
+        { "muscleId": "hip-flexors", "percent": 4 },
+        { "muscleId": "obliques", "percent": 3 },
+        { "muscleId": "rectus-abdominis-lower", "percent": 2 }
+      ],
+      "sources": [
+        "Mohr 2010 soccer muscle demands",
+        "Bangsbø intermittent sport EMG reviews"
+      ]
+    },
+    {
+      "id": "STEPS",
+      "label": "Daily Steps",
+      "aliases": ["steps", "walking"],
+      "unit": "per_1000_steps",
+      "baseLoadPerUnit": 0.08,
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 10 },
+        { "muscleId": "vastus-lateralis", "percent": 12 },
+        { "muscleId": "vastus-medialis", "percent": 10 },
+        { "muscleId": "biceps-femoris", "percent": 8 },
+        { "muscleId": "semitendinosus", "percent": 6 },
+        { "muscleId": "gluteus-maximus", "percent": 14 },
+        { "muscleId": "gluteus-medius", "percent": 8 },
+        { "muscleId": "gastrocnemius-medial", "percent": 12 },
+        { "muscleId": "gastrocnemius-lateral", "percent": 10 },
+        { "muscleId": "soleus", "percent": 8 },
+        { "muscleId": "tibialis-anterior", "percent": 6 },
+        { "muscleId": "hip-flexors", "percent": 6 }
+      ],
+      "sources": [
+        "Perry 2010 walking gait EMG",
+        "Light-load lower body distribution consensus"
+      ]
+    }
+  ],
+  "recoveryWindows": {
+    "gymDays": 7,
+    "cardioDays": 7,
+    "stepDays": 3
+  }
+}

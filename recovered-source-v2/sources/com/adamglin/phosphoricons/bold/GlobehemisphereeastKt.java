@@ -1,0 +1,86 @@
+package com.adamglin.phosphoricons.bold;
+
+import androidx.compose.ui.graphics.ColorKt;
+import androidx.compose.ui.graphics.PathFillType;
+import androidx.compose.ui.graphics.SolidColor;
+import androidx.compose.ui.graphics.StrokeCap;
+import androidx.compose.ui.graphics.StrokeJoin;
+import androidx.compose.ui.graphics.vector.ImageVector;
+import androidx.compose.ui.graphics.vector.PathBuilder;
+import androidx.compose.ui.unit.Dp;
+import com.adamglin.phosphoricons.BoldGroup;
+import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
+
+/* compiled from: Globehemisphereeast.kt */
+@Metadata(d1 = {"\u0000\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\"\u0015\u0010\u0000\u001a\u00020\u0001*\u00020\u00028F¢\u0006\u0006\u001a\u0004\b\u0003\u0010\u0004\"\u0010\u0010\u0005\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0006"}, d2 = {"GlobeHemisphereEast", "Landroidx/compose/ui/graphics/vector/ImageVector;", "Lcom/adamglin/phosphoricons/BoldGroup;", "getGlobeHemisphereEast", "(Lcom/adamglin/phosphoricons/BoldGroup;)Landroidx/compose/ui/graphics/vector/ImageVector;", "_globeHemisphereEast", "phosphor_release"}, k = 2, mv = {2, 0, 0}, xi = 48)
+/* loaded from: classes3.dex */
+public final class GlobehemisphereeastKt {
+    private static ImageVector _globeHemisphereEast;
+
+    public static final ImageVector getGlobeHemisphereEast(BoldGroup boldGroup) {
+        Intrinsics.checkNotNullParameter(boldGroup, "<this>");
+        ImageVector imageVector = _globeHemisphereEast;
+        if (imageVector != null) {
+            Intrinsics.checkNotNull(imageVector);
+            return imageVector;
+        }
+        float f = (float) 24.0d;
+        ImageVector.Builder builder = new ImageVector.Builder("GlobeHemisphereEast", Dp.m6303constructorimpl(f), Dp.m6303constructorimpl(f), 256.0f, 256.0f, 0L, 0, false, 224, null);
+        SolidColor solidColor = new SolidColor(ColorKt.Color(4278190080L), null);
+        int m4196getButtKaPHkGw = StrokeCap.INSTANCE.m4196getButtKaPHkGw();
+        int m4207getMiterLxFBmk8 = StrokeJoin.INSTANCE.m4207getMiterLxFBmk8();
+        int m4126getNonZeroRgk1Os = PathFillType.INSTANCE.m4126getNonZeroRgk1Os();
+        PathBuilder pathBuilder = new PathBuilder();
+        pathBuilder.moveTo(128.0f, 20.0f);
+        pathBuilder.arcTo(108.0f, 108.0f, 0.0f, true, false, 236.0f, 128.0f);
+        pathBuilder.arcTo(108.12f, 108.12f, 0.0f, false, false, 128.0f, 20.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(128.0f, 44.0f);
+        pathBuilder.arcToRelative(83.57f, 83.57f, 0.0f, false, true, 44.0f, 12.48f);
+        pathBuilder.verticalLineToRelative(16.0f);
+        pathBuilder.lineTo(151.79f, 96.0f);
+        pathBuilder.lineToRelative(-28.47f, 3.85f);
+        pathBuilder.lineTo(104.62f, 87.6f);
+        pathBuilder.arcToRelative(20.0f, 20.0f, 0.0f, false, false, -28.07f, 5.28f);
+        pathBuilder.lineToRelative(-20.94f, 31.3f);
+        pathBuilder.arcToRelative(19.89f, 19.89f, 0.0f, false, false, -3.38f, 11.0f);
+        pathBuilder.lineToRelative(-0.16f, 28.69f);
+        pathBuilder.arcTo(84.0f, 84.0f, 0.0f, false, true, 128.0f, 44.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(68.41f, 187.14f);
+        pathBuilder.arcTo(20.0f, 20.0f, 0.0f, false, false, 76.0f, 171.55f);
+        pathBuilder.lineToRelative(0.2f, -35.0f);
+        pathBuilder.lineToRelative(18.07f, -27.0f);
+        pathBuilder.lineToRelative(16.62f, 10.88f);
+        pathBuilder.arcToRelative(19.92f, 19.92f, 0.0f, false, false, 14.14f, 3.42f);
+        pathBuilder.lineToRelative(31.47f, -4.26f);
+        pathBuilder.arcTo(20.0f, 20.0f, 0.0f, false, false, 169.0f, 112.79f);
+        pathBuilder.lineTo(191.16f, 87.0f);
+        pathBuilder.arcToRelative(20.15f, 20.15f, 0.0f, false, false, 4.39f, -8.9f);
+        pathBuilder.arcToRelative(83.78f, 83.78f, 0.0f, false, true, 14.12f, 69.48f);
+        pathBuilder.lineToRelative(-11.34f, -10.37f);
+        pathBuilder.arcToRelative(20.08f, 20.08f, 0.0f, false, false, -21.17f, -3.71f);
+        pathBuilder.lineToRelative(-30.45f, 12.66f);
+        pathBuilder.arcToRelative(20.1f, 20.1f, 0.0f, false, false, -12.11f, 15.55f);
+        pathBuilder.lineToRelative(-2.39f, 16.2f);
+        pathBuilder.arcToRelative(20.0f, 20.0f, 0.0f, false, false, 14.71f, 22.26f);
+        pathBuilder.lineToRelative(16.0f, 4.18f);
+        pathBuilder.arcToRelative(83.78f, 83.78f, 0.0f, false, true, -94.47f, -17.24f);
+        pathBuilder.close();
+        pathBuilder.moveTo(185.18f, 189.46f);
+        pathBuilder.lineTo(183.55f, 187.83f);
+        pathBuilder.arcToRelative(20.05f, 20.05f, 0.0f, false, false, -9.08f, -5.22f);
+        pathBuilder.lineToRelative(-18.0f, -4.72f);
+        pathBuilder.lineTo(158.0f, 167.48f);
+        pathBuilder.lineToRelative(26.0f, -10.81f);
+        pathBuilder.lineTo(200.0f, 171.26f);
+        pathBuilder.arcTo(84.84f, 84.84f, 0.0f, false, true, 185.18f, 189.46f);
+        pathBuilder.close();
+        ImageVector.Builder.m4534addPathoIyEayM$default(builder, pathBuilder.getNodes(), m4126getNonZeroRgk1Os, "", solidColor, 1.0f, null, 1.0f, 0.0f, m4196getButtKaPHkGw, m4207getMiterLxFBmk8, 4.0f, 0.0f, 0.0f, 0.0f, 14336, null);
+        ImageVector build = builder.build();
+        _globeHemisphereEast = build;
+        Intrinsics.checkNotNull(build);
+        return build;
+    }
+}

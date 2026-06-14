@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://exercise-tracker.local/schemas/export.json",
+  "title": "ExerciseTrackerExport",
+  "type": "object",
+  "required": ["exportedAtMs", "version", "gymSessions", "runs", "soccerSessions", "sleep"],
+  "properties": {
+    "exportedAtMs": { "type": "integer" },
+    "version": { "type": "integer" },
+    "gymSessions": {
+      "type": "array",
+      "items": { "$ref": "gym-sessions.schema.json" }
+    },
+    "runs": {
+      "type": "array",
+      "items": { "$ref": "runs.schema.json" }
+    },
+    "soccerSessions": {
+      "type": "array",
+      "items": { "$ref": "soccer-sessions.schema.json" }
+    },
+    "sleep": {
+      "type": "array",
+      "items": { "$ref": "sleep.schema.json" }
+    }
+  }
+}

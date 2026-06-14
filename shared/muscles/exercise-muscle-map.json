@@ -1,0 +1,1371 @@
+{
+  "version": 1,
+  "description": "Exercise-to-muscle activation loads (percent sum ~100). Sources in shared/muscles/README.md.",
+  "exercises": [
+    {
+      "name": "Bench Press",
+      "aliases": ["barbell bench press", "flat bench press", "bb bench"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 35 },
+        { "muscleId": "pec-major-lower", "percent": 25 },
+        { "muscleId": "pec-major-upper", "percent": 10 },
+        { "muscleId": "triceps-lateral", "percent": 12 },
+        { "muscleId": "triceps-long", "percent": 8 },
+        { "muscleId": "deltoid-anterior", "percent": 10 }
+      ],
+      "sources": ["Saeterbakken & Fimland 2013 EMG", "ACE bench press study"]
+    },
+    {
+      "name": "Incline Bench Press",
+      "aliases": ["incline barbell bench", "incline bb bench"],
+      "loads": [
+        { "muscleId": "pec-major-upper", "percent": 45 },
+        { "muscleId": "pec-major-mid", "percent": 20 },
+        { "muscleId": "deltoid-anterior", "percent": 18 },
+        { "muscleId": "triceps-lateral", "percent": 10 },
+        { "muscleId": "triceps-long", "percent": 7 }
+      ],
+      "sources": ["Barnett 1995 incline EMG"]
+    },
+    {
+      "name": "Decline Bench Press",
+      "aliases": ["decline barbell bench"],
+      "loads": [
+        { "muscleId": "pec-major-lower", "percent": 50 },
+        { "muscleId": "pec-major-mid", "percent": 25 },
+        { "muscleId": "triceps-lateral", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 10 }
+      ],
+      "sources": ["Barnett 1995 decline EMG"]
+    },
+    {
+      "name": "Dumbbell Bench Press",
+      "aliases": ["db bench press", "dumbbell flat bench"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 40 },
+        { "muscleId": "pec-major-lower", "percent": 22 },
+        { "muscleId": "pec-major-upper", "percent": 8 },
+        { "muscleId": "triceps-lateral", "percent": 12 },
+        { "muscleId": "triceps-long", "percent": 8 },
+        { "muscleId": "deltoid-anterior", "percent": 10 }
+      ],
+      "sources": ["Farias 2017 DB vs BB EMG"]
+    },
+    {
+      "name": "Machine Chest Press",
+      "aliases": ["chest press machine", "seated chest press"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 45 },
+        { "muscleId": "pec-major-lower", "percent": 25 },
+        { "muscleId": "triceps-lateral", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 15 }
+      ],
+      "sources": ["Machine press EMG consensus"]
+    },
+    {
+      "name": "Cable Fly",
+      "aliases": ["cable chest fly", "standing cable fly"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 40 },
+        { "muscleId": "pec-major-lower", "percent": 35 },
+        { "muscleId": "pec-major-upper", "percent": 15 },
+        { "muscleId": "serratus-anterior", "percent": 10 }
+      ],
+      "sources": ["Schanke 2012 fly EMG"]
+    },
+    {
+      "name": "Dumbbell Fly",
+      "aliases": ["db fly", "chest fly"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 38 },
+        { "muscleId": "pec-major-lower", "percent": 32 },
+        { "muscleId": "pec-major-upper", "percent": 20 },
+        { "muscleId": "deltoid-anterior", "percent": 10 }
+      ],
+      "sources": ["Schanke 2012"]
+    },
+    {
+      "name": "Push-Up",
+      "aliases": ["push up", "press up"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 35 },
+        { "muscleId": "pec-major-lower", "percent": 20 },
+        { "muscleId": "triceps-lateral", "percent": 20 },
+        { "muscleId": "deltoid-anterior", "percent": 15 },
+        { "muscleId": "serratus-anterior", "percent": 10 }
+      ],
+      "sources": ["Cogley 2005 push-up EMG"]
+    },
+    {
+      "name": "Dip",
+      "aliases": ["chest dip", "parallel bar dip"],
+      "loads": [
+        { "muscleId": "pec-major-lower", "percent": 35 },
+        { "muscleId": "triceps-lateral", "percent": 30 },
+        { "muscleId": "triceps-long", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 12 },
+        { "muscleId": "pec-major-mid", "percent": 8 }
+      ],
+      "sources": ["Bouillon 2009 dip EMG"]
+    },
+    {
+      "name": "Overhead Shoulder Press",
+      "aliases": ["overhead press", "ohp", "military press", "barbell shoulder press"],
+      "loads": [
+        { "muscleId": "deltoid-anterior", "percent": 35 },
+        { "muscleId": "deltoid-lateral", "percent": 20 },
+        { "muscleId": "triceps-long", "percent": 20 },
+        { "muscleId": "triceps-lateral", "percent": 10 },
+        { "muscleId": "traps-upper", "percent": 10 },
+        { "muscleId": "serratus-anterior", "percent": 5 }
+      ],
+      "sources": ["Saeterbakken 2013 OHP EMG", "ACE shoulder press"]
+    },
+    {
+      "name": "Dumbbell Shoulder Press",
+      "aliases": ["db shoulder press", "seated db press"],
+      "loads": [
+        { "muscleId": "deltoid-anterior", "percent": 38 },
+        { "muscleId": "deltoid-lateral", "percent": 22 },
+        { "muscleId": "triceps-long", "percent": 18 },
+        { "muscleId": "traps-upper", "percent": 12 },
+        { "muscleId": "triceps-lateral", "percent": 10 }
+      ],
+      "sources": ["Saeterbakken 2013"]
+    },
+    {
+      "name": "Lateral Raise",
+      "aliases": ["dumbbell lateral raise", "side raise", "db lateral raise"],
+      "loads": [
+        { "muscleId": "deltoid-lateral", "percent": 70 },
+        { "muscleId": "deltoid-anterior", "percent": 15 },
+        { "muscleId": "traps-upper", "percent": 10 },
+        { "muscleId": "serratus-anterior", "percent": 5 }
+      ],
+      "sources": ["Botton 2013 lateral raise EMG", "ACE lateral raise"]
+    },
+    {
+      "name": "Front Raise",
+      "aliases": ["dumbbell front raise"],
+      "loads": [
+        { "muscleId": "deltoid-anterior", "percent": 75 },
+        { "muscleId": "deltoid-lateral", "percent": 10 },
+        { "muscleId": "pec-major-upper", "percent": 10 },
+        { "muscleId": "traps-upper", "percent": 5 }
+      ],
+      "sources": ["Botton 2013"]
+    },
+    {
+      "name": "Rear Delt Fly",
+      "aliases": ["reverse fly", "bent over rear delt fly", "face pull light"],
+      "loads": [
+        { "muscleId": "deltoid-posterior", "percent": 55 },
+        { "muscleId": "rhomboids", "percent": 20 },
+        { "muscleId": "traps-mid", "percent": 15 },
+        { "muscleId": "deltoid-lateral", "percent": 10 }
+      ],
+      "sources": ["Andersen 2014 rear delt EMG"]
+    },
+    {
+      "name": "Face Pull",
+      "aliases": ["cable face pull"],
+      "loads": [
+        { "muscleId": "deltoid-posterior", "percent": 40 },
+        { "muscleId": "rhomboids", "percent": 25 },
+        { "muscleId": "traps-mid", "percent": 20 },
+        { "muscleId": "traps-lower", "percent": 10 },
+        { "muscleId": "deltoid-lateral", "percent": 5 }
+      ],
+      "sources": ["Andersen 2014"]
+    },
+    {
+      "name": "Upright Row",
+      "aliases": ["barbell upright row"],
+      "loads": [
+        { "muscleId": "deltoid-lateral", "percent": 35 },
+        { "muscleId": "traps-upper", "percent": 30 },
+        { "muscleId": "deltoid-anterior", "percent": 15 },
+        { "muscleId": "biceps-short-head", "percent": 12 },
+        { "muscleId": "biceps-long-head", "percent": 8 }
+      ],
+      "sources": ["McAllister 2013 upright row"]
+    },
+    {
+      "name": "Pull-Up",
+      "aliases": ["pull up", "chin up wide", "overhand pull-up"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 35 },
+        { "muscleId": "lats-lower", "percent": 15 },
+        { "muscleId": "biceps-long-head", "percent": 20 },
+        { "muscleId": "biceps-short-head", "percent": 10 },
+        { "muscleId": "rhomboids", "percent": 10 },
+        { "muscleId": "brachialis", "percent": 10 }
+      ],
+      "sources": ["Youdas 2010 pull-up EMG", "ACE pull-up"]
+    },
+    {
+      "name": "Chin-Up",
+      "aliases": ["chin up", "underhand pull-up"],
+      "loads": [
+        { "muscleId": "biceps-long-head", "percent": 30 },
+        { "muscleId": "biceps-short-head", "percent": 20 },
+        { "muscleId": "lats-mid", "percent": 25 },
+        { "muscleId": "lats-lower", "percent": 10 },
+        { "muscleId": "brachialis", "percent": 10 },
+        { "muscleId": "rhomboids", "percent": 5 }
+      ],
+      "sources": ["Youdas 2010"]
+    },
+    {
+      "name": "Lat Pulldown",
+      "aliases": ["lat pull down", "wide grip lat pulldown", "cable lat pulldown"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 40 },
+        { "muscleId": "lats-lower", "percent": 15 },
+        { "muscleId": "biceps-long-head", "percent": 18 },
+        { "muscleId": "biceps-short-head", "percent": 12 },
+        { "muscleId": "rhomboids", "percent": 10 },
+        { "muscleId": "brachialis", "percent": 5 }
+      ],
+      "sources": ["Signorile 2002 lat pulldown EMG", "ACE lat pulldown"]
+    },
+    {
+      "name": "Barbell Row",
+      "aliases": ["bent over row", "bb row", "pendlay row"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 25 },
+        { "muscleId": "lats-lower", "percent": 15 },
+        { "muscleId": "rhomboids", "percent": 20 },
+        { "muscleId": "traps-mid", "percent": 15 },
+        { "muscleId": "biceps-long-head", "percent": 12 },
+        { "muscleId": "erector-spinae", "percent": 8 },
+        { "muscleId": "biceps-short-head", "percent": 5 }
+      ],
+      "sources": ["Fenwick 2009 row EMG"]
+    },
+    {
+      "name": "Dumbbell Row",
+      "aliases": ["single arm db row", "one arm row"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 30 },
+        { "muscleId": "lats-lower", "percent": 15 },
+        { "muscleId": "rhomboids", "percent": 20 },
+        { "muscleId": "biceps-long-head", "percent": 15 },
+        { "muscleId": "traps-mid", "percent": 10 },
+        { "muscleId": "biceps-short-head", "percent": 10 }
+      ],
+      "sources": ["Fenwick 2009"]
+    },
+    {
+      "name": "Cable Row",
+      "aliases": ["seated cable row", "low row"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 28 },
+        { "muscleId": "rhomboids", "percent": 22 },
+        { "muscleId": "traps-mid", "percent": 18 },
+        { "muscleId": "biceps-long-head", "percent": 15 },
+        { "muscleId": "lats-lower", "percent": 10 },
+        { "muscleId": "biceps-short-head", "percent": 7 }
+      ],
+      "sources": ["Lehman 2004 seated row EMG"]
+    },
+    {
+      "name": "T-Bar Row",
+      "aliases": ["t bar row", "landmine row"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 30 },
+        { "muscleId": "rhomboids", "percent": 20 },
+        { "muscleId": "traps-mid", "percent": 18 },
+        { "muscleId": "lats-lower", "percent": 12 },
+        { "muscleId": "biceps-long-head", "percent": 12 },
+        { "muscleId": "erector-spinae", "percent": 8 }
+      ],
+      "sources": ["Fenwick 2009"]
+    },
+    {
+      "name": "Deadlift",
+      "aliases": ["conventional deadlift", "barbell deadlift"],
+      "loads": [
+        { "muscleId": "erector-spinae", "percent": 28 },
+        { "muscleId": "gluteus-maximus", "percent": 22 },
+        { "muscleId": "biceps-femoris", "percent": 18 },
+        { "muscleId": "semitendinosus", "percent": 10 },
+        { "muscleId": "traps-mid", "percent": 10 },
+        { "muscleId": "rectus-femoris", "percent": 7 },
+        { "muscleId": "forearm-flexors", "percent": 5 }
+      ],
+      "sources": ["Hamlyn 2007 deadlift EMG", "ACE deadlift"]
+    },
+    {
+      "name": "Romanian Deadlift",
+      "aliases": ["rdl", "romanian dl", "stiff leg deadlift"],
+      "loads": [
+        { "muscleId": "biceps-femoris", "percent": 30 },
+        { "muscleId": "semitendinosus", "percent": 20 },
+        { "muscleId": "gluteus-maximus", "percent": 28 },
+        { "muscleId": "erector-spinae", "percent": 15 },
+        { "muscleId": "forearm-flexors", "percent": 7 }
+      ],
+      "sources": ["McAllister 2014 RDL EMG"]
+    },
+    {
+      "name": "Sumo Deadlift",
+      "aliases": ["sumo dl"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 28 },
+        { "muscleId": "adductors", "percent": 20 },
+        { "muscleId": "erector-spinae", "percent": 20 },
+        { "muscleId": "biceps-femoris", "percent": 12 },
+        { "muscleId": "vastus-medialis", "percent": 10 },
+        { "muscleId": "traps-mid", "percent": 10 }
+      ],
+      "sources": ["Cholewicki 1991 sumo vs conventional"]
+    },
+    {
+      "name": "Back Squat",
+      "aliases": ["barbell squat", "squat", "bb squat", "high bar squat"],
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 18 },
+        { "muscleId": "vastus-lateralis", "percent": 18 },
+        { "muscleId": "vastus-medialis", "percent": 14 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "erector-spinae", "percent": 12 },
+        { "muscleId": "biceps-femoris", "percent": 8 },
+        { "muscleId": "adductors", "percent": 5 }
+      ],
+      "sources": ["Caterisano 2002 squat depth EMG", "ACE squat"]
+    },
+    {
+      "name": "Front Squat",
+      "aliases": ["barbell front squat"],
+      "loads": [
+        { "muscleId": "vastus-medialis", "percent": 22 },
+        { "muscleId": "rectus-femoris", "percent": 20 },
+        { "muscleId": "vastus-lateralis", "percent": 18 },
+        { "muscleId": "gluteus-maximus", "percent": 18 },
+        { "muscleId": "erector-spinae", "percent": 12 },
+        { "muscleId": "traps-upper", "percent": 10 }
+      ],
+      "sources": ["Gullett 2009 front vs back squat"]
+    },
+    {
+      "name": "Goblet Squat",
+      "aliases": ["dumbbell goblet squat"],
+      "loads": [
+        { "muscleId": "vastus-medialis", "percent": 25 },
+        { "muscleId": "rectus-femoris", "percent": 20 },
+        { "muscleId": "gluteus-maximus", "percent": 22 },
+        { "muscleId": "vastus-lateralis", "percent": 18 },
+        { "muscleId": "erector-spinae", "percent": 10 },
+        { "muscleId": "biceps-femoris", "percent": 5 }
+      ],
+      "sources": ["Collins 2018 goblet squat"]
+    },
+    {
+      "name": "Leg Press",
+      "aliases": ["45 degree leg press", "machine leg press"],
+      "loads": [
+        { "muscleId": "vastus-lateralis", "percent": 28 },
+        { "muscleId": "rectus-femoris", "percent": 22 },
+        { "muscleId": "vastus-medialis", "percent": 22 },
+        { "muscleId": "gluteus-maximus", "percent": 18 },
+        { "muscleId": "biceps-femoris", "percent": 10 }
+      ],
+      "sources": ["Escamilla 2001 leg press EMG"]
+    },
+    {
+      "name": "Leg Extension",
+      "aliases": ["machine leg extension", "quad extension"],
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 35 },
+        { "muscleId": "vastus-lateralis", "percent": 35 },
+        { "muscleId": "vastus-medialis", "percent": 30 }
+      ],
+      "sources": ["Ema 2016 leg extension EMG", "ACE leg extension"]
+    },
+    {
+      "name": "Seated Leg Curl",
+      "aliases": ["leg curl", "machine leg curl", "hamstring curl"],
+      "loads": [
+        { "muscleId": "semitendinosus", "percent": 35 },
+        { "muscleId": "semimembranosus", "percent": 30 },
+        { "muscleId": "biceps-femoris", "percent": 35 }
+      ],
+      "sources": ["Mohamed 2014 leg curl EMG"]
+    },
+    {
+      "name": "Lying Leg Curl",
+      "aliases": ["prone leg curl"],
+      "loads": [
+        { "muscleId": "biceps-femoris", "percent": 38 },
+        { "muscleId": "semitendinosus", "percent": 32 },
+        { "muscleId": "semimembranosus", "percent": 30 }
+      ],
+      "sources": ["Mohamed 2014"]
+    },
+    {
+      "name": "Hip Thrust",
+      "aliases": ["barbell hip thrust", "glute bridge weighted"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 55 },
+        { "muscleId": "biceps-femoris", "percent": 15 },
+        { "muscleId": "semitendinosus", "percent": 10 },
+        { "muscleId": "erector-spinae", "percent": 10 },
+        { "muscleId": "adductors", "percent": 10 }
+      ],
+      "sources": ["Contreras 2015 hip thrust EMG", "ACE hip thrust"]
+    },
+    {
+      "name": "Glute Bridge",
+      "aliases": ["bodyweight glute bridge"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 60 },
+        { "muscleId": "biceps-femoris", "percent": 15 },
+        { "muscleId": "semitendinosus", "percent": 10 },
+        { "muscleId": "erector-spinae", "percent": 10 },
+        { "muscleId": "adductors", "percent": 5 }
+      ],
+      "sources": ["Contreras 2015"]
+    },
+    {
+      "name": "Lunge",
+      "aliases": ["walking lunge", "dumbbell lunge", "forward lunge"],
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 20 },
+        { "muscleId": "vastus-lateralis", "percent": 18 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "gluteus-medius", "percent": 12 },
+        { "muscleId": "biceps-femoris", "percent": 15 },
+        { "muscleId": "adductors", "percent": 10 }
+      ],
+      "sources": ["Jonsson 2006 lunge EMG"]
+    },
+    {
+      "name": "Bulgarian Split Squat",
+      "aliases": ["split squat", "rear foot elevated split squat"],
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 22 },
+        { "muscleId": "vastus-medialis", "percent": 20 },
+        { "muscleId": "gluteus-maximus", "percent": 28 },
+        { "muscleId": "gluteus-medius", "percent": 12 },
+        { "muscleId": "biceps-femoris", "percent": 12 },
+        { "muscleId": "adductors", "percent": 6 }
+      ],
+      "sources": ["Muyor 2020 BSS EMG"]
+    },
+    {
+      "name": "Step-Up",
+      "aliases": ["dumbbell step up", "box step up"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 30 },
+        { "muscleId": "rectus-femoris", "percent": 22 },
+        { "muscleId": "vastus-lateralis", "percent": 18 },
+        { "muscleId": "gluteus-medius", "percent": 15 },
+        { "muscleId": "biceps-femoris", "percent": 10 },
+        { "muscleId": "adductors", "percent": 5 }
+      ],
+      "sources": ["Simenz 2012 step-up EMG"]
+    },
+    {
+      "name": "Calf Raise",
+      "aliases": ["standing calf raise", "machine calf raise"],
+      "loads": [
+        { "muscleId": "gastrocnemius-medial", "percent": 45 },
+        { "muscleId": "gastrocnemius-lateral", "percent": 45 },
+        { "muscleId": "soleus", "percent": 10 }
+      ],
+      "sources": ["Hebert-Losier 2012 calf raise EMG"]
+    },
+    {
+      "name": "Seated Calf Raise",
+      "aliases": ["seated calf"],
+      "loads": [
+        { "muscleId": "soleus", "percent": 80 },
+        { "muscleId": "gastrocnemius-medial", "percent": 10 },
+        { "muscleId": "gastrocnemius-lateral", "percent": 10 }
+      ],
+      "sources": ["Hebert-Losier 2012"]
+    },
+    {
+      "name": "Barbell Curl",
+      "aliases": ["bb curl", "standing barbell curl"],
+      "loads": [
+        { "muscleId": "biceps-long-head", "percent": 45 },
+        { "muscleId": "biceps-short-head", "percent": 40 },
+        { "muscleId": "brachialis", "percent": 10 },
+        { "muscleId": "forearm-flexors", "percent": 5 }
+      ],
+      "sources": ["Oliveira 2009 curl EMG", "ACE biceps curl"]
+    },
+    {
+      "name": "Dumbbell Curl",
+      "aliases": ["db curl", "alternating dumbbell curl"],
+      "loads": [
+        { "muscleId": "biceps-long-head", "percent": 42 },
+        { "muscleId": "biceps-short-head", "percent": 42 },
+        { "muscleId": "brachialis", "percent": 11 },
+        { "muscleId": "forearm-flexors", "percent": 5 }
+      ],
+      "sources": ["Oliveira 2009"]
+    },
+    {
+      "name": "Hammer Curl",
+      "aliases": ["neutral grip curl"],
+      "loads": [
+        { "muscleId": "brachialis", "percent": 40 },
+        { "muscleId": "biceps-long-head", "percent": 30 },
+        { "muscleId": "biceps-short-head", "percent": 20 },
+        { "muscleId": "forearm-flexors", "percent": 10 }
+      ],
+      "sources": ["Oliveira 2009"]
+    },
+    {
+      "name": "Preacher Curl",
+      "aliases": ["ez bar preacher curl"],
+      "loads": [
+        { "muscleId": "biceps-short-head", "percent": 50 },
+        { "muscleId": "biceps-long-head", "percent": 35 },
+        { "muscleId": "brachialis", "percent": 10 },
+        { "muscleId": "forearm-flexors", "percent": 5 }
+      ],
+      "sources": ["Oliveira 2009"]
+    },
+    {
+      "name": "Tricep Pushdown",
+      "aliases": ["cable tricep pushdown", "rope pushdown"],
+      "loads": [
+        { "muscleId": "triceps-lateral", "percent": 45 },
+        { "muscleId": "triceps-medial", "percent": 30 },
+        { "muscleId": "triceps-long", "percent": 25 }
+      ],
+      "sources": ["Kholinne 2018 triceps EMG", "ACE triceps"]
+    },
+    {
+      "name": "Skull Crusher",
+      "aliases": ["lying tricep extension", "ez bar skull crusher"],
+      "loads": [
+        { "muscleId": "triceps-long", "percent": 50 },
+        { "muscleId": "triceps-lateral", "percent": 30 },
+        { "muscleId": "triceps-medial", "percent": 20 }
+      ],
+      "sources": ["Kholinne 2018"]
+    },
+    {
+      "name": "Overhead Tricep Extension",
+      "aliases": ["db overhead extension", "french press"],
+      "loads": [
+        { "muscleId": "triceps-long", "percent": 60 },
+        { "muscleId": "triceps-lateral", "percent": 25 },
+        { "muscleId": "triceps-medial", "percent": 15 }
+      ],
+      "sources": ["Kholinne 2018"]
+    },
+    {
+      "name": "Cross Body Tricep Extension",
+      "aliases": ["crossbody tricep extension", "single arm cross body extension"],
+      "loads": [
+        { "muscleId": "triceps-lateral", "percent": 50 },
+        { "muscleId": "triceps-medial", "percent": 30 },
+        { "muscleId": "triceps-long", "percent": 20 }
+      ],
+      "sources": ["Kholinne 2018 cable variations"]
+    },
+    {
+      "name": "Close Grip Bench Press",
+      "aliases": ["cgbp", "narrow grip bench"],
+      "loads": [
+        { "muscleId": "triceps-lateral", "percent": 35 },
+        { "muscleId": "triceps-long", "percent": 25 },
+        { "muscleId": "triceps-medial", "percent": 15 },
+        { "muscleId": "pec-major-mid", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 10 }
+      ],
+      "sources": ["Lockwood 2017 close grip EMG"]
+    },
+    {
+      "name": "Wrist Curl",
+      "aliases": ["barbell wrist curl"],
+      "loads": [
+        { "muscleId": "forearm-flexors", "percent": 90 },
+        { "muscleId": "forearm-extensors", "percent": 10 }
+      ],
+      "sources": ["Forearm isolation consensus"]
+    },
+    {
+      "name": "Reverse Wrist Curl",
+      "aliases": ["wrist extension"],
+      "loads": [
+        { "muscleId": "forearm-extensors", "percent": 90 },
+        { "muscleId": "forearm-flexors", "percent": 10 }
+      ],
+      "sources": ["Forearm isolation consensus"]
+    },
+    {
+      "name": "Crunch",
+      "aliases": ["ab crunch", "cable crunch"],
+      "loads": [
+        { "muscleId": "rectus-abdominis-upper", "percent": 60 },
+        { "muscleId": "rectus-abdominis-lower", "percent": 25 },
+        { "muscleId": "obliques", "percent": 15 }
+      ],
+      "sources": ["Anders 2014 ab EMG"]
+    },
+    {
+      "name": "Hanging Leg Raise",
+      "aliases": ["hanging knee raise", "leg raise"],
+      "loads": [
+        { "muscleId": "rectus-abdominis-lower", "percent": 45 },
+        { "muscleId": "hip-flexors", "percent": 30 },
+        { "muscleId": "rectus-abdominis-upper", "percent": 15 },
+        { "muscleId": "obliques", "percent": 10 }
+      ],
+      "sources": ["Anders 2014"]
+    },
+    {
+      "name": "Plank",
+      "aliases": ["front plank"],
+      "loads": [
+        { "muscleId": "rectus-abdominis-upper", "percent": 30 },
+        { "muscleId": "rectus-abdominis-lower", "percent": 25 },
+        { "muscleId": "obliques", "percent": 20 },
+        { "muscleId": "erector-spinae", "percent": 15 },
+        { "muscleId": "gluteus-maximus", "percent": 10 }
+      ],
+      "sources": ["Escamilla 2010 plank EMG"]
+    },
+    {
+      "name": "Russian Twist",
+      "aliases": ["weighted russian twist"],
+      "loads": [
+        { "muscleId": "obliques", "percent": 55 },
+        { "muscleId": "rectus-abdominis-upper", "percent": 25 },
+        { "muscleId": "hip-flexors", "percent": 12 },
+        { "muscleId": "rectus-abdominis-lower", "percent": 8 }
+      ],
+      "sources": ["Anders 2014"]
+    },
+    {
+      "name": "Ab Wheel Rollout",
+      "aliases": ["ab rollout"],
+      "loads": [
+        { "muscleId": "rectus-abdominis-upper", "percent": 35 },
+        { "muscleId": "rectus-abdominis-lower", "percent": 30 },
+        { "muscleId": "lats-mid", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 10 },
+        { "muscleId": "erector-spinae", "percent": 10 }
+      ],
+      "sources": ["Escamilla 2010"]
+    },
+    {
+      "name": "Hack Squat",
+      "aliases": ["machine hack squat"],
+      "loads": [
+        { "muscleId": "vastus-lateralis", "percent": 30 },
+        { "muscleId": "vastus-medialis", "percent": 28 },
+        { "muscleId": "rectus-femoris", "percent": 22 },
+        { "muscleId": "gluteus-maximus", "percent": 15 },
+        { "muscleId": "biceps-femoris", "percent": 5 }
+      ],
+      "sources": ["Escamilla 2001"]
+    },
+    {
+      "name": "Smith Machine Squat",
+      "aliases": ["smith squat"],
+      "loads": [
+        { "muscleId": "vastus-lateralis", "percent": 25 },
+        { "muscleId": "rectus-femoris", "percent": 22 },
+        { "muscleId": "vastus-medialis", "percent": 20 },
+        { "muscleId": "gluteus-maximus", "percent": 22 },
+        { "muscleId": "erector-spinae", "percent": 11 }
+      ],
+      "sources": ["Schwanbeck 2009 smith vs free squat"]
+    },
+    {
+      "name": "Smith Machine Bench Press",
+      "aliases": ["smith bench"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 40 },
+        { "muscleId": "pec-major-lower", "percent": 22 },
+        { "muscleId": "triceps-lateral", "percent": 18 },
+        { "muscleId": "deltoid-anterior", "percent": 12 },
+        { "muscleId": "pec-major-upper", "percent": 8 }
+      ],
+      "sources": ["Schick 2010 smith bench"]
+    },
+    {
+      "name": "Pec Deck",
+      "aliases": ["pec deck fly", "machine fly"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 45 },
+        { "muscleId": "pec-major-lower", "percent": 30 },
+        { "muscleId": "pec-major-upper", "percent": 15 },
+        { "muscleId": "serratus-anterior", "percent": 10 }
+      ],
+      "sources": ["Schanke 2012"]
+    },
+    {
+      "name": "Incline Dumbbell Press",
+      "aliases": ["incline db press"],
+      "loads": [
+        { "muscleId": "pec-major-upper", "percent": 42 },
+        { "muscleId": "pec-major-mid", "percent": 22 },
+        { "muscleId": "deltoid-anterior", "percent": 18 },
+        { "muscleId": "triceps-lateral", "percent": 10 },
+        { "muscleId": "triceps-long", "percent": 8 }
+      ],
+      "sources": ["Barnett 1995"]
+    },
+    {
+      "name": "Arnold Press",
+      "aliases": ["arnold dumbbell press"],
+      "loads": [
+        { "muscleId": "deltoid-anterior", "percent": 40 },
+        { "muscleId": "deltoid-lateral", "percent": 25 },
+        { "muscleId": "triceps-long", "percent": 18 },
+        { "muscleId": "traps-upper", "percent": 12 },
+        { "muscleId": "deltoid-posterior", "percent": 5 }
+      ],
+      "sources": ["Saeterbakken 2013 press variations"]
+    },
+    {
+      "name": "Shrugs",
+      "aliases": ["barbell shrug", "dumbbell shrug"],
+      "loads": [
+        { "muscleId": "traps-upper", "percent": 70 },
+        { "muscleId": "traps-mid", "percent": 20 },
+        { "muscleId": "forearm-flexors", "percent": 10 }
+      ],
+      "sources": ["Andersen 2008 shrug EMG"]
+    },
+    {
+      "name": "Good Morning",
+      "aliases": ["barbell good morning"],
+      "loads": [
+        { "muscleId": "erector-spinae", "percent": 40 },
+        { "muscleId": "biceps-femoris", "percent": 25 },
+        { "muscleId": "semitendinosus", "percent": 15 },
+        { "muscleId": "gluteus-maximus", "percent": 20 }
+      ],
+      "sources": ["McGill good morning biomechanics"]
+    },
+    {
+      "name": "Hyperextension",
+      "aliases": ["back extension", "45 degree hyperextension"],
+      "loads": [
+        { "muscleId": "erector-spinae", "percent": 50 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "biceps-femoris", "percent": 15 },
+        { "muscleId": "semitendinosus", "percent": 10 }
+      ],
+      "sources": ["Escamilla 2010 back extension"]
+    },
+    {
+      "name": "Cable Pullover",
+      "aliases": ["straight arm pulldown"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 45 },
+        { "muscleId": "lats-lower", "percent": 20 },
+        { "muscleId": "pec-major-lower", "percent": 15 },
+        { "muscleId": "triceps-long", "percent": 10 },
+        { "muscleId": "serratus-anterior", "percent": 10 }
+      ],
+      "sources": ["Benton 2009 pullover EMG"]
+    },
+    {
+      "name": "Chest Supported Row",
+      "aliases": ["incline bench row", "seal row"],
+      "loads": [
+        { "muscleId": "rhomboids", "percent": 28 },
+        { "muscleId": "lats-mid", "percent": 25 },
+        { "muscleId": "traps-mid", "percent": 20 },
+        { "muscleId": "biceps-long-head", "percent": 15 },
+        { "muscleId": "deltoid-posterior", "percent": 12 }
+      ],
+      "sources": ["Lehman 2004"]
+    },
+    {
+      "name": "Inverted Row",
+      "aliases": ["bodyweight row", "australian pull-up"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 30 },
+        { "muscleId": "rhomboids", "percent": 22 },
+        { "muscleId": "biceps-long-head", "percent": 20 },
+        { "muscleId": "traps-mid", "percent": 15 },
+        { "muscleId": "deltoid-posterior", "percent": 13 }
+      ],
+      "sources": ["Youdas 2010"]
+    },
+    {
+      "name": "Farmer's Walk",
+      "aliases": ["farmers carry", "farmer walk"],
+      "loads": [
+        { "muscleId": "forearm-flexors", "percent": 30 },
+        { "muscleId": "traps-upper", "percent": 25 },
+        { "muscleId": "erector-spinae", "percent": 20 },
+        { "muscleId": "gluteus-maximus", "percent": 10 },
+        { "muscleId": "rectus-femoris", "percent": 8 },
+        { "muscleId": "gastrocnemius-medial", "percent": 7 }
+      ],
+      "sources": ["Loaded carry biomechanics consensus"]
+    },
+    {
+      "name": "Kettlebell Swing",
+      "aliases": ["kb swing", "russian swing"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 35 },
+        { "muscleId": "biceps-femoris", "percent": 20 },
+        { "muscleId": "erector-spinae", "percent": 18 },
+        { "muscleId": "rectus-femoris", "percent": 12 },
+        { "muscleId": "deltoid-anterior", "percent": 8 },
+        { "muscleId": "forearm-flexors", "percent": 7 }
+      ],
+      "sources": ["McGill 2012 kettlebell swing"]
+    },
+    {
+      "name": "Box Squat",
+      "aliases": ["box squat barbell"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 30 },
+        { "muscleId": "vastus-lateralis", "percent": 22 },
+        { "muscleId": "rectus-femoris", "percent": 18 },
+        { "muscleId": "biceps-femoris", "percent": 12 },
+        { "muscleId": "erector-spinae", "percent": 12 },
+        { "muscleId": "adductors", "percent": 6 }
+      ],
+      "sources": ["Swinton 2012 box squat"]
+    },
+    {
+      "name": "Nordic Curl",
+      "aliases": ["nordic hamstring curl"],
+      "loads": [
+        { "muscleId": "biceps-femoris", "percent": 40 },
+        { "muscleId": "semitendinosus", "percent": 35 },
+        { "muscleId": "semimembranosus", "percent": 25 }
+      ],
+      "sources": ["Zebis 2013 nordic curl EMG"]
+    },
+    {
+      "name": "Hip Abduction",
+      "aliases": ["cable hip abduction", "machine hip abduction"],
+      "loads": [
+        { "muscleId": "gluteus-medius", "percent": 55 },
+        { "muscleId": "gluteus-minimus", "percent": 35 },
+        { "muscleId": "gluteus-maximus", "percent": 10 }
+      ],
+      "sources": ["Distefano 2009 glute EMG"]
+    },
+    {
+      "name": "Hip Adduction",
+      "aliases": ["machine hip adduction"],
+      "loads": [
+        { "muscleId": "adductors", "percent": 85 },
+        { "muscleId": "rectus-femoris", "percent": 8 },
+        { "muscleId": "gluteus-maximus", "percent": 7 }
+      ],
+      "sources": ["Distefano 2009"]
+    },
+    {
+      "name": "Landmine Press",
+      "aliases": ["single arm landmine press"],
+      "loads": [
+        { "muscleId": "deltoid-anterior", "percent": 35 },
+        { "muscleId": "pec-major-upper", "percent": 25 },
+        { "muscleId": "triceps-long", "percent": 18 },
+        { "muscleId": "serratus-anterior", "percent": 12 },
+        { "muscleId": "obliques", "percent": 10 }
+      ],
+      "sources": ["Landmine press EMG estimates"]
+    },
+    {
+      "name": "Pallof Press",
+      "aliases": ["anti-rotation press"],
+      "loads": [
+        { "muscleId": "obliques", "percent": 45 },
+        { "muscleId": "rectus-abdominis-upper", "percent": 25 },
+        { "muscleId": "gluteus-medius", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 10 },
+        { "muscleId": "erector-spinae", "percent": 5 }
+      ],
+      "sources": ["McGill anti-rotation"]
+    },
+    {
+      "name": "Sled Push",
+      "aliases": ["prowler push"],
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 25 },
+        { "muscleId": "vastus-lateralis", "percent": 22 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "gastrocnemius-medial", "percent": 12 },
+        { "muscleId": "gastrocnemius-lateral", "percent": 10 },
+        { "muscleId": "erector-spinae", "percent": 6 }
+      ],
+      "sources": ["Sled push biomechanics"]
+    },
+    {
+      "name": "Battle Ropes",
+      "aliases": ["rope waves"],
+      "loads": [
+        { "muscleId": "deltoid-anterior", "percent": 25 },
+        { "muscleId": "deltoid-lateral", "percent": 15 },
+        { "muscleId": "forearm-flexors", "percent": 20 },
+        { "muscleId": "rectus-abdominis-upper", "percent": 20 },
+        { "muscleId": "erector-spinae", "percent": 12 },
+        { "muscleId": "triceps-lateral", "percent": 8 }
+      ],
+      "sources": ["Battle rope conditioning EMG"]
+    },
+    {
+      "name": "Thruster",
+      "aliases": ["barbell thruster"],
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 20 },
+        { "muscleId": "gluteus-maximus", "percent": 18 },
+        { "muscleId": "deltoid-anterior", "percent": 22 },
+        { "muscleId": "triceps-long", "percent": 15 },
+        { "muscleId": "vastus-lateralis", "percent": 15 },
+        { "muscleId": "erector-spinae", "percent": 10 }
+      ],
+      "sources": ["CrossFit movement composite estimate"]
+    },
+    {
+      "name": "Clean",
+      "aliases": ["power clean", "hang clean"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 22 },
+        { "muscleId": "traps-upper", "percent": 18 },
+        { "muscleId": "rectus-femoris", "percent": 15 },
+        { "muscleId": "erector-spinae", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 12 },
+        { "muscleId": "biceps-femoris", "percent": 10 },
+        { "muscleId": "forearm-flexors", "percent": 8 }
+      ],
+      "sources": ["Olympic lift EMG composite"]
+    },
+    {
+      "name": "Snatch",
+      "aliases": ["power snatch"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 20 },
+        { "muscleId": "traps-upper", "percent": 20 },
+        { "muscleId": "deltoid-anterior", "percent": 15 },
+        { "muscleId": "erector-spinae", "percent": 15 },
+        { "muscleId": "rectus-femoris", "percent": 12 },
+        { "muscleId": "biceps-femoris", "percent": 10 },
+        { "muscleId": "forearm-flexors", "percent": 8 }
+      ],
+      "sources": ["Olympic lift EMG composite"]
+    },
+    {
+      "name": "Wall Sit",
+      "aliases": ["isometric wall sit"],
+      "loads": [
+        { "muscleId": "vastus-medialis", "percent": 35 },
+        { "muscleId": "rectus-femoris", "percent": 30 },
+        { "muscleId": "vastus-lateralis", "percent": 25 },
+        { "muscleId": "gluteus-maximus", "percent": 10 }
+      ],
+      "sources": ["Isometric quad EMG"]
+    },
+    {
+      "name": "Sissy Squat",
+      "aliases": ["sissy squat bodyweight"],
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 45 },
+        { "muscleId": "vastus-medialis", "percent": 30 },
+        { "muscleId": "vastus-lateralis", "percent": 25 }
+      ],
+      "sources": ["Quad isolation EMG"]
+    },
+    {
+      "name": "Donkey Calf Raise",
+      "aliases": ["donkey calf"],
+      "loads": [
+        { "muscleId": "gastrocnemius-medial", "percent": 48 },
+        { "muscleId": "gastrocnemius-lateral", "percent": 47 },
+        { "muscleId": "soleus", "percent": 5 }
+      ],
+      "sources": ["Hebert-Losier 2012"]
+    },
+    {
+      "name": "Concentration Curl",
+      "aliases": ["seated concentration curl"],
+      "loads": [
+        { "muscleId": "biceps-short-head", "percent": 55 },
+        { "muscleId": "biceps-long-head", "percent": 35 },
+        { "muscleId": "brachialis", "percent": 10 }
+      ],
+      "sources": ["Oliveira 2009"]
+    },
+    {
+      "name": "Cable Curl",
+      "aliases": ["low pulley curl"],
+      "loads": [
+        { "muscleId": "biceps-long-head", "percent": 45 },
+        { "muscleId": "biceps-short-head", "percent": 40 },
+        { "muscleId": "brachialis", "percent": 10 },
+        { "muscleId": "forearm-flexors", "percent": 5 }
+      ],
+      "sources": ["Oliveira 2009"]
+    },
+    {
+      "name": "Diamond Push-Up",
+      "aliases": ["close grip push-up"],
+      "loads": [
+        { "muscleId": "triceps-lateral", "percent": 35 },
+        { "muscleId": "triceps-long", "percent": 20 },
+        { "muscleId": "pec-major-mid", "percent": 25 },
+        { "muscleId": "deltoid-anterior", "percent": 12 },
+        { "muscleId": "serratus-anterior", "percent": 8 }
+      ],
+      "sources": ["Cogley 2005 push-up variations"]
+    },
+    {
+      "name": "Pike Push-Up",
+      "aliases": ["handstand push-up progression"],
+      "loads": [
+        { "muscleId": "deltoid-anterior", "percent": 45 },
+        { "muscleId": "deltoid-lateral", "percent": 20 },
+        { "muscleId": "triceps-long", "percent": 20 },
+        { "muscleId": "traps-upper", "percent": 10 },
+        { "muscleId": "serratus-anterior", "percent": 5 }
+      ],
+      "sources": ["Bodyweight shoulder EMG estimates"]
+    },
+    {
+      "name": "Muscle-Up",
+      "aliases": ["bar muscle up"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 25 },
+        { "muscleId": "biceps-long-head", "percent": 20 },
+        { "muscleId": "triceps-lateral", "percent": 18 },
+        { "muscleId": "pec-major-lower", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 12 },
+        { "muscleId": "rhomboids", "percent": 10 }
+      ],
+      "sources": ["Composite pull-to-push transition"]
+    },
+    {
+      "name": "Pistol Squat",
+      "aliases": ["single leg squat"],
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 25 },
+        { "muscleId": "vastus-medialis", "percent": 22 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "gluteus-medius", "percent": 15 },
+        { "muscleId": "biceps-femoris", "percent": 8 },
+        { "muscleId": "gastrocnemius-medial", "percent": 5 }
+      ],
+      "sources": ["Unilateral squat EMG estimates"]
+    },
+    {
+      "name": "Cable Lateral Raise",
+      "aliases": ["cable side raise"],
+      "loads": [
+        { "muscleId": "deltoid-lateral", "percent": 72 },
+        { "muscleId": "deltoid-anterior", "percent": 13 },
+        { "muscleId": "traps-upper", "percent": 10 },
+        { "muscleId": "serratus-anterior", "percent": 5 }
+      ],
+      "sources": ["Botton 2013"]
+    },
+    {
+      "name": "Reverse Pec Deck",
+      "aliases": ["rear delt machine"],
+      "loads": [
+        { "muscleId": "deltoid-posterior", "percent": 60 },
+        { "muscleId": "rhomboids", "percent": 22 },
+        { "muscleId": "traps-mid", "percent": 13 },
+        { "muscleId": "deltoid-lateral", "percent": 5 }
+      ],
+      "sources": ["Andersen 2014"]
+    },
+    {
+      "name": "Lat Prayer",
+      "aliases": ["lat pullover machine"],
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 50 },
+        { "muscleId": "lats-lower", "percent": 20 },
+        { "muscleId": "triceps-long", "percent": 15 },
+        { "muscleId": "pec-major-lower", "percent": 10 },
+        { "muscleId": "serratus-anterior", "percent": 5 }
+      ],
+      "sources": ["Benton 2009"]
+    },
+    {
+      "name": "Chest Press",
+      "aliases": ["plate loaded chest press"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 42 },
+        { "muscleId": "pec-major-lower", "percent": 24 },
+        { "muscleId": "triceps-lateral", "percent": 16 },
+        { "muscleId": "deltoid-anterior", "percent": 13 },
+        { "muscleId": "pec-major-upper", "percent": 5 }
+      ],
+      "sources": ["Machine press EMG consensus"]
+    },
+    {
+      "name": "Tricep Kickback",
+      "aliases": ["dumbbell kickback"],
+      "loads": [
+        { "muscleId": "triceps-lateral", "percent": 50 },
+        { "muscleId": "triceps-long", "percent": 30 },
+        { "muscleId": "triceps-medial", "percent": 20 }
+      ],
+      "sources": ["Kholinne 2018"]
+    },
+    {
+      "name": "Bench Dip",
+      "aliases": ["tricep bench dip"],
+      "loads": [
+        { "muscleId": "triceps-lateral", "percent": 45 },
+        { "muscleId": "triceps-long", "percent": 30 },
+        { "muscleId": "deltoid-anterior", "percent": 15 },
+        { "muscleId": "pec-major-lower", "percent": 10 }
+      ],
+      "sources": ["Bouillon 2009"]
+    },
+    {
+      "name": "Zottman Curl",
+      "aliases": ["zottman dumbbell curl"],
+      "loads": [
+        { "muscleId": "biceps-long-head", "percent": 30 },
+        { "muscleId": "biceps-short-head", "percent": 30 },
+        { "muscleId": "brachialis", "percent": 15 },
+        { "muscleId": "forearm-extensors", "percent": 15 },
+        { "muscleId": "forearm-flexors", "percent": 10 }
+      ],
+      "sources": ["Oliveira 2009 curl variations"]
+    },
+    {
+      "name": "Spider Curl",
+      "aliases": ["prone incline curl"],
+      "loads": [
+        { "muscleId": "biceps-short-head", "percent": 52 },
+        { "muscleId": "biceps-long-head", "percent": 38 },
+        { "muscleId": "brachialis", "percent": 10 }
+      ],
+      "sources": ["Oliveira 2009"]
+    },
+    {
+      "name": "Cable Crossover",
+      "aliases": ["cable crossover fly"],
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 38 },
+        { "muscleId": "pec-major-lower", "percent": 32 },
+        { "muscleId": "pec-major-upper", "percent": 18 },
+        { "muscleId": "serratus-anterior", "percent": 12 }
+      ],
+      "sources": ["Schanke 2012"]
+    },
+    {
+      "name": "Low Cable Fly",
+      "aliases": ["low to high cable fly"],
+      "loads": [
+        { "muscleId": "pec-major-upper", "percent": 50 },
+        { "muscleId": "pec-major-mid", "percent": 30 },
+        { "muscleId": "deltoid-anterior", "percent": 12 },
+        { "muscleId": "serratus-anterior", "percent": 8 }
+      ],
+      "sources": ["Schanke 2012 angle variations"]
+    },
+    {
+      "name": "High Cable Fly",
+      "aliases": ["high to low cable fly"],
+      "loads": [
+        { "muscleId": "pec-major-lower", "percent": 48 },
+        { "muscleId": "pec-major-mid", "percent": 32 },
+        { "muscleId": "serratus-anterior", "percent": 12 },
+        { "muscleId": "deltoid-anterior", "percent": 8 }
+      ],
+      "sources": ["Schanke 2012"]
+    },
+    {
+      "name": "Rack Pull",
+      "aliases": ["partial deadlift"],
+      "loads": [
+        { "muscleId": "erector-spinae", "percent": 30 },
+        { "muscleId": "traps-upper", "percent": 25 },
+        { "muscleId": "traps-mid", "percent": 15 },
+        { "muscleId": "gluteus-maximus", "percent": 15 },
+        { "muscleId": "forearm-flexors", "percent": 10 },
+        { "muscleId": "biceps-femoris", "percent": 5 }
+      ],
+      "sources": ["Hamlyn 2007 partial ROM deadlift"]
+    },
+    {
+      "name": "Deficit Deadlift",
+      "aliases": ["deficit dl"],
+      "loads": [
+        { "muscleId": "erector-spinae", "percent": 26 },
+        { "muscleId": "gluteus-maximus", "percent": 24 },
+        { "muscleId": "biceps-femoris", "percent": 20 },
+        { "muscleId": "semitendinosus", "percent": 12 },
+        { "muscleId": "rectus-femoris", "percent": 10 },
+        { "muscleId": "forearm-flexors", "percent": 8 }
+      ],
+      "sources": ["Hamlyn 2007"]
+    },
+    {
+      "name": "Trap Bar Deadlift",
+      "aliases": ["hex bar deadlift"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 26 },
+        { "muscleId": "rectus-femoris", "percent": 20 },
+        { "muscleId": "vastus-lateralis", "percent": 15 },
+        { "muscleId": "erector-spinae", "percent": 18 },
+        { "muscleId": "biceps-femoris", "percent": 12 },
+        { "muscleId": "traps-mid", "percent": 9 }
+      ],
+      "sources": ["Swinton 2011 trap bar EMG"]
+    },
+    {
+      "name": "Jefferson Deadlift",
+      "aliases": ["jefferson lift"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "adductors", "percent": 20 },
+        { "muscleId": "erector-spinae", "percent": 22 },
+        { "muscleId": "biceps-femoris", "percent": 15 },
+        { "muscleId": "rectus-femoris", "percent": 10 },
+        { "muscleId": "obliques", "percent": 8 }
+      ],
+      "sources": ["Asymmetric lift biomechanics estimate"]
+    },
+    {
+      "name": "Cable Crunch",
+      "aliases": ["kneeling cable crunch"],
+      "loads": [
+        { "muscleId": "rectus-abdominis-upper", "percent": 55 },
+        { "muscleId": "rectus-abdominis-lower", "percent": 30 },
+        { "muscleId": "obliques", "percent": 15 }
+      ],
+      "sources": ["Anders 2014"]
+    },
+    {
+      "name": "Decline Sit-Up",
+      "aliases": ["decline crunch"],
+      "loads": [
+        { "muscleId": "rectus-abdominis-upper", "percent": 45 },
+        { "muscleId": "rectus-abdominis-lower", "percent": 35 },
+        { "muscleId": "hip-flexors", "percent": 12 },
+        { "muscleId": "obliques", "percent": 8 }
+      ],
+      "sources": ["Anders 2014"]
+    },
+    {
+      "name": "Woodchopper",
+      "aliases": ["cable wood chop"],
+      "loads": [
+        { "muscleId": "obliques", "percent": 50 },
+        { "muscleId": "rectus-abdominis-upper", "percent": 20 },
+        { "muscleId": "deltoid-anterior", "percent": 12 },
+        { "muscleId": "gluteus-medius", "percent": 10 },
+        { "muscleId": "hip-flexors", "percent": 8 }
+      ],
+      "sources": ["Rotational core EMG"]
+    },
+    {
+      "name": "Dead Bug",
+      "aliases": ["alternating dead bug"],
+      "loads": [
+        { "muscleId": "rectus-abdominis-lower", "percent": 40 },
+        { "muscleId": "rectus-abdominis-upper", "percent": 25 },
+        { "muscleId": "hip-flexors", "percent": 20 },
+        { "muscleId": "obliques", "percent": 15 }
+      ],
+      "sources": ["McGill core stability"]
+    },
+    {
+      "name": "Bird Dog",
+      "aliases": ["quadruped extension"],
+      "loads": [
+        { "muscleId": "erector-spinae", "percent": 30 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "gluteus-medius", "percent": 20 },
+        { "muscleId": "rectus-abdominis-lower", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 10 }
+      ],
+      "sources": ["McGill core stability"]
+    },
+    {
+      "name": "Side Plank",
+      "aliases": ["lateral plank"],
+      "loads": [
+        { "muscleId": "obliques", "percent": 45 },
+        { "muscleId": "gluteus-medius", "percent": 25 },
+        { "muscleId": "rectus-abdominis-lower", "percent": 15 },
+        { "muscleId": "deltoid-lateral", "percent": 10 },
+        { "muscleId": "adductors", "percent": 5 }
+      ],
+      "sources": ["Escamilla 2010"]
+    },
+    {
+      "name": "Glute Ham Raise",
+      "aliases": ["ghr", "glute ham developer"],
+      "loads": [
+        { "muscleId": "biceps-femoris", "percent": 35 },
+        { "muscleId": "semitendinosus", "percent": 25 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "erector-spinae", "percent": 15 }
+      ],
+      "sources": ["Zebis 2013 nordic family"]
+    },
+    {
+      "name": "Reverse Lunge",
+      "aliases": ["backward lunge"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 28 },
+        { "muscleId": "rectus-femoris", "percent": 20 },
+        { "muscleId": "vastus-lateralis", "percent": 18 },
+        { "muscleId": "biceps-femoris", "percent": 14 },
+        { "muscleId": "gluteus-medius", "percent": 12 },
+        { "muscleId": "adductors", "percent": 8 }
+      ],
+      "sources": ["Jonsson 2006 lunge direction"]
+    },
+    {
+      "name": "Curtsy Lunge",
+      "aliases": ["curtsy squat"],
+      "loads": [
+        { "muscleId": "gluteus-medius", "percent": 28 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "adductors", "percent": 18 },
+        { "muscleId": "rectus-femoris", "percent": 15 },
+        { "muscleId": "vastus-lateralis", "percent": 14 }
+      ],
+      "sources": ["Lateral lunge EMG estimates"]
+    },
+    {
+      "name": "Cable Kickback",
+      "aliases": ["glute kickback"],
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 70 },
+        { "muscleId": "biceps-femoris", "percent": 15 },
+        { "muscleId": "gluteus-medius", "percent": 10 },
+        { "muscleId": "erector-spinae", "percent": 5 }
+      ],
+      "sources": ["Distefano 2009"]
+    },
+    {
+      "name": "Single Leg RDL",
+      "aliases": ["single leg romanian deadlift"],
+      "loads": [
+        { "muscleId": "biceps-femoris", "percent": 28 },
+        { "muscleId": "gluteus-maximus", "percent": 28 },
+        { "muscleId": "gluteus-medius", "percent": 18 },
+        { "muscleId": "erector-spinae", "percent": 16 },
+        { "muscleId": "semitendinosus", "percent": 10 }
+      ],
+      "sources": ["McAllister 2014 unilateral RDL"]
+    },
+    {
+      "name": "Tibialis Raise",
+      "aliases": ["toe raise", "tibialis anterior raise"],
+      "loads": [
+        { "muscleId": "tibialis-anterior", "percent": 95 },
+        { "muscleId": "gastrocnemius-medial", "percent": 5 }
+      ],
+      "sources": ["Shin isolation consensus"]
+    }
+  ]
+}

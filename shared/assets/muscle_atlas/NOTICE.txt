@@ -1,0 +1,4 @@
+Anatomical muscle SVG paths from body-muscles (Apache License 2.0)
+https://github.com/vulovix/body-muscles
+
+Bundled as body-muscles.umd.min.js in this folder.

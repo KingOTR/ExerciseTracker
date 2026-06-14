@@ -1,0 +1,111 @@
+package com.adamglin.phosphoricons.regular;
+
+import androidx.compose.ui.graphics.ColorKt;
+import androidx.compose.ui.graphics.PathFillType;
+import androidx.compose.ui.graphics.SolidColor;
+import androidx.compose.ui.graphics.StrokeCap;
+import androidx.compose.ui.graphics.StrokeJoin;
+import androidx.compose.ui.graphics.vector.ImageVector;
+import androidx.compose.ui.graphics.vector.PathBuilder;
+import androidx.compose.ui.unit.Dp;
+import com.adamglin.phosphoricons.RegularGroup;
+import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
+
+/* compiled from: Guitar.kt */
+@Metadata(d1 = {"\u0000\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\"\u0015\u0010\u0000\u001a\u00020\u0001*\u00020\u00028F¢\u0006\u0006\u001a\u0004\b\u0003\u0010\u0004\"\u0010\u0010\u0005\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0006"}, d2 = {"Guitar", "Landroidx/compose/ui/graphics/vector/ImageVector;", "Lcom/adamglin/phosphoricons/RegularGroup;", "getGuitar", "(Lcom/adamglin/phosphoricons/RegularGroup;)Landroidx/compose/ui/graphics/vector/ImageVector;", "_guitar", "phosphor_release"}, k = 2, mv = {2, 0, 0}, xi = 48)
+/* loaded from: classes3.dex */
+public final class GuitarKt {
+    private static ImageVector _guitar;
+
+    public static final ImageVector getGuitar(RegularGroup regularGroup) {
+        Intrinsics.checkNotNullParameter(regularGroup, "<this>");
+        ImageVector imageVector = _guitar;
+        if (imageVector != null) {
+            Intrinsics.checkNotNull(imageVector);
+            return imageVector;
+        }
+        float f = (float) 24.0d;
+        ImageVector.Builder builder = new ImageVector.Builder("Guitar", Dp.m6303constructorimpl(f), Dp.m6303constructorimpl(f), 256.0f, 256.0f, 0L, 0, false, 224, null);
+        SolidColor solidColor = new SolidColor(ColorKt.Color(4278190080L), null);
+        int m4196getButtKaPHkGw = StrokeCap.INSTANCE.m4196getButtKaPHkGw();
+        int m4207getMiterLxFBmk8 = StrokeJoin.INSTANCE.m4207getMiterLxFBmk8();
+        int m4126getNonZeroRgk1Os = PathFillType.INSTANCE.m4126getNonZeroRgk1Os();
+        PathBuilder pathBuilder = new PathBuilder();
+        pathBuilder.moveTo(249.66f, 46.34f);
+        pathBuilder.lineToRelative(-40.0f, -40.0f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, false, -11.31f, 11.32f);
+        pathBuilder.lineTo(200.69f, 20.0f);
+        pathBuilder.lineTo(140.52f, 80.16f);
+        pathBuilder.curveTo(117.73f, 68.3f, 92.21f, 69.29f, 76.75f, 84.74f);
+        pathBuilder.arcToRelative(42.27f, 42.27f, 0.0f, false, false, -9.39f, 14.37f);
+        pathBuilder.arcTo(8.24f, 8.24f, 0.0f, false, true, 59.81f, 104.0f);
+        pathBuilder.curveToRelative(-14.59f, 0.49f, -27.26f, 5.72f, -36.65f, 15.11f);
+        pathBuilder.curveTo(11.08f, 131.22f, 6.0f, 148.6f, 8.74f, 168.07f);
+        pathBuilder.curveTo(11.4f, 186.7f, 21.07f, 205.15f, 36.0f, 220.0f);
+        pathBuilder.reflectiveCurveToRelative(33.34f, 24.56f, 52.0f, 27.22f);
+        pathBuilder.arcTo(71.13f, 71.13f, 0.0f, false, false, 98.1f, 248.0f);
+        pathBuilder.curveToRelative(15.32f, 0.0f, 28.83f, -5.23f, 38.76f, -15.16f);
+        pathBuilder.curveToRelative(9.39f, -9.39f, 14.62f, -22.06f, 15.11f, -36.65f);
+        pathBuilder.arcToRelative(8.24f, 8.24f, 0.0f, false, true, 4.92f, -7.55f);
+        pathBuilder.arcToRelative(42.12f, 42.12f, 0.0f, false, false, 14.37f, -9.39f);
+        pathBuilder.curveToRelative(15.45f, -15.46f, 16.44f, -41.0f, 4.58f, -63.77f);
+        pathBuilder.lineTo(236.0f, 55.31f);
+        pathBuilder.lineToRelative(2.34f, 2.34f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, true, false, 11.32f, -11.31f);
+        pathBuilder.close();
+        pathBuilder.moveTo(160.0f, 167.93f);
+        pathBuilder.arcToRelative(26.12f, 26.12f, 0.0f, false, true, -8.95f, 5.83f);
+        pathBuilder.arcToRelative(24.24f, 24.24f, 0.0f, false, false, -15.0f, 21.89f);
+        pathBuilder.curveToRelative(-0.36f, 10.46f, -4.0f, 19.41f, -10.43f, 25.88f);
+        pathBuilder.curveToRelative(-8.44f, 8.43f, -21.0f, 11.95f, -35.36f, 9.89f);
+        pathBuilder.curveTo(75.0f, 229.25f, 59.73f, 221.19f, 47.27f, 208.73f);
+        pathBuilder.reflectiveCurveTo(26.75f, 181.0f, 24.58f, 165.81f);
+        pathBuilder.curveToRelative(-2.0f, -14.37f, 1.46f, -26.92f, 9.89f, -35.36f);
+        pathBuilder.curveTo(40.94f, 124.0f, 49.89f, 120.37f, 60.35f, 120.0f);
+        pathBuilder.horizontalLineToRelative(0.0f);
+        pathBuilder.arcToRelative(24.22f, 24.22f, 0.0f, false, false, 21.89f, -15.0f);
+        pathBuilder.arcToRelative(26.12f, 26.12f, 0.0f, false, true, 5.83f, -9.0f);
+        pathBuilder.curveToRelative(5.49f, -5.49f, 13.0f, -8.13f, 21.38f, -8.13f);
+        pathBuilder.arcToRelative(49.38f, 49.38f, 0.0f, false, true, 19.13f, 4.19f);
+        pathBuilder.lineTo(108.5f, 112.19f);
+        pathBuilder.arcToRelative(32.0f, 32.0f, 0.0f, true, false, 35.31f, 35.31f);
+        pathBuilder.lineToRelative(20.08f, -20.08f);
+        pathBuilder.curveTo(170.41f, 142.71f, 169.47f, 158.41f, 160.0f, 167.93f);
+        pathBuilder.close();
+        pathBuilder.moveTo(149.6f, 106.45f);
+        pathBuilder.arcToRelative(72.9f, 72.9f, 0.0f, false, true, 5.93f, 6.75f);
+        pathBuilder.lineToRelative(-15.42f, 15.42f);
+        pathBuilder.arcToRelative(32.22f, 32.22f, 0.0f, false, false, -12.68f, -12.68f);
+        pathBuilder.lineToRelative(15.42f, -15.43f);
+        pathBuilder.arcTo(73.0f, 73.0f, 0.0f, false, true, 149.55f, 106.45f);
+        pathBuilder.close();
+        pathBuilder.moveTo(112.0f, 128.0f);
+        pathBuilder.arcToRelative(16.0f, 16.0f, 0.0f, false, true, 16.0f, 16.0f);
+        pathBuilder.horizontalLineToRelative(0.0f);
+        pathBuilder.arcToRelative(16.0f, 16.0f, 0.0f, true, true, -16.0f, -16.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(160.85f, 95.15f);
+        pathBuilder.arcToRelative(86.94f, 86.94f, 0.0f, false, false, -6.68f, -6.0f);
+        pathBuilder.lineTo(176.0f, 67.31f);
+        pathBuilder.lineTo(188.69f, 80.0f);
+        pathBuilder.lineToRelative(-21.83f, 21.82f);
+        pathBuilder.arcTo(86.94f, 86.94f, 0.0f, false, false, 160.86f, 95.14f);
+        pathBuilder.close();
+        pathBuilder.moveTo(200.0f, 68.68f);
+        pathBuilder.lineTo(187.32f, 56.0f);
+        pathBuilder.lineTo(212.0f, 31.31f);
+        pathBuilder.lineTo(224.69f, 44.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(93.66f, 194.33f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, true, -11.31f, 11.32f);
+        pathBuilder.lineToRelative(-32.0f, -32.0f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, true, 11.32f, -11.31f);
+        pathBuilder.close();
+        ImageVector.Builder.m4534addPathoIyEayM$default(builder, pathBuilder.getNodes(), m4126getNonZeroRgk1Os, "", solidColor, 1.0f, null, 1.0f, 0.0f, m4196getButtKaPHkGw, m4207getMiterLxFBmk8, 4.0f, 0.0f, 0.0f, 0.0f, 14336, null);
+        ImageVector build = builder.build();
+        _guitar = build;
+        Intrinsics.checkNotNull(build);
+        return build;
+    }
+}

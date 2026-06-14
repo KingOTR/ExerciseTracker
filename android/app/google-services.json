@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "40353237709",
+    "project_id": "exercise-tracker-2936d",
+    "storage_bucket": "exercise-tracker-2936d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40353237709:android:22fc221528db802c58b784",
+        "android_client_info": {
+          "package_name": "com.exercisetracker.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "40353237709-cdkd0og3i4ufu5mhtrh9g0un7i67a7g8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5i_DnEJgUSN5MhUVr7PmM0lSXUJickew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "40353237709-cdkd0og3i4ufu5mhtrh9g0un7i67a7g8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

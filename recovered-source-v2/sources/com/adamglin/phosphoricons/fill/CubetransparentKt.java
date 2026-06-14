@@ -1,0 +1,90 @@
+package com.adamglin.phosphoricons.fill;
+
+import androidx.compose.ui.graphics.ColorKt;
+import androidx.compose.ui.graphics.PathFillType;
+import androidx.compose.ui.graphics.SolidColor;
+import androidx.compose.ui.graphics.StrokeCap;
+import androidx.compose.ui.graphics.StrokeJoin;
+import androidx.compose.ui.graphics.vector.ImageVector;
+import androidx.compose.ui.graphics.vector.PathBuilder;
+import androidx.compose.ui.unit.Dp;
+import com.adamglin.phosphoricons.FillGroup;
+import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
+
+/* compiled from: Cubetransparent.kt */
+@Metadata(d1 = {"\u0000\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\"\u0015\u0010\u0000\u001a\u00020\u0001*\u00020\u00028F¢\u0006\u0006\u001a\u0004\b\u0003\u0010\u0004\"\u0010\u0010\u0005\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0006"}, d2 = {"CubeTransparent", "Landroidx/compose/ui/graphics/vector/ImageVector;", "Lcom/adamglin/phosphoricons/FillGroup;", "getCubeTransparent", "(Lcom/adamglin/phosphoricons/FillGroup;)Landroidx/compose/ui/graphics/vector/ImageVector;", "_cubeTransparent", "phosphor_release"}, k = 2, mv = {2, 0, 0}, xi = 48)
+/* loaded from: classes3.dex */
+public final class CubetransparentKt {
+    private static ImageVector _cubeTransparent;
+
+    public static final ImageVector getCubeTransparent(FillGroup fillGroup) {
+        Intrinsics.checkNotNullParameter(fillGroup, "<this>");
+        ImageVector imageVector = _cubeTransparent;
+        if (imageVector != null) {
+            Intrinsics.checkNotNull(imageVector);
+            return imageVector;
+        }
+        float f = (float) 24.0d;
+        ImageVector.Builder builder = new ImageVector.Builder("CubeTransparent", Dp.m6303constructorimpl(f), Dp.m6303constructorimpl(f), 256.0f, 256.0f, 0L, 0, false, 224, null);
+        SolidColor solidColor = new SolidColor(ColorKt.Color(4278190080L), null);
+        int m4196getButtKaPHkGw = StrokeCap.INSTANCE.m4196getButtKaPHkGw();
+        int m4207getMiterLxFBmk8 = StrokeJoin.INSTANCE.m4207getMiterLxFBmk8();
+        int m4126getNonZeroRgk1Os = PathFillType.INSTANCE.m4126getNonZeroRgk1Os();
+        PathBuilder pathBuilder = new PathBuilder();
+        pathBuilder.moveTo(104.0f, 152.0f);
+        pathBuilder.lineTo(104.0f, 104.0f);
+        pathBuilder.horizontalLineToRelative(48.0f);
+        pathBuilder.verticalLineToRelative(48.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(32.0f, 53.0f);
+        pathBuilder.verticalLineToRelative(95.0f);
+        pathBuilder.arcToRelative(4.0f, 4.0f, 0.0f, false, false, 4.0f, 4.0f);
+        pathBuilder.lineTo(88.0f, 152.0f);
+        pathBuilder.lineTo(88.0f, 99.31f);
+        pathBuilder.lineTo(38.83f, 50.14f);
+        pathBuilder.arcTo(4.0f, 4.0f, 0.0f, false, false, 32.0f, 53.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(220.0f, 104.0f);
+        pathBuilder.lineTo(168.0f, 104.0f);
+        pathBuilder.verticalLineToRelative(52.69f);
+        pathBuilder.lineToRelative(49.17f, 49.17f);
+        pathBuilder.arcTo(4.0f, 4.0f, 0.0f, false, false, 224.0f, 203.0f);
+        pathBuilder.lineTo(224.0f, 108.0f);
+        pathBuilder.arcTo(4.0f, 4.0f, 0.0f, false, false, 220.0f, 104.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(152.0f, 36.0f);
+        pathBuilder.arcToRelative(4.0f, 4.0f, 0.0f, false, false, -4.0f, -4.0f);
+        pathBuilder.lineTo(53.0f, 32.0f);
+        pathBuilder.arcToRelative(4.0f, 4.0f, 0.0f, false, false, -2.83f, 6.83f);
+        pathBuilder.lineTo(99.31f, 88.0f);
+        pathBuilder.lineTo(152.0f, 88.0f);
+        pathBuilder.close();
+        pathBuilder.moveTo(212.49f, 81.17f);
+        pathBuilder.lineTo(174.83f, 43.51f);
+        pathBuilder.arcTo(4.0f, 4.0f, 0.0f, false, false, 168.0f, 46.34f);
+        pathBuilder.lineTo(168.0f, 88.0f);
+        pathBuilder.horizontalLineToRelative(41.66f);
+        pathBuilder.arcTo(4.0f, 4.0f, 0.0f, false, false, 212.49f, 81.17f);
+        pathBuilder.close();
+        pathBuilder.moveTo(156.69f, 168.0f);
+        pathBuilder.lineTo(104.0f, 168.0f);
+        pathBuilder.verticalLineToRelative(52.0f);
+        pathBuilder.arcToRelative(4.0f, 4.0f, 0.0f, false, false, 4.0f, 4.0f);
+        pathBuilder.horizontalLineToRelative(95.0f);
+        pathBuilder.arcToRelative(4.0f, 4.0f, 0.0f, false, false, 2.83f, -6.83f);
+        pathBuilder.close();
+        pathBuilder.moveTo(43.51f, 174.83f);
+        pathBuilder.lineToRelative(37.66f, 37.66f);
+        pathBuilder.arcTo(4.0f, 4.0f, 0.0f, false, false, 88.0f, 209.66f);
+        pathBuilder.lineTo(88.0f, 168.0f);
+        pathBuilder.lineTo(46.34f, 168.0f);
+        pathBuilder.arcTo(4.0f, 4.0f, 0.0f, false, false, 43.51f, 174.83f);
+        pathBuilder.close();
+        ImageVector.Builder.m4534addPathoIyEayM$default(builder, pathBuilder.getNodes(), m4126getNonZeroRgk1Os, "", solidColor, 1.0f, null, 1.0f, 0.0f, m4196getButtKaPHkGw, m4207getMiterLxFBmk8, 4.0f, 0.0f, 0.0f, 0.0f, 14336, null);
+        ImageVector build = builder.build();
+        _cubeTransparent = build;
+        Intrinsics.checkNotNull(build);
+        return build;
+    }
+}

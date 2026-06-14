@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://exercise-tracker.local/schemas/sleep.json",
+  "title": "SleepRecord",
+  "type": "object",
+  "required": ["startTimeMs", "endTimeMs", "totalSleepMin"],
+  "properties": {
+    "startTimeMs": { "type": "integer" },
+    "endTimeMs": { "type": "integer" },
+    "totalSleepMin": { "type": "integer", "minimum": 0 },
+    "sleepEfficiency": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+    "sleepQuality": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+    "source": {
+      "type": ["string", "null"],
+      "enum": ["health_connect", "samsung_health", "rungps_overnight", null]
+    }
+  }
+}

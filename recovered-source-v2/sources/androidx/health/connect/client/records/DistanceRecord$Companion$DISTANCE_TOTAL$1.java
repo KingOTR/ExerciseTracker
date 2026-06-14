@@ -1,0 +1,25 @@
+package androidx.health.connect.client.records;
+
+import androidx.health.connect.client.units.Length;
+import kotlin.Metadata;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.internal.FunctionReferenceImpl;
+import org.maplibre.turf.TurfConstants;
+
+/* compiled from: DistanceRecord.kt */
+@Metadata(k = 3, mv = {1, 8, 0}, xi = 48)
+/* loaded from: classes2.dex */
+/* synthetic */ class DistanceRecord$Companion$DISTANCE_TOTAL$1 extends FunctionReferenceImpl implements Function1<Double, Length> {
+    DistanceRecord$Companion$DISTANCE_TOTAL$1(Object obj) {
+        super(1, obj, Length.Companion.class, TurfConstants.UNIT_METERS, "meters(D)Landroidx/health/connect/client/units/Length;", 0);
+    }
+
+    public final Length invoke(double d) {
+        return ((Length.Companion) this.receiver).meters(d);
+    }
+
+    @Override // kotlin.jvm.functions.Function1
+    public /* bridge */ /* synthetic */ Length invoke(Double d) {
+        return invoke(d.doubleValue());
+    }
+}

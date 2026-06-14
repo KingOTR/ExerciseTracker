@@ -1,0 +1,378 @@
+{
+  "version": 1,
+  "description": "Hierarchical muscle taxonomy aligned with muscle-atlas.json bilateral IDs via atlasIds.",
+  "regions": [
+    { "id": "upper", "label": "Upper Body" },
+    { "id": "lower", "label": "Lower Body" },
+    { "id": "core", "label": "Core" }
+  ],
+  "groups": [
+    { "id": "chest", "label": "Chest", "regionId": "upper" },
+    { "id": "back", "label": "Back", "regionId": "upper" },
+    { "id": "shoulders", "label": "Shoulders", "regionId": "upper" },
+    { "id": "arms", "label": "Arms", "regionId": "upper" },
+    { "id": "forearms", "label": "Forearms", "regionId": "upper" },
+    { "id": "core", "label": "Core", "regionId": "core" },
+    { "id": "quads", "label": "Quadriceps", "regionId": "lower" },
+    { "id": "hamstrings", "label": "Hamstrings", "regionId": "lower" },
+    { "id": "glutes", "label": "Glutes", "regionId": "lower" },
+    { "id": "calves", "label": "Calves", "regionId": "lower" },
+    { "id": "hips", "label": "Hips", "regionId": "lower" }
+  ],
+  "muscles": [
+    {
+      "id": "pec-major-upper",
+      "label": "Pec Major (Clavicular / Upper)",
+      "groupId": "chest",
+      "regionId": "upper",
+      "atlasIds": ["chest-upper-left", "chest-upper-right"]
+    },
+    {
+      "id": "pec-major-mid",
+      "label": "Pec Major (Sternal / Mid)",
+      "groupId": "chest",
+      "regionId": "upper",
+      "atlasIds": ["chest-upper-left", "chest-upper-right", "chest-lower-left", "chest-lower-right"]
+    },
+    {
+      "id": "pec-major-lower",
+      "label": "Pec Major (Costal / Lower)",
+      "groupId": "chest",
+      "regionId": "upper",
+      "atlasIds": ["chest-lower-left", "chest-lower-right"]
+    },
+    {
+      "id": "pec-minor",
+      "label": "Pec Minor",
+      "groupId": "chest",
+      "regionId": "upper",
+      "atlasIds": ["chest-upper-left", "chest-upper-right"]
+    },
+    {
+      "id": "serratus-anterior",
+      "label": "Serratus Anterior",
+      "groupId": "chest",
+      "regionId": "upper",
+      "atlasIds": ["serratus-anterior-left", "serratus-anterior-right"]
+    },
+    {
+      "id": "lats-upper",
+      "label": "Latissimus Dorsi (Upper)",
+      "groupId": "back",
+      "regionId": "upper",
+      "atlasIds": ["lats-upper-left", "lats-upper-right"]
+    },
+    {
+      "id": "lats-mid",
+      "label": "Latissimus Dorsi (Mid)",
+      "groupId": "back",
+      "regionId": "upper",
+      "atlasIds": ["lats-mid-left", "lats-mid-right"]
+    },
+    {
+      "id": "lats-lower",
+      "label": "Latissimus Dorsi (Lower)",
+      "groupId": "back",
+      "regionId": "upper",
+      "atlasIds": ["lats-lower-left", "lats-lower-right"]
+    },
+    {
+      "id": "rhomboids",
+      "label": "Rhomboids",
+      "groupId": "back",
+      "regionId": "upper",
+      "atlasIds": ["traps-mid-left", "traps-mid-right"]
+    },
+    {
+      "id": "traps-upper",
+      "label": "Trapezius (Upper)",
+      "groupId": "back",
+      "regionId": "upper",
+      "atlasIds": ["traps-upper-left", "traps-upper-right"]
+    },
+    {
+      "id": "traps-mid",
+      "label": "Trapezius (Mid)",
+      "groupId": "back",
+      "regionId": "upper",
+      "atlasIds": ["traps-mid-left", "traps-mid-right"]
+    },
+    {
+      "id": "traps-lower",
+      "label": "Trapezius (Lower)",
+      "groupId": "back",
+      "regionId": "upper",
+      "atlasIds": ["traps-lower-left", "traps-lower-right"]
+    },
+    {
+      "id": "erector-spinae",
+      "label": "Erector Spinae",
+      "groupId": "back",
+      "regionId": "upper",
+      "atlasIds": ["lower-back-erectors-left", "lower-back-erectors-right", "spine"]
+    },
+    {
+      "id": "deltoid-anterior",
+      "label": "Anterior Deltoid",
+      "groupId": "shoulders",
+      "regionId": "upper",
+      "atlasIds": ["shoulder-front-left", "shoulder-front-right"]
+    },
+    {
+      "id": "deltoid-lateral",
+      "label": "Lateral Deltoid",
+      "groupId": "shoulders",
+      "regionId": "upper",
+      "atlasIds": ["shoulder-side-left", "shoulder-side-right"]
+    },
+    {
+      "id": "deltoid-posterior",
+      "label": "Posterior Deltoid",
+      "groupId": "shoulders",
+      "regionId": "upper",
+      "atlasIds": ["deltoid-rear-left", "deltoid-rear-right"]
+    },
+    {
+      "id": "biceps-long-head",
+      "label": "Biceps Brachii (Long Head)",
+      "groupId": "arms",
+      "regionId": "upper",
+      "atlasIds": ["biceps-left", "biceps-right"]
+    },
+    {
+      "id": "biceps-short-head",
+      "label": "Biceps Brachii (Short Head)",
+      "groupId": "arms",
+      "regionId": "upper",
+      "atlasIds": ["biceps-left", "biceps-right"]
+    },
+    {
+      "id": "brachialis",
+      "label": "Brachialis",
+      "groupId": "arms",
+      "regionId": "upper",
+      "atlasIds": ["biceps-left", "biceps-right"]
+    },
+    {
+      "id": "triceps-long",
+      "label": "Triceps (Long Head)",
+      "groupId": "arms",
+      "regionId": "upper",
+      "atlasIds": ["triceps-long-left", "triceps-long-right"]
+    },
+    {
+      "id": "triceps-lateral",
+      "label": "Triceps (Lateral Head)",
+      "groupId": "arms",
+      "regionId": "upper",
+      "atlasIds": ["triceps-lateral-left", "triceps-lateral-right"]
+    },
+    {
+      "id": "triceps-medial",
+      "label": "Triceps (Medial Head)",
+      "groupId": "arms",
+      "regionId": "upper",
+      "atlasIds": ["triceps-long-left", "triceps-long-right", "triceps-lateral-left", "triceps-lateral-right"]
+    },
+    {
+      "id": "forearm-flexors",
+      "label": "Forearm Flexors",
+      "groupId": "forearms",
+      "regionId": "upper",
+      "atlasIds": ["forearm-flexors-left", "forearm-flexors-right"]
+    },
+    {
+      "id": "forearm-extensors",
+      "label": "Forearm Extensors",
+      "groupId": "forearms",
+      "regionId": "upper",
+      "atlasIds": ["forearm-extensors-left", "forearm-extensors-right"]
+    },
+    {
+      "id": "rectus-abdominis-upper",
+      "label": "Rectus Abdominis (Upper)",
+      "groupId": "core",
+      "regionId": "core",
+      "atlasIds": ["abs-upper-left", "abs-upper-right"]
+    },
+    {
+      "id": "rectus-abdominis-lower",
+      "label": "Rectus Abdominis (Lower)",
+      "groupId": "core",
+      "regionId": "core",
+      "atlasIds": ["abs-lower-left", "abs-lower-right"]
+    },
+    {
+      "id": "obliques",
+      "label": "Obliques",
+      "groupId": "core",
+      "regionId": "core",
+      "atlasIds": ["obliques-left", "obliques-right"]
+    },
+    {
+      "id": "rectus-femoris",
+      "label": "Rectus Femoris",
+      "groupId": "quads",
+      "regionId": "lower",
+      "atlasIds": ["quads-left", "quads-right"]
+    },
+    {
+      "id": "vastus-lateralis",
+      "label": "Vastus Lateralis",
+      "groupId": "quads",
+      "regionId": "lower",
+      "atlasIds": ["quads-left", "quads-right"]
+    },
+    {
+      "id": "vastus-medialis",
+      "label": "Vastus Medialis",
+      "groupId": "quads",
+      "regionId": "lower",
+      "atlasIds": ["quads-left", "quads-right"]
+    },
+    {
+      "id": "biceps-femoris",
+      "label": "Biceps Femoris",
+      "groupId": "hamstrings",
+      "regionId": "lower",
+      "atlasIds": ["hamstrings-lateral-left", "hamstrings-lateral-right"]
+    },
+    {
+      "id": "semitendinosus",
+      "label": "Semitendinosus",
+      "groupId": "hamstrings",
+      "regionId": "lower",
+      "atlasIds": ["hamstrings-medial-left", "hamstrings-medial-right"]
+    },
+    {
+      "id": "semimembranosus",
+      "label": "Semimembranosus",
+      "groupId": "hamstrings",
+      "regionId": "lower",
+      "atlasIds": ["hamstrings-medial-left", "hamstrings-medial-right"]
+    },
+    {
+      "id": "gluteus-maximus",
+      "label": "Gluteus Maximus",
+      "groupId": "glutes",
+      "regionId": "lower",
+      "atlasIds": ["gluteus-maximus-left", "gluteus-maximus-right"]
+    },
+    {
+      "id": "gluteus-medius",
+      "label": "Gluteus Medius",
+      "groupId": "glutes",
+      "regionId": "lower",
+      "atlasIds": ["gluteus-medius-left", "gluteus-medius-right"]
+    },
+    {
+      "id": "gluteus-minimus",
+      "label": "Gluteus Minimus",
+      "groupId": "glutes",
+      "regionId": "lower",
+      "atlasIds": ["gluteus-medius-left", "gluteus-medius-right"]
+    },
+    {
+      "id": "gastrocnemius-medial",
+      "label": "Gastrocnemius (Medial)",
+      "groupId": "calves",
+      "regionId": "lower",
+      "atlasIds": ["calves-gastroc-medial-left", "calves-gastroc-medial-right"]
+    },
+    {
+      "id": "gastrocnemius-lateral",
+      "label": "Gastrocnemius (Lateral)",
+      "groupId": "calves",
+      "regionId": "lower",
+      "atlasIds": ["calves-gastroc-lateral-left", "calves-gastroc-lateral-right"]
+    },
+    {
+      "id": "soleus",
+      "label": "Soleus",
+      "groupId": "calves",
+      "regionId": "lower",
+      "atlasIds": ["calves-soleus-left", "calves-soleus-right"]
+    },
+    {
+      "id": "tibialis-anterior",
+      "label": "Tibialis Anterior",
+      "groupId": "calves",
+      "regionId": "lower",
+      "atlasIds": ["tibialis-anterior-left", "tibialis-anterior-right"]
+    },
+    {
+      "id": "hip-flexors",
+      "label": "Hip Flexors (Iliopsoas)",
+      "groupId": "hips",
+      "regionId": "lower",
+      "atlasIds": ["hip-flexor-left", "hip-flexor-right"]
+    },
+    {
+      "id": "adductors",
+      "label": "Adductors",
+      "groupId": "hips",
+      "regionId": "lower",
+      "atlasIds": ["adductors-left", "adductors-right"]
+    }
+  ],
+  "patternTemplates": [
+    {
+      "id": "push",
+      "label": "Push (Chest/Shoulders/Triceps)",
+      "loads": [
+        { "muscleId": "pec-major-mid", "percent": 40 },
+        { "muscleId": "pec-major-lower", "percent": 15 },
+        { "muscleId": "deltoid-anterior", "percent": 20 },
+        { "muscleId": "triceps-lateral", "percent": 15 },
+        { "muscleId": "triceps-long", "percent": 10 }
+      ]
+    },
+    {
+      "id": "pull",
+      "label": "Pull (Back/Biceps)",
+      "loads": [
+        { "muscleId": "lats-mid", "percent": 35 },
+        { "muscleId": "lats-lower", "percent": 15 },
+        { "muscleId": "rhomboids", "percent": 15 },
+        { "muscleId": "biceps-long-head", "percent": 20 },
+        { "muscleId": "biceps-short-head", "percent": 10 },
+        { "muscleId": "traps-mid", "percent": 5 }
+      ]
+    },
+    {
+      "id": "squat",
+      "label": "Squat Pattern",
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 20 },
+        { "muscleId": "vastus-lateralis", "percent": 20 },
+        { "muscleId": "vastus-medialis", "percent": 15 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "erector-spinae", "percent": 10 },
+        { "muscleId": "biceps-femoris", "percent": 10 }
+      ]
+    },
+    {
+      "id": "hinge",
+      "label": "Hinge Pattern",
+      "loads": [
+        { "muscleId": "gluteus-maximus", "percent": 30 },
+        { "muscleId": "biceps-femoris", "percent": 25 },
+        { "muscleId": "semitendinosus", "percent": 15 },
+        { "muscleId": "erector-spinae", "percent": 25 },
+        { "muscleId": "traps-mid", "percent": 5 }
+      ]
+    },
+    {
+      "id": "lunge",
+      "label": "Lunge Pattern",
+      "loads": [
+        { "muscleId": "rectus-femoris", "percent": 20 },
+        { "muscleId": "vastus-lateralis", "percent": 20 },
+        { "muscleId": "gluteus-maximus", "percent": 25 },
+        { "muscleId": "gluteus-medius", "percent": 10 },
+        { "muscleId": "biceps-femoris", "percent": 15 },
+        { "muscleId": "adductors", "percent": 10 }
+      ]
+    }
+  ]
+}

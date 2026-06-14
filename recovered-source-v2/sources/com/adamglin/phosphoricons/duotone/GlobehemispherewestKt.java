@@ -1,0 +1,136 @@
+package com.adamglin.phosphoricons.duotone;
+
+import androidx.compose.ui.graphics.ColorKt;
+import androidx.compose.ui.graphics.PathFillType;
+import androidx.compose.ui.graphics.SolidColor;
+import androidx.compose.ui.graphics.StrokeCap;
+import androidx.compose.ui.graphics.StrokeJoin;
+import androidx.compose.ui.graphics.vector.ImageVector;
+import androidx.compose.ui.graphics.vector.PathBuilder;
+import androidx.compose.ui.unit.Dp;
+import com.adamglin.phosphoricons.DuotoneGroup;
+import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
+
+/* compiled from: Globehemispherewest.kt */
+@Metadata(d1 = {"\u0000\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\"\u0015\u0010\u0000\u001a\u00020\u0001*\u00020\u00028F¢\u0006\u0006\u001a\u0004\b\u0003\u0010\u0004\"\u0010\u0010\u0005\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0006"}, d2 = {"GlobeHemisphereWest", "Landroidx/compose/ui/graphics/vector/ImageVector;", "Lcom/adamglin/phosphoricons/DuotoneGroup;", "getGlobeHemisphereWest", "(Lcom/adamglin/phosphoricons/DuotoneGroup;)Landroidx/compose/ui/graphics/vector/ImageVector;", "_globeHemisphereWest", "phosphor_release"}, k = 2, mv = {2, 0, 0}, xi = 48)
+/* loaded from: classes3.dex */
+public final class GlobehemispherewestKt {
+    private static ImageVector _globeHemisphereWest;
+
+    public static final ImageVector getGlobeHemisphereWest(DuotoneGroup duotoneGroup) {
+        Intrinsics.checkNotNullParameter(duotoneGroup, "<this>");
+        ImageVector imageVector = _globeHemisphereWest;
+        if (imageVector != null) {
+            Intrinsics.checkNotNull(imageVector);
+            return imageVector;
+        }
+        float f = (float) 24.0d;
+        ImageVector.Builder builder = new ImageVector.Builder("GlobeHemisphereWest", Dp.m6303constructorimpl(f), Dp.m6303constructorimpl(f), 256.0f, 256.0f, 0L, 0, false, 224, null);
+        SolidColor solidColor = new SolidColor(ColorKt.Color(4278190080L), null);
+        int m4196getButtKaPHkGw = StrokeCap.INSTANCE.m4196getButtKaPHkGw();
+        int m4207getMiterLxFBmk8 = StrokeJoin.INSTANCE.m4207getMiterLxFBmk8();
+        int m4126getNonZeroRgk1Os = PathFillType.INSTANCE.m4126getNonZeroRgk1Os();
+        PathBuilder pathBuilder = new PathBuilder();
+        pathBuilder.moveTo(213.09f, 172.48f);
+        pathBuilder.arcToRelative(96.0f, 96.0f, 0.0f, false, true, -80.41f, 51.41f);
+        pathBuilder.lineToRelative(3.17f, -16.44f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, false, -2.0f, -6.95f);
+        pathBuilder.lineToRelative(-19.74f, -20.33f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, true, -1.44f, -8.69f);
+        pathBuilder.lineToRelative(13.7f, -30.74f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, true, 8.38f, -4.67f);
+        pathBuilder.lineToRelative(22.82f, 3.08f);
+        pathBuilder.arcToRelative(8.11f, 8.11f, 0.0f, false, true, 3.12f, 1.11f);
+        pathBuilder.close();
+        pathBuilder.moveTo(116.71f, 95.0f);
+        pathBuilder.lineTo(129.0f, 88.24f);
+        pathBuilder.arcToRelative(7.46f, 7.46f, 0.0f, false, false, 1.5f, -1.07f);
+        pathBuilder.lineToRelative(26.91f, -24.33f);
+        pathBuilder.arcTo(8.0f, 8.0f, 0.0f, false, false, 159.0f, 53.0f);
+        pathBuilder.lineToRelative(-10.5f, -18.81f);
+        pathBuilder.arcTo(96.62f, 96.62f, 0.0f, false, false, 128.0f, 32.0f);
+        pathBuilder.arcTo(95.61f, 95.61f, 0.0f, false, false, 67.78f, 53.23f);
+        pathBuilder.lineTo(56.0f, 81.08f);
+        pathBuilder.arcTo(8.0f, 8.0f, 0.0f, false, false, 55.88f, 87.0f);
+        pathBuilder.lineToRelative(11.5f, 30.67f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, false, 5.81f, 5.0f);
+        pathBuilder.lineToRelative(2.69f, 0.58f);
+        pathBuilder.lineTo(89.2f, 100.0f);
+        pathBuilder.arcToRelative(8.0f, 8.0f, 0.0f, false, true, 6.94f, -4.0f);
+        pathBuilder.horizontalLineToRelative(16.71f);
+        pathBuilder.arcTo(7.9f, 7.9f, 0.0f, false, false, 116.71f, 95.0f);
+        pathBuilder.close();
+        ImageVector.Builder.m4534addPathoIyEayM$default(builder, pathBuilder.getNodes(), m4126getNonZeroRgk1Os, "", solidColor, 0.2f, null, 0.2f, 0.0f, m4196getButtKaPHkGw, m4207getMiterLxFBmk8, 4.0f, 0.0f, 0.0f, 0.0f, 14336, null);
+        SolidColor solidColor2 = new SolidColor(ColorKt.Color(4278190080L), null);
+        int m4196getButtKaPHkGw2 = StrokeCap.INSTANCE.m4196getButtKaPHkGw();
+        int m4207getMiterLxFBmk82 = StrokeJoin.INSTANCE.m4207getMiterLxFBmk8();
+        int m4126getNonZeroRgk1Os2 = PathFillType.INSTANCE.m4126getNonZeroRgk1Os();
+        PathBuilder pathBuilder2 = new PathBuilder();
+        pathBuilder2.moveTo(128.0f, 24.0f);
+        pathBuilder2.arcTo(104.0f, 104.0f, 0.0f, true, false, 232.0f, 128.0f);
+        pathBuilder2.arcTo(104.11f, 104.11f, 0.0f, false, false, 128.0f, 24.0f);
+        pathBuilder2.close();
+        pathBuilder2.moveTo(216.0f, 128.0f);
+        pathBuilder2.arcToRelative(87.62f, 87.62f, 0.0f, false, true, -6.4f, 32.94f);
+        pathBuilder2.lineToRelative(-44.7f, -27.49f);
+        pathBuilder2.arcToRelative(15.92f, 15.92f, 0.0f, false, false, -6.24f, -2.23f);
+        pathBuilder2.lineToRelative(-22.82f, -3.08f);
+        pathBuilder2.arcToRelative(16.11f, 16.11f, 0.0f, false, false, -16.0f, 7.86f);
+        pathBuilder2.horizontalLineToRelative(-8.72f);
+        pathBuilder2.lineToRelative(-3.8f, -7.86f);
+        pathBuilder2.arcToRelative(15.91f, 15.91f, 0.0f, false, false, -11.0f, -8.67f);
+        pathBuilder2.lineToRelative(-8.0f, -1.73f);
+        pathBuilder2.lineTo(96.14f, 104.0f);
+        pathBuilder2.horizontalLineToRelative(16.71f);
+        pathBuilder2.arcToRelative(16.06f, 16.06f, 0.0f, false, false, 7.73f, -2.0f);
+        pathBuilder2.lineToRelative(12.25f, -6.76f);
+        pathBuilder2.arcToRelative(16.62f, 16.62f, 0.0f, false, false, 3.0f, -2.14f);
+        pathBuilder2.lineToRelative(26.91f, -24.34f);
+        pathBuilder2.arcTo(15.93f, 15.93f, 0.0f, false, false, 166.0f, 49.1f);
+        pathBuilder2.lineToRelative(-0.36f, -0.65f);
+        pathBuilder2.arcTo(88.11f, 88.11f, 0.0f, false, true, 216.0f, 128.0f);
+        pathBuilder2.close();
+        pathBuilder2.moveTo(143.31f, 41.34f);
+        pathBuilder2.lineTo(152.0f, 56.9f);
+        pathBuilder2.lineTo(125.09f, 81.24f);
+        pathBuilder2.lineTo(112.85f, 88.0f);
+        pathBuilder2.lineTo(96.14f, 88.0f);
+        pathBuilder2.arcToRelative(16.0f, 16.0f, 0.0f, false, false, -13.88f, 8.0f);
+        pathBuilder2.lineToRelative(-8.73f, 15.23f);
+        pathBuilder2.lineTo(63.38f, 84.19f);
+        pathBuilder2.lineTo(74.32f, 58.32f);
+        pathBuilder2.arcToRelative(87.87f, 87.87f, 0.0f, false, true, 69.0f, -17.0f);
+        pathBuilder2.close();
+        pathBuilder2.moveTo(40.0f, 128.0f);
+        pathBuilder2.arcToRelative(87.53f, 87.53f, 0.0f, false, true, 8.54f, -37.8f);
+        pathBuilder2.lineToRelative(11.34f, 30.27f);
+        pathBuilder2.arcToRelative(16.0f, 16.0f, 0.0f, false, false, 11.62f, 10.0f);
+        pathBuilder2.lineToRelative(21.43f, 4.61f);
+        pathBuilder2.lineTo(96.74f, 143.0f);
+        pathBuilder2.arcToRelative(16.09f, 16.09f, 0.0f, false, false, 14.4f, 9.0f);
+        pathBuilder2.horizontalLineToRelative(1.48f);
+        pathBuilder2.lineToRelative(-7.23f, 16.23f);
+        pathBuilder2.arcToRelative(16.0f, 16.0f, 0.0f, false, false, 2.86f, 17.37f);
+        pathBuilder2.lineToRelative(0.14f, 0.14f);
+        pathBuilder2.lineTo(128.0f, 205.94f);
+        pathBuilder2.lineToRelative(-1.94f, 10.0f);
+        pathBuilder2.arcTo(88.11f, 88.11f, 0.0f, false, true, 40.0f, 128.0f);
+        pathBuilder2.close();
+        pathBuilder2.moveTo(142.58f, 214.78f);
+        pathBuilder2.lineTo(143.71f, 208.97f);
+        pathBuilder2.arcToRelative(16.09f, 16.09f, 0.0f, false, false, -4.0f, -13.9f);
+        pathBuilder2.arcToRelative(1.85f, 1.85f, 0.0f, false, true, -0.14f, -0.14f);
+        pathBuilder2.lineTo(120.0f, 174.74f);
+        pathBuilder2.lineTo(133.7f, 144.0f);
+        pathBuilder2.lineToRelative(22.82f, 3.08f);
+        pathBuilder2.lineToRelative(45.72f, 28.12f);
+        pathBuilder2.arcTo(88.18f, 88.18f, 0.0f, false, true, 142.58f, 214.78f);
+        pathBuilder2.close();
+        ImageVector.Builder.m4534addPathoIyEayM$default(builder, pathBuilder2.getNodes(), m4126getNonZeroRgk1Os2, "", solidColor2, 1.0f, null, 1.0f, 0.0f, m4196getButtKaPHkGw2, m4207getMiterLxFBmk82, 4.0f, 0.0f, 0.0f, 0.0f, 14336, null);
+        ImageVector build = builder.build();
+        _globeHemisphereWest = build;
+        Intrinsics.checkNotNull(build);
+        return build;
+    }
+}

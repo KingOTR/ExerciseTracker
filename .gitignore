@@ -1,0 +1,34 @@
+# Build outputs
+android/.gradle/
+android/build/
+android/app/build/
+android/app/src/main/java-quarantine/
+web/dist/
+web/node_modules/
+recovered-source/
+recovered-source-v2/
+android/decompiled-reference/
+tools/jadx.zip
+tools/jadx/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Secrets — never commit real production keys (placeholder files are OK)
+# Replace placeholder google-services.json with real file locally; do not commit real keys.
+*.jks
+*.keystore
+android/local.properties
+local.properties
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Extracted APK (large, reproducible)
+extracted/

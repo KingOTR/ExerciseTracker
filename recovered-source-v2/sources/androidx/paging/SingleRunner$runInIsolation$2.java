@@ -1,0 +1,152 @@
+package androidx.paging;
+
+import androidx.paging.SingleRunner;
+import kotlin.Metadata;
+import kotlin.ResultKt;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
+import kotlin.coroutines.intrinsics.IntrinsicsKt;
+import kotlin.coroutines.jvm.internal.DebugMetadata;
+import kotlin.coroutines.jvm.internal.SuspendLambda;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
+import kotlinx.coroutines.CoroutineScope;
+import kotlinx.coroutines.Job;
+
+/* compiled from: SingleRunner.kt */
+@Metadata(d1 = {"\u0000\n\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@"}, d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;"}, k = 3, mv = {1, 8, 0}, xi = 48)
+@DebugMetadata(c = "androidx.paging.SingleRunner$runInIsolation$2", f = "SingleRunner.kt", i = {0, 1}, l = {53, 59, 61, 61}, m = "invokeSuspend", n = {"myJob", "myJob"}, s = {"L$0", "L$0"})
+/* loaded from: classes2.dex */
+final class SingleRunner$runInIsolation$2 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
+    final /* synthetic */ Function1<Continuation<? super Unit>, Object> $block;
+    final /* synthetic */ int $priority;
+    private /* synthetic */ Object L$0;
+    int label;
+    final /* synthetic */ SingleRunner this$0;
+
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    /* JADX WARN: Multi-variable type inference failed */
+    SingleRunner$runInIsolation$2(SingleRunner singleRunner, int i, Function1<? super Continuation<? super Unit>, ? extends Object> function1, Continuation<? super SingleRunner$runInIsolation$2> continuation) {
+        super(2, continuation);
+        this.this$0 = singleRunner;
+        this.$priority = i;
+        this.$block = function1;
+    }
+
+    @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
+    public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
+        SingleRunner$runInIsolation$2 singleRunner$runInIsolation$2 = new SingleRunner$runInIsolation$2(this.this$0, this.$priority, this.$block, continuation);
+        singleRunner$runInIsolation$2.L$0 = obj;
+        return singleRunner$runInIsolation$2;
+    }
+
+    @Override // kotlin.jvm.functions.Function2
+    public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
+        return ((SingleRunner$runInIsolation$2) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+    }
+
+    /* JADX WARN: Multi-variable type inference failed */
+    /* JADX WARN: Removed duplicated region for block: B:20:0x0095 A[RETURN] */
+    /* JADX WARN: Type inference failed for: r10v16, types: [androidx.paging.SingleRunner$Holder] */
+    /* JADX WARN: Type inference failed for: r1v0, types: [int] */
+    /* JADX WARN: Type inference failed for: r1v1, types: [kotlinx.coroutines.Job] */
+    /* JADX WARN: Type inference failed for: r1v14 */
+    /* JADX WARN: Type inference failed for: r1v15 */
+    /* JADX WARN: Type inference failed for: r1v9, types: [kotlinx.coroutines.Job] */
+    /* JADX WARN: Type inference failed for: r2v0 */
+    /* JADX WARN: Type inference failed for: r2v1, types: [int] */
+    /* JADX WARN: Type inference failed for: r2v3, types: [kotlin.coroutines.Continuation] */
+    /* JADX WARN: Type inference failed for: r3v2, types: [androidx.paging.SingleRunner$Holder] */
+    /* JADX WARN: Type inference failed for: r9v0, types: [androidx.paging.SingleRunner$runInIsolation$2, java.lang.Object] */
+    /* JADX WARN: Type inference failed for: r9v1, types: [androidx.paging.SingleRunner$runInIsolation$2] */
+    /* JADX WARN: Type inference failed for: r9v5, types: [java.lang.Object] */
+    @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+    */
+    public final Object invokeSuspend(Object obj) {
+        ?? r3;
+        SingleRunner.Holder holder;
+        Job job;
+        ?? r10;
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        ?? r1 = this.label;
+        ?? r2 = 4;
+        try {
+            if (r1 == 0) {
+                ResultKt.throwOnFailure(obj);
+                CoroutineContext.Element element = ((CoroutineScope) this.L$0).getCoroutineContext().get(Job.INSTANCE);
+                if (element != null) {
+                    Job job2 = (Job) element;
+                    holder = this.this$0.holder;
+                    this.L$0 = job2;
+                    this.label = 1;
+                    Object tryEnqueue = holder.tryEnqueue(this.$priority, job2, (Continuation) this);
+                    if (tryEnqueue == coroutine_suspended) {
+                        return coroutine_suspended;
+                    }
+                    job = job2;
+                    obj = tryEnqueue;
+                } else {
+                    throw new IllegalStateException("Internal error. coroutineScope should've created a job.".toString());
+                }
+            } else {
+                if (r1 != 1) {
+                    if (r1 != 2) {
+                        if (r1 == 3) {
+                            ResultKt.throwOnFailure(obj);
+                            return Unit.INSTANCE;
+                        }
+                        if (r1 != 4) {
+                            throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+                        }
+                        Throwable th = (Throwable) this.L$0;
+                        ResultKt.throwOnFailure(obj);
+                        throw th;
+                    }
+                    Job job3 = (Job) this.L$0;
+                    ResultKt.throwOnFailure(obj);
+                    r1 = job3;
+                    r10 = this.this$0.holder;
+                    r2 = (Continuation) this;
+                    this.L$0 = null;
+                    this.label = 3;
+                    this = r10.onFinish(r1, r2);
+                    if (this == coroutine_suspended) {
+                        return coroutine_suspended;
+                    }
+                    return Unit.INSTANCE;
+                }
+                Job job4 = (Job) this.L$0;
+                ResultKt.throwOnFailure(obj);
+                job = job4;
+            }
+            if (((Boolean) obj).booleanValue()) {
+                Function1<Continuation<? super Unit>, Object> function1 = this.$block;
+                this.L$0 = job;
+                this.label = 2;
+                r1 = job;
+                if (function1.invoke(this) == coroutine_suspended) {
+                    return coroutine_suspended;
+                }
+                r10 = this.this$0.holder;
+                r2 = (Continuation) this;
+                this.L$0 = null;
+                this.label = 3;
+                this = r10.onFinish(r1, r2);
+                if (this == coroutine_suspended) {
+                }
+            }
+            return Unit.INSTANCE;
+        } catch (Throwable th2) {
+            r3 = this.this$0.holder;
+            this.L$0 = th2;
+            this.label = r2;
+            if (r3.onFinish(r1, this) == coroutine_suspended) {
+                return coroutine_suspended;
+            }
+            throw th2;
+        }
+    }
+}

@@ -1,0 +1,59 @@
+package com.adamglin.phosphoricons.light;
+
+import androidx.compose.ui.graphics.ColorKt;
+import androidx.compose.ui.graphics.PathFillType;
+import androidx.compose.ui.graphics.SolidColor;
+import androidx.compose.ui.graphics.StrokeCap;
+import androidx.compose.ui.graphics.StrokeJoin;
+import androidx.compose.ui.graphics.vector.ImageVector;
+import androidx.compose.ui.graphics.vector.PathBuilder;
+import androidx.compose.ui.unit.Dp;
+import com.adamglin.phosphoricons.LightGroup;
+import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
+
+/* compiled from: Firesimple.kt */
+@Metadata(d1 = {"\u0000\u000e\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0004\"\u0015\u0010\u0000\u001a\u00020\u0001*\u00020\u00028F¢\u0006\u0006\u001a\u0004\b\u0003\u0010\u0004\"\u0010\u0010\u0005\u001a\u0004\u0018\u00010\u0001X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0006"}, d2 = {"FireSimple", "Landroidx/compose/ui/graphics/vector/ImageVector;", "Lcom/adamglin/phosphoricons/LightGroup;", "getFireSimple", "(Lcom/adamglin/phosphoricons/LightGroup;)Landroidx/compose/ui/graphics/vector/ImageVector;", "_fireSimple", "phosphor_release"}, k = 2, mv = {2, 0, 0}, xi = 48)
+/* loaded from: classes3.dex */
+public final class FiresimpleKt {
+    private static ImageVector _fireSimple;
+
+    public static final ImageVector getFireSimple(LightGroup lightGroup) {
+        Intrinsics.checkNotNullParameter(lightGroup, "<this>");
+        ImageVector imageVector = _fireSimple;
+        if (imageVector != null) {
+            Intrinsics.checkNotNull(imageVector);
+            return imageVector;
+        }
+        float f = (float) 24.0d;
+        ImageVector.Builder builder = new ImageVector.Builder("FireSimple", Dp.m6303constructorimpl(f), Dp.m6303constructorimpl(f), 256.0f, 256.0f, 0L, 0, false, 224, null);
+        SolidColor solidColor = new SolidColor(ColorKt.Color(4278190080L), null);
+        int m4196getButtKaPHkGw = StrokeCap.INSTANCE.m4196getButtKaPHkGw();
+        int m4207getMiterLxFBmk8 = StrokeJoin.INSTANCE.m4207getMiterLxFBmk8();
+        int m4126getNonZeroRgk1Os = PathFillType.INSTANCE.m4126getNonZeroRgk1Os();
+        PathBuilder pathBuilder = new PathBuilder();
+        pathBuilder.moveTo(142.1f, 19.38f);
+        pathBuilder.arcToRelative(6.0f, 6.0f, 0.0f, false, false, -9.47f, 2.56f);
+        pathBuilder.lineTo(109.54f, 85.25f);
+        pathBuilder.lineTo(83.2f, 59.69f);
+        pathBuilder.arcToRelative(6.0f, 6.0f, 0.0f, false, false, -9.0f, 0.67f);
+        pathBuilder.curveTo(52.85f, 88.39f, 42.0f, 116.53f, 42.0f, 144.0f);
+        pathBuilder.arcToRelative(86.0f, 86.0f, 0.0f, false, false, 172.0f, 0.0f);
+        pathBuilder.curveTo(214.0f, 85.4f, 163.72f, 37.33f, 142.1f, 19.38f);
+        pathBuilder.close();
+        pathBuilder.moveTo(128.0f, 218.0f);
+        pathBuilder.arcToRelative(74.09f, 74.09f, 0.0f, false, true, -74.0f, -74.0f);
+        pathBuilder.curveToRelative(0.0f, -23.0f, 8.67f, -46.87f, 25.77f, -70.91f);
+        pathBuilder.lineToRelative(28.05f, 27.22f);
+        pathBuilder.arcToRelative(6.0f, 6.0f, 0.0f, false, false, 9.82f, -2.25f);
+        pathBuilder.lineTo(140.93f, 34.2f);
+        pathBuilder.curveTo(163.35f, 54.16f, 202.0f, 95.6f, 202.0f, 144.0f);
+        pathBuilder.arcTo(74.09f, 74.09f, 0.0f, false, true, 128.0f, 218.0f);
+        pathBuilder.close();
+        ImageVector.Builder.m4534addPathoIyEayM$default(builder, pathBuilder.getNodes(), m4126getNonZeroRgk1Os, "", solidColor, 1.0f, null, 1.0f, 0.0f, m4196getButtKaPHkGw, m4207getMiterLxFBmk8, 4.0f, 0.0f, 0.0f, 0.0f, 14336, null);
+        ImageVector build = builder.build();
+        _fireSimple = build;
+        Intrinsics.checkNotNull(build);
+        return build;
+    }
+}
