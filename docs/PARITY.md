@@ -1,102 +1,65 @@
 # Exercise Tracker — parity status (14 Jun 2026)
 
-Reference targets:
+Reference: `Desktop/ExerciseTracker-v0.7.93.apk` (versionCode **107**, ~84.5 MB)  
+Rebuilt: `Desktop/ExerciseTracker-latest.apk` (signed release, ~34.4 MB)
 
-| Target | Path / URL | versionName | versionCode | Size |
-|--------|------------|-------------|-------------|------|
-| **Canonical release** | `Desktop/ExerciseTracker-v0.7.93.apk` | 0.7.93 | 107 | ~84.5 MB |
-| APKs folder copy | `Desktop/APKs/ExerciseTracker-latest.apk` | 0.7.52 | 71 | ~76.8 MB (older build) |
-| Live web | https://exercise-tracker-2936d.web.app/ | 0.7.93 (package.json) | — | Firebase Hosting |
+## Summary: **~48% overall parity**
 
-## Android APK parity
+100% feature parity is **not achievable** from JADX decompile alone (~1,571 Java files; Kotlin coroutines/Compose lambdas decompile to invalid Java). Original Kotlin tree (`c:\Users\sydne\run`) is unavailable. Maximum recoverable without source: manifest + assets + backend stubs + 7-tab shell.
 
-| Check | Reference (v0.7.93) | Rebuilt scaffold | Match |
-|-------|---------------------|------------------|-------|
-| Package | `com.exercisetracker.app` | `com.exercisetracker.app` | Yes |
-| versionName | `0.7.93` | `0.7.93` | Yes |
-| versionCode | `107` | `107` | Yes |
-| minSdk | 29 | 29 | Yes |
-| targetSdk | 35 | 35 | Yes |
-| Permissions (declared) | 38 | 38 (manifest) | Declared yes / runtime no |
-| Activities | 4+ | 1 (`MainActivity`) | No |
-| Services | 6+ | 0 | No |
-| Receivers / widgets | 12+ | 0 | No |
-| APK size (release) | ~84.5 MB | TBD (scaffold + libs) | No |
-| Release signing | Original keystore | Unsigned | No |
-| Feature parity | Full app | ~15% (tabs + sync + muscle) | No |
+| Area | Weight | Match | Notes |
+|------|--------|-------|-------|
+| Version / package / signing | 10% | **100%** | 107 / 0.7.93 / `com.exercisetracker.app`, release keystore |
+| Permissions (38) | 10% | **100%** | All declared; runtime behaviour partial |
+| Manifest app components | 15% | **95%** | All custom `com.example.rungps.*` activities/services/receivers/widgets declared; implementations are stubs |
+| Assets | 15% | **75%** | Core JSON (sleep ML, muscle atlas, maps) present; duplicate map assets deduped vs AAR |
+| Backend services (GPS/sleep/gym/BLE) | 25% | **25%** | Foreground services compile & register; no full TrackingService / SleepListenService logic |
+| Compose UI (7 tabs + feature screens) | 25% | **20%** | Shell + Gym/Recovery partial; ~400+ UI `.kt` files still in `decompiled-reference/` |
+| APK size | — | **41%** | 34.4 MB vs 84.5 MB (missing full native/media payload + unreleased asset duplicates) |
 
-### Ported (Kotlin scaffold)
+## Component diff (custom `com.example.rungps.*`)
 
-- 7-tab Compose shell (Home, Map, History, Gym, Recovery, Sleep, Soccer)
-- Room DB (gym, runs, splits, soccer, sleep, muscle overrides)
-- Firestore sync layer (`CloudSyncManager`, per-domain sync)
-- Muscle load engine (`shared/muscles/` → assets + domain)
-- Firebase Auth + Firestore (google-services.json with OAuth client)
+| Type | Reference v0.7.93 | Rebuilt | Match |
+|------|-------------------|---------|-------|
+| Activities | 3 (+ 6 library) | 3 (+ 8 library) | **Yes** (custom) |
+| Services | 5 (+ 8 library) | 5 (+ 10 library) | **Yes** (custom) |
+| Receivers | 11 (+ 10 library) | 11 (+ 13 library) | **Yes** (custom) |
+| Providers | 1 (+ 2 library) | 1 (+ 2 library) | **Yes** |
+| Activity alias | 1 | 1 | **Yes** |
+| Widgets | 3 | 3 | **Yes** (stub providers) |
 
-### Not yet ported (from `android/decompiled-reference/`)
+## Build status
 
-Full decompiled tree (~1,571 Java files) is preserved under `android/decompiled-reference/` (gitignored). JADX output does not compile cleanly; port incrementally to Kotlin.
+| Check | Status |
+|-------|--------|
+| `./gradlew assembleRelease` | **SUCCESS** |
+| Signed APK | `%LOCALAPPDATA%\ExerciseTracker-build\app\outputs\apk\release\app-release.apk` |
+| Desktop copy | `Desktop/ExerciseTracker-latest.apk` |
+| Launch activity | `com.example.rungps.MainActivity` |
 
-| Area | Reference components | Status |
-|------|---------------------|--------|
-| GPS tracking | `TrackingService`, run recording UI | Not ported |
-| MapLibre offline | `MapTabContentKt`, map tiles | Dependency only |
-| Gym train flow | NFC, session media, full `GymTabContentKt` | Partial (GymScreen) |
-| Sleep ML | `SleepListenService`, TFLite staging | Not ported |
-| Health Connect | `HealthConnectManager` | Not ported |
-| BLE watch | Moyoung parsers, sync | Not ported |
-| Strava OAuth | Activities API, upload | Not ported |
-| Spotify | Mini player, timeline | Not ported |
-| Widgets | Recovery, Gym, Run widgets | Not ported |
-| Foreground services | 6 services in full manifest | Not ported |
+## Remaining gaps (line-item)
 
-### Blockers for exact APK match
+| Gap | Est. % missing | Blocker |
+|-----|----------------|---------|
+| Full Compose UI from decompile | ~80% UI | JADX Compose output invalid; needs manual Kotlin port |
+| TrackingService GPS/run logic | ~100% feature | ~1,250 lines + dependencies |
+| SleepListenService + ML pipeline | ~100% feature | 77+ sleep files, TFLite staging |
+| Health Connect / Samsung Health | ~90% | SDK + writeback coroutines |
+| Strava / Spotify integration | ~100% | OAuth + API clients in decompile |
+| MapLibre offline UI | ~90% | MapTabContent not ported |
+| Room schema v42 full DAO surface | ~40% | Scaffold DB smaller than `AppDb` |
+| Web dashboard Firestore binding | ~60% | `web/` shell only |
 
-1. **Release keystore** (`.jks`) — required for in-place upgrade over Play/distributed builds
-2. **~1,500 decompiled UI/logic files** — need manual Kotlin port, not bulk compile
-3. **Native libs / R8 tuning** — reference uses optimized packaging (`extractNativeLibs=false`)
-4. **Signing** — rebuilt APK is unsigned unless keystore is provided
+## Web parity (~25%)
 
-## Web parity
+Live site: https://exercise-tracker-2936d.web.app/ — 7-tab shell in `web/`; most pages not wired to Firestore.
 
-| Check | Live site (expected) | `web/` rebuild | Match |
-|-------|---------------------|----------------|-------|
-| Hosting | Firebase `exercise-tracker-2936d.web.app` | `web/dist/` | Deploy pending |
-| Auth | Email/password Firebase | `AuthPanel` + `firebase.ts` | Partial (needs `VITE_FIREBASE_APP_ID`) |
-| Dashboard tabs | 7 sections | 7 routes in `App.tsx` | Yes (shell) |
-| Gym muscle atlas | Volume from Firestore | Demo from `shared/muscles/` | Partial |
-| Runs / map | History + Leaflet | Placeholder `SectionPage` | No |
-| Firestore data binding | Live user data | Not wired on most pages | No |
+## Next steps toward 100%
 
-### Web setup
+1. Recover original Kotlin from backup/Play bundle if available
+2. Port UI tab-by-tab from `android/decompiled-reference/com-example-rungps/rungps/ui/` → new `.kt` (not bulk Java compile)
+3. Port `TrackingService.kt` then `SleepListenService.kt` from decompiled reference
+4. Re-add non-conflicting reference assets (symbols/patterns) with packaging `pickFirsts`
+5. Wire `web/` to Firestore paths matching Android sync
 
-Copy Web app ID from [Firebase Console](https://console.firebase.google.com/project/exercise-tracker-2936d/settings/general) into `web/.env`:
-
-```
-VITE_FIREBASE_APP_ID=1:40353237709:web:YOUR_ID
-```
-
-Then: `cd web && npm run build && cd ../firebase && npx firebase-tools deploy --only hosting`
-
-## Repository layout (optimized)
-
-```
-ExerciseTracker/
-├── android/                 Kotlin + Compose app (canonical source)
-│   ├── app/src/main/java/   com.exercisetracker.app.*
-│   ├── decompiled-reference/  JADX output (gitignored, porting reference)
-│   └── scaffold-backup/     Original Kotlin scaffold snapshot
-├── web/                     React + Vite dashboard
-├── shared/                  JSON schemas, muscle maps, assets
-├── firebase/                Hosting + Firestore rules
-├── docs/                    PARITY.md, guides
-├── apk-archive/             APK inventory metadata
-└── recovered-source-v2/   Additional decompile artifacts
-```
-
-## Next steps (Phase 4+)
-
-1. Port `TrackingService` + run recording from decompiled reference
-2. Restore full `AndroidManifest.xml` from `decompiled-reference/AndroidManifest-full.xml` as features land
-3. Wire web pages to Firestore (`users/{uid}/runs`, gym, sleep)
-4. Provide release keystore for signed builds matching distributed APK
+See also `docs/APK_PROJECT_PARITY.md`.

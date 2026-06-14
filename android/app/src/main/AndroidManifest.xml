@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+        <package android:name="com.sec.android.app.shealth" />
+        <package android:name="com.spotify.music" />
+        <package android:name="com.samsung.android.wear.shealth" />
+    </queries>
 
     <uses-permission android:name="android.permission.health.READ_STEPS" />
     <uses-permission android:name="android.permission.health.WRITE_STEPS" />
@@ -40,25 +48,265 @@
 
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
     <uses-feature android:name="android.hardware.nfc" android:required="false" />
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+    <uses-feature android:name="android.hardware.location.network" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
     <uses-feature android:glEsVersion="0x30000" android:required="true" />
 
+    <permission
+        android:name="${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+
     <application
-        android:name=".ExerciseTrackerApplication"
+        android:name="com.example.rungps.ExerciseTrackerApplication"
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/backup_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ExerciseTracker">
+        android:theme="@style/Theme.ExerciseTracker"
+        android:extractNativeLibs="false"
+        tools:targetApi="31">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <service
+            android:name="com.example.rungps.tracking.TrackingService"
+            android:exported="false"
+            android:foregroundServiceType="location"
+            android:stopWithTask="false" />
+
+        <service
+            android:name="com.example.rungps.gym.GymActiveSessionForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Keeps gym set logging active while using other apps" />
+        </service>
+
+        <service
+            android:name="com.example.rungps.sleep.SleepListenService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse|microphone"
+            android:stopWithTask="false">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Overnight sleep movement tracking when microphone is unavailable" />
+        </service>
+
+        <service
+            android:name="com.example.rungps.sleep.SleepAlarmSoundService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <service
+            android:name="com.example.rungps.media.MediaSessionListenerService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.example.rungps.sleep.SleepAlarmReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.rungps.sleep.ALARM_FIRE" />
+                <action android:name="com.example.rungps.sleep.ALARM_DISMISS" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.example.rungps.sleep.SleepAlarmBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.example.rungps.widget.GymWidgetRefreshReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.example.rungps.widget.RideRunWidgetRefreshReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.example.rungps.widget.GymWidgetRestReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.example.rungps.widget.WidgetBootReceiver"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.example.rungps.sleep.BedtimeReminderReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.rungps.sleep.BEDTIME_REMINDER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.example.rungps.notify.RestTimerReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.rungps.REST_TIMER_DONE" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.example.rungps.notify.NotificationDismissReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.exercisetracker.app.NOTIFICATION_DISMISS" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.example.rungps.widget.GymWidgetProvider"
+            android:exported="true"
+            android:label="@string/gym_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.rungps.WIDGET_REST_60" />
+                <action android:name="com.example.rungps.WIDGET_REST_90" />
+                <action android:name="com.example.rungps.WIDGET_REST_120" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/gym_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.example.rungps.widget.RideRunWidgetProvider"
+            android:exported="true"
+            android:label="@string/ride_run_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ride_run_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.example.rungps.widget.RecoveryWidgetProvider"
+            android:exported="true"
+            android:label="@string/recovery_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recovery_widget_info" />
+        </receiver>
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.rungps.sleep.SleepAlarmActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:showWhenLocked="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.ExerciseTracker.SleepAlarm"
+            android:turnScreenOn="true" />
+
+        <activity
+            android:name="com.example.rungps.sleep.CalendarPermissionActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.ExerciseTracker" />
+
+        <activity
+            android:name="com.example.rungps.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.ExerciseTracker">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.ExerciseTracker.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="rungps" android:host="strava" android:pathPrefix="/oauth" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="localhost" android:path="/oauth" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="localhost" android:path="/spotify" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="exercisetracker" android:host="spotify-callback" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="rungps" android:host="gym" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="rungps" android:host="gym" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+
+        <activity-alias
+            android:name="com.example.rungps.HealthPermissionUsage"
+            android:exported="true"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
+            android:targetActivity="com.example.rungps.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
     </application>
 </manifest>

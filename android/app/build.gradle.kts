@@ -38,6 +38,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+        }
     }
 
     signingConfigs {
@@ -85,20 +89,19 @@ android {
     }
 
     packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
             excludes += "/META-INF/DEPENDENCIES"
             excludes += "/META-INF/LICENSE*"
             excludes += "/META-INF/NOTICE*"
-            // osmdroid-mapsforge AAR also ships mapsforge themes — avoid duplicate APK entries
+            excludes += "assets/dexopt/**"
+            pickFirsts += "assets/dexopt/baseline.prof"
+            pickFirsts += "assets/dexopt/baseline.profm"
             pickFirsts += "assets/mapsforge/default.xml"
             pickFirsts += "assets/mapsforge/osmarender.xml"
-        }
-    }
-
-    sourceSets {
-        getByName("main") {
-            java.srcDirs("src/main/java")
         }
     }
 }
@@ -121,7 +124,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.8.4")
-    implementation("androidx.fragment:fragment-ktx:1.8.5")
+    implementation("androidx.autofill:autofill:1.1.0")
+    implementation("com.google.guava:guava:33.3.1-android")
     implementation("androidx.browser:browser:1.8.0")
     implementation("androidx.webkit:webkit:1.12.1")
     implementation("androidx.credentials:credentials:1.3.0")
@@ -156,6 +160,11 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+
+    implementation("androidx.glance:glance-appwidget:1.1.1")
 
     testImplementation("junit:junit:4.13.2")
     debugImplementation("androidx.compose.ui:ui-tooling")
