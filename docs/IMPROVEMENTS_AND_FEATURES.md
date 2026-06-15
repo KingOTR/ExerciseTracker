@@ -10,12 +10,16 @@
 
 | Section | Done | Notes |
 |---------|------|-------|
-| **A — Parity** | **~74%** | P0/P1 core logic + gym media; device validation & full UI depth remain |
-| **B — UX** | **~55%** | Dynamic color, onboarding, empty states, haptics stub; lazy tabs/widgets partial |
-| **C — New features** | **~70%** | All in-scope items started; Wear stub on disk, not in default build |
-| **D — Technical** | **~65%** | CI, 21+ unit tests, analytics, schema export; modularization stub only |
+| **A — Parity** | **79%** (15/19) | P0/P1 core logic + gym media; device validation & widget tap parity remain |
+| **B — UX** | **50%** (5/10) | Dynamic color, onboarding, empty states, haptics stub; a11y/perf/widgets partial |
+| **C — New features** | **91%** (10/11) | All in-scope items except PDF training log; Wear stub on disk, not in default build |
+| **D — Technical** | **89%** (8/9) | CI, 30+ unit tests, analytics, schema export; `core/domain` split not started |
 
-**Build:** `assembleRelease` + `testReleaseUnitTest` — **PASS** (session end)
+**Overall: ~77%** (38/49 scoped checkboxes)
+
+**Build:** `assembleRelease` + `testReleaseUnitTest` — **PASS** (15 Jun 2026)  
+**APK:** `OneDrive/Desktop/ExerciseTracker-rebuilt-v0.7.93.apk` (~38 MB)  
+**Git:** pushed to `KingOTR/ExerciseTracker` `master` (`5fd93eb` → `83681c4b`)
 
 ---
 
