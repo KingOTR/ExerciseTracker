@@ -1,0 +1,10 @@
+{
+  "name": "Exercise Tracker",
+  "short_name": "ExTracker",
+  "description": "Runs, gym, sleep, and recovery dashboard",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1565C0",
+  "theme_color": "#1565C0",
+  "icons": []
+}

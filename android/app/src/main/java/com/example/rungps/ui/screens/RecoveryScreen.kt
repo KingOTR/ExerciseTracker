@@ -23,6 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.rungps.ui.settings.CloudBackupPanel
+import com.example.rungps.ui.settings.DiagnosticsPanel
+import com.example.rungps.ui.settings.HealthConnectDashboard
 import com.example.rungps.ui.viewmodel.RecoveryViewModel
 
 @Composable
@@ -107,6 +110,14 @@ fun RecoveryScreen(
                 }
             }
         }
+
+        CloudBackupPanel()
+        DiagnosticsPanel()
+        HealthConnectDashboard(
+            readStatus = mapOf("Sleep" to true, "Steps" to true, "Exercise" to true),
+            writeStatus = mapOf("Sleep" to true, "Exercise" to false),
+            onReconcile = { },
+        )
     }
 }
 
