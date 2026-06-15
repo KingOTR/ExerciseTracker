@@ -19,13 +19,28 @@ object SleepStageInference {
     )
 
     private const val SNORE_AUDIO = 0.35f
+    private const val CYCLE_BUCKETS = 54
+
+    fun stageLabels(samples: List<SleepTrackSample>, context: Context? = null): List<SleepStageLabel> {
+        if (samples.isEmpty()) return emptyList()
+        context?.let { SleepMlClassifier.ensureLoaded(it) }
+        val raw = samples.mapIndexed { index, s ->
+            val asleep = s.asleepProb ?: (1f - s.movement.coerceIn(0f, 1f))
+            when {
+                asleep < 0.5f -> SleepStageLabel.AWAKE
+                s.movement < 0.15f && s.quietFraction > 0.6f -> SleepStageLabel.DEEP
+                (s.lightSleepProb ?: 0.5f) > 0.55f -> SleepStageLabel.LIGHT
+                else -> SleepStageLabel.REM
+            }
+        }
+        return SleepStageSmoother.smooth(raw)
+    }
 
     fun analyze(samples: List<SleepTrackSample>, inBedMin: Int, context: Context? = null): StageBreakdown {
-        if (samples.isEmpty()) {
-            return emptyBreakdown("No overnight samples recorded")
-        }
-        val trackedMin = (samples.last().elapsedMs / 60_000L).toInt().coerceAtLeast(1)
+        if (samples.isEmpty()) return emptyBreakdown("No overnight samples recorded")
+        val labels = stageLabels(samples, context)
         val bucketMs = SleepAudioConstants.BUCKET_MS
+        val trackedMin = (samples.last().elapsedMs / 60_000L).toInt().coerceAtLeast(1)
         var deep = 0
         var light = 0
         var rem = 0
@@ -35,19 +50,19 @@ object SleepStageInference {
         var fallAsleepBuckets = 0
         var asleepStarted = false
 
-        samples.forEach { s ->
+        samples.forEachIndexed { i, s ->
             if (s.snoreLikelihood >= SNORE_AUDIO) snoreEvents++
             restlessSum += s.movement
-            val asleep = (s.asleepProb ?: (1f - s.movement.coerceIn(0f, 1f))) >= 0.5f
-            if (!asleepStarted && asleep) {
+            val label = labels.getOrElse(i) { SleepStageLabel.LIGHT }
+            if (!asleepStarted && label != SleepStageLabel.AWAKE) {
                 asleepStarted = true
                 fallAsleepBuckets = (s.elapsedMs / bucketMs).toInt()
             }
-            when {
-                !asleep -> awake++
-                s.movement < 0.15f && s.quietFraction > 0.6f -> deep++
-                (s.lightSleepProb ?: 0.5f) > 0.55f -> light++
-                else -> rem++
+            when (label) {
+                SleepStageLabel.AWAKE -> awake++
+                SleepStageLabel.DEEP -> deep++
+                SleepStageLabel.LIGHT -> light++
+                SleepStageLabel.REM -> rem++
             }
         }
 
@@ -61,7 +76,8 @@ object SleepStageInference {
         val fallAsleepMin = (fallAsleepBuckets * bucketMs / 60_000L).toInt()
         val efficiency = if (inBedMin > 0) ((totalSleepMin * 100) / inBedMin).coerceIn(0, 100) else 85
         val cycles = estimateCycles(rem, totalBuckets)
-        val hint = buildQualityHint(efficiency, deepMin, remMin, cycles, snoreEvents, restlessness)
+        val avgBreath = samples.map { it.breathRateBpm }.filter { it > 0f }.average().takeIf { !it.isNaN() }?.toFloat() ?: 0f
+        val hint = buildQualityHint(efficiency, deepMin, remMin, cycles, snoreEvents, restlessness, avgBreath)
         return StageBreakdown(
             totalSleepMin = totalSleepMin.coerceAtMost(inBedMin.coerceAtLeast(totalSleepMin)),
             deepSleepMin = deepMin,
@@ -79,7 +95,7 @@ object SleepStageInference {
     }
 
     private fun estimateCycles(remBuckets: Int, total: Int): Int =
-        if (total <= 0) 0 else (remBuckets / 54).coerceIn(0, 8)
+        if (total <= 0) 0 else (remBuckets / CYCLE_BUCKETS).coerceIn(0, 8)
 
     private fun buildQualityHint(
         efficiency: Int,
@@ -88,25 +104,19 @@ object SleepStageInference {
         cycles: Int,
         snore: Int,
         restlessness: Int,
+        avgBreath: Float,
     ): String = when {
         efficiency >= 85 && restlessness < 40 -> "Solid rest — movement and breathing looked calm"
         snore > 20 -> "Noisy night — consider mic placement farther from pillow edge"
         restlessness > 65 -> "Restless night — higher movement throughout"
+        avgBreath > 0f && (avgBreath < 10f || avgBreath > 22f) -> "Breathing rate outside typical sleep range"
         deepMin < 30 -> "Light on deep sleep — try consistent bedtime"
         else -> "Tracked overnight — review stages in detail"
     }
 
     private fun emptyBreakdown(hint: String) = StageBreakdown(
-        totalSleepMin = 0,
-        deepSleepMin = 0,
-        lightSleepMin = 0,
-        remSleepMin = 0,
-        awakeSleepMin = 0,
-        snoreEvents = 0,
-        restlessnessIndex = 0,
-        timeToFallAsleepMin = 0,
-        efficiency = 0,
-        sleepCycles = 0,
-        qualityHint = hint,
+        totalSleepMin = 0, deepSleepMin = 0, lightSleepMin = 0, remSleepMin = 0,
+        awakeSleepMin = 0, snoreEvents = 0, restlessnessIndex = 0, timeToFallAsleepMin = 0,
+        efficiency = 0, sleepCycles = 0, qualityHint = hint,
     )
 }

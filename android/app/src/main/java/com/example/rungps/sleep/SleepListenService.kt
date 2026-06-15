@@ -45,6 +45,7 @@ class SleepListenService : Service(), SensorEventListener {
     private var wakeLock: PowerManager.WakeLock? = null
     private val accelWindow = SleepAccelWindow()
     private val rmsBucket = mutableListOf<Float>()
+    private val partialMels = mutableListOf<FloatArray>()
     private var pcmRing = SleepPcmRingBuffer(20, SAMPLE_RATE)
     private var emptyReadStreak = 0
     private var alarmTriggered = false
@@ -232,6 +233,7 @@ class SleepListenService : Service(), SensorEventListener {
     private fun startContinuousCapture() {
         stopCapture()
         rmsBucket.clear()
+        partialMels.clear()
         emptyReadStreak = 0
         pcmRing = SleepPcmRingBuffer(20, SAMPLE_RATE)
         lastClipAtMs = 0L
@@ -334,31 +336,60 @@ class SleepListenService : Service(), SensorEventListener {
             val accel = accelWindow.snapshot()
             val baselineAudio = SleepOvernightStore.baselineAudioRms(this)
             val baselineMove = SleepOvernightStore.baselineMovement(this)
-            val audioFeatures = SleepAudioAnalyzer.analyzeWindow(rmsBucket.toList(), baselineAudio)
+            val pcmBytes = pcmRing.tailPcmBytes(SAMPLE_RATE * 2 * (BUCKET_MS / 1000).toInt())
+            val recent = SleepOvernightStore.loadRecentSamples(this, 120)
+            val features = SleepAudioFeaturePipeline.analyzeBucket(
+                context = this,
+                rmsSeries = rmsBucket.toList(),
+                baselineRms = baselineAudio,
+                pcm16le = pcmBytes,
+                sampleRate = SAMPLE_RATE,
+                movement = (accel.activityIndex / baselineMove.coerceAtLeast(0.05f)).coerceIn(0f, 3f),
+                recentSamples = recent,
+                bucketIndex = bucketCount,
+            )
             rmsBucket.clear()
+            partialMels += features.melPartial
             val movement = (accel.activityIndex / baselineMove.coerceAtLeast(0.05f)).coerceIn(0f, 3f)
+            var melCompact: FloatArray? = null
+            if (partialMels.size >= SleepAudioConstants.EPOCH_BUCKETS) {
+                val epoch = SleepAudioFeaturePipeline.buildEpoch(
+                    this,
+                    partialMels.toList(),
+                    recent + SleepTrackSample(
+                        elapsedMs = elapsed,
+                        movement = movement,
+                        audioLevel = features.window.rms,
+                    ),
+                    bucketCount,
+                )
+                melCompact = epoch.melCompact
+                partialMels.clear()
+            }
             val sample = SleepTrackSample(
                 elapsedMs = elapsed,
                 movement = movement,
-                audioLevel = audioFeatures.rms,
-                breathRateBpm = audioFeatures.breathRateBpm,
-                breathRegularity = audioFeatures.breathRegularity,
-                quietFraction = audioFeatures.quietFraction,
-                snoreLikelihood = audioFeatures.snoreLikelihood,
+                audioLevel = features.window.rms,
+                breathRateBpm = features.window.breathRateBpm,
+                breathRegularity = features.window.breathRegularity,
+                quietFraction = features.window.quietFraction,
+                snoreLikelihood = features.window.snoreLikelihood,
                 movementVariance = accel.variance,
-                asleepProb = (1f - movement.coerceIn(0f, 1f) * 0.7f).coerceIn(0f, 1f),
-                stageConfidence = 0.55f,
-                eventTag = when {
-                    audioFeatures.snoreLikelihood >= 0.5f -> "snore"
-                    isTalkBucket(audioFeatures) -> "talk"
-                    isNoiseDisturbanceBucket(audioFeatures) -> "noise"
-                    else -> null
-                },
+                melCompact = melCompact,
+                asleepProb = features.asleepProb,
+                stageConfidence = features.stageConfidence,
+                lightSleepProb = features.lightSleepProb,
+                eventTag = features.eventTag,
+                snoreIntensity = features.snoreIntensity,
+                audioQualityOk = features.audioQualityOk,
+                noiseTag = features.noiseTag,
+                breathPause = features.breathPause,
+                sonarMotion = features.sonarMotion,
             )
             SleepOvernightStore.appendSample(this, sample)
             bucketCount++
             if (bucketCount == CALIBRATION_BUCKETS) {
-                val avgRms = audioFeatures.rms * baselineAudio
+                val avgRms = features.window.rms * baselineAudio
                 SleepOvernightStore.setBaselines(this, avgRms.coerceAtLeast(50f), movement.coerceAtLeast(0.05f))
             }
             checkAwayFromBed()

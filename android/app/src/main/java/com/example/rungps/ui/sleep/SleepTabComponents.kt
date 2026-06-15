@@ -48,6 +48,7 @@ fun SleepTrackingLiveCard(
     serviceRunning: Boolean,
     sampleCount: Int,
     lastSample: SleepTrackSample?,
+    liveSamples: List<SleepTrackSample> = emptyList(),
     modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
@@ -55,7 +56,7 @@ fun SleepTrackingLiveCard(
             Text("Tonight", style = MaterialTheme.typography.titleMedium)
             Text(
                 when {
-                    tracking && serviceRunning -> "Recording — $sampleCount buckets"
+                    tracking && serviceRunning -> "Recording — $sampleCount buckets (ML pipeline)"
                     tracking -> "Session active — restarting service…"
                     else -> "Not tracking"
                 },
@@ -63,10 +64,14 @@ fun SleepTrackingLiveCard(
             )
             lastSample?.let { s ->
                 Text(
-                    "Movement ${"%.2f".format(s.movement)} · audio ${"%.2f".format(s.audioLevel)} · snore ${"%.0f".format(s.snoreLikelihood * 100)}%",
+                    "Movement ${"%.2f".format(s.movement)} · audio ${"%.2f".format(s.audioLevel)} · " +
+                        "stage ${((s.stageConfidence ?: 0f) * 100).toInt()}% · snore ${"%.0f".format(s.snoreLikelihood * 100)}%",
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(top = 8.dp),
                 )
+            }
+            if (tracking && liveSamples.size >= 2) {
+                SleepOvernightLiveChart(liveSamples, Modifier.padding(top = 8.dp))
             }
         }
     }
@@ -75,12 +80,18 @@ fun SleepTrackingLiveCard(
 @Composable
 fun SleepTrendCard(entries: List<SleepEntryEntity>, modifier: Modifier = Modifier) {
     if (entries.size < 2) return
-    val avg = entries.take(7).map { it.totalSleepMin }.average()
+    val recent = entries.take(7)
+    val avgSleep = recent.map { it.totalSleepMin }.average()
+    val avgEff = recent.mapNotNull { it.sleepEfficiency }.average().takeIf { !it.isNaN() }
     Card(modifier = modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp)) {
             Text("7-night trend", style = MaterialTheme.typography.titleMedium)
             Text(
-                "Avg ${avg.toInt() / 60}h ${avg.toInt() % 60}m · ${entries.size} nights in history",
+                buildString {
+                    append("Avg ${avgSleep.toInt() / 60}h ${avgSleep.toInt() % 60}m")
+                    avgEff?.let { append(" · ${it.toInt()}% efficiency") }
+                    append(" · ${entries.size} nights")
+                },
                 modifier = Modifier.padding(top = 4.dp),
             )
         }

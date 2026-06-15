@@ -40,6 +40,7 @@ fun SleepTabScreenBody(modifier: Modifier = Modifier, viewModel: SleepViewModel 
     var tracking by remember { mutableStateOf(viewModel.isTracking) }
     var serviceRunning by remember { mutableStateOf(viewModel.isServiceRunning) }
     val samples = remember(tracking, serviceRunning) { viewModel.liveSamples() }
+    var selectedEntry by remember { mutableStateOf<com.example.rungps.data.entity.SleepEntryEntity?>(null) }
     val (alarmHour, alarmMinute) = remember { viewModel.alarmTime() }
     var hour by remember { mutableIntStateOf(alarmHour) }
     var minute by remember { mutableIntStateOf(alarmMinute) }
@@ -66,6 +67,7 @@ fun SleepTabScreenBody(modifier: Modifier = Modifier, viewModel: SleepViewModel 
             serviceRunning = serviceRunning,
             sampleCount = samples.size,
             lastSample = samples.lastOrNull(),
+            liveSamples = samples,
         )
 
         Text("Alarm", style = MaterialTheme.typography.titleSmall)
@@ -136,9 +138,11 @@ fun SleepTabScreenBody(modifier: Modifier = Modifier, viewModel: SleepViewModel 
 
         Text("Recent nights", style = MaterialTheme.typography.titleSmall)
         entries.take(10).forEach { entry ->
-            SleepNightRow(entry, onClick = {})
+            SleepNightRow(entry, onClick = { selectedEntry = entry })
         }
     }
+
+    SleepNightDetailSheet(entry = selectedEntry, onDismiss = { selectedEntry = null })
 }
 
 @Composable

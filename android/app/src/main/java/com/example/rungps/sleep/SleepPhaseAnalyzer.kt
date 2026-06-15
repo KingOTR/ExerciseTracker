@@ -40,10 +40,14 @@ object SleepPhaseAnalyzer {
         var bestScore = Float.MAX_VALUE
         for (i in startIdx..endIdx) {
             val s = samples[i]
-            val score = s.movement * 0.35f +
-                s.audioLevel * 0.25f +
-                (1f - s.quietFraction) * 0.25f +
-                (1f - s.breathRegularity) * 0.15f
+            val asleep = s.asleepProb ?: (1f - s.movement.coerceIn(0f, 1f))
+            val lightBias = s.lightSleepProb ?: 0.5f
+            val score = s.movement * 0.3f +
+                s.audioLevel * 0.2f +
+                (1f - s.quietFraction) * 0.2f +
+                (1f - s.breathRegularity) * 0.1f +
+                (1f - asleep) * 0.1f +
+                (1f - lightBias) * 0.1f
             if (score < bestScore) {
                 bestScore = score
                 bestIdx = i
