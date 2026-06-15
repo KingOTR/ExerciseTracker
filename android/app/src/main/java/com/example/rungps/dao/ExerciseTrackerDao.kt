@@ -12,6 +12,7 @@ import com.example.rungps.data.entity.RunEntity
 import com.example.rungps.data.entity.RunHrSampleEntity
 import com.example.rungps.data.entity.SleepRecordEntity
 import com.example.rungps.data.entity.SoccerSessionEntity
+import com.example.rungps.data.entity.SpotifyTimelineEntity
 import com.example.rungps.data.entity.UserExerciseOverrideEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -134,4 +135,19 @@ interface ExerciseTrackerDao {
 
     @Query("SELECT * FROM run_hr_samples WHERE runId = :runId ORDER BY timeMs")
     suspend fun hrSamplesForRun(runId: Long): List<RunHrSampleEntity>
+
+    @Query("SELECT * FROM gym_sessions WHERE id = :sessionId LIMIT 1")
+    suspend fun getGymSession(sessionId: Long): GymSessionEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSpotifyTimeline(entry: SpotifyTimelineEntity)
+
+    @Query("SELECT * FROM spotify_timeline WHERE gymSessionId = :sessionId ORDER BY timeMs")
+    fun observeSpotifyTimelineForGymSession(sessionId: Long): Flow<List<SpotifyTimelineEntity>>
+
+    @Query("SELECT * FROM spotify_timeline WHERE gymSessionId = :sessionId ORDER BY timeMs")
+    suspend fun getSpotifyTimelineForGymSession(sessionId: Long): List<SpotifyTimelineEntity>
+
+    @Query("SELECT * FROM spotify_timeline WHERE runId = :runId ORDER BY timeMs")
+    suspend fun getSpotifyTimelineForRun(runId: Long): List<SpotifyTimelineEntity>
 }

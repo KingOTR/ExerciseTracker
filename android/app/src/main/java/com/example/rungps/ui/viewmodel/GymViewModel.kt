@@ -5,13 +5,18 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rungps.data.ExerciseTrackerDatabase
 import com.example.rungps.data.entity.GymSessionEntity
+import com.example.rungps.data.entity.SpotifyTimelineEntity
 import com.example.rungps.data.repository.MuscleRepository
 import com.example.rungps.data.entity.GymSetEntity
 import com.example.rungps.domain.muscle.MappingSource
 import com.example.rungps.domain.muscle.MuscleLoad
 import com.example.rungps.domain.muscle.MuscleVolumeEntry
 import com.example.rungps.domain.muscle.SetMuscleBreakdown
+import com.example.rungps.gym.GymActiveSessionForegroundService
+import com.example.rungps.media.DeviceNowPlayingReader
+import com.example.rungps.media.SessionMediaSnapshot
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -28,6 +33,9 @@ data class GymUiState(
     val lastBreakdown: SetMuscleBreakdown? = null,
     val pendingExerciseName: String? = null,
     val userOverrides: Map<String, List<MuscleLoad>> = emptyMap(),
+    val mediaTimeline: List<SpotifyTimelineEntity> = emptyList(),
+    val liveMedia: SessionMediaSnapshot? = null,
+    val session: GymSessionEntity? = null,
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,16 +47,25 @@ class GymViewModel(application: Application) : AndroidViewModel(application) {
     private val lastBreakdown = MutableStateFlow<SetMuscleBreakdown?>(null)
     private val pendingExercise = MutableStateFlow<String?>(null)
 
+    private val setsFlow = activeSessionId.flatMapLatest { sessionId ->
+        if (sessionId == null) flowOf(emptyList())
+        else dao.observeGymSets(sessionId)
+    }
+    private val timelineFlow = activeSessionId.flatMapLatest { sessionId ->
+        if (sessionId == null) flowOf(emptyList())
+        else dao.observeSpotifyTimelineForGymSession(sessionId)
+    }
+
     val uiState: StateFlow<GymUiState> = combine(
-        activeSessionId,
-        activeSessionId.flatMapLatest { sessionId ->
-            if (sessionId == null) flowOf(emptyList())
-            else dao.observeGymSets(sessionId)
+        combine(activeSessionId, setsFlow, timelineFlow) { sessionId, sets, timeline ->
+            Triple(sessionId, sets, timeline)
         },
-        lastBreakdown,
-        pendingExercise,
-        muscleRepo.observeUserOverrides(),
-    ) { sessionId, sets, breakdown, pending, overrides ->
+        combine(lastBreakdown, pendingExercise, muscleRepo.observeUserOverrides()) { breakdown, pending, overrides ->
+            Triple(breakdown, pending, overrides)
+        },
+    ) { sessionPart, metaPart ->
+        val (sessionId, sets, timeline) = sessionPart
+        val (breakdown, pending, overrides) = metaPart
         val volumes = muscleRepo.recoveryEngine.computeSessionMuscleVolumes(sets, overrides)
         GymUiState(
             sessionId = sessionId,
@@ -57,8 +74,13 @@ class GymViewModel(application: Application) : AndroidViewModel(application) {
             lastBreakdown = breakdown,
             pendingExerciseName = pending,
             userOverrides = overrides,
+            mediaTimeline = timeline,
+            liveMedia = _liveMedia.value,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), GymUiState())
+
+    private val _liveMedia = MutableStateFlow<SessionMediaSnapshot?>(null)
+    val liveMedia: StateFlow<SessionMediaSnapshot?> = _liveMedia.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -75,6 +97,17 @@ class GymViewModel(application: Application) : AndroidViewModel(application) {
                     ),
                 )
                 activeSessionId.value = newId
+            }
+            activeSessionId.value?.let { id ->
+                GymActiveSessionForegroundService.start(getApplication(), id)
+            }
+        }
+        viewModelScope.launch {
+            while (true) {
+                kotlinx.coroutines.delay(10_000)
+                if (activeSessionId.value == null) continue
+                val now = DeviceNowPlayingReader.read(getApplication())
+                _liveMedia.value = now?.let { SessionMediaSnapshot.fromDeviceNowPlaying(it) }
             }
         }
     }

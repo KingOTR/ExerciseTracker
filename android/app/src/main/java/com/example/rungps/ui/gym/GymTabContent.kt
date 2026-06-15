@@ -17,6 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import com.example.rungps.gym.GymActiveSessionForegroundService
 import com.example.rungps.gym.GymPulleySelection
 import com.example.rungps.gym.GymPulleyStore
 import androidx.compose.ui.Modifier
@@ -36,6 +38,7 @@ fun GymTabContent(
     modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val liveMedia by viewModel.liveMedia.collectAsState()
     var detailMuscleId by remember { mutableStateOf<String?>(null) }
     var pulleySelection by remember { mutableStateOf(GymPulleySelection.NONE) }
     val context = LocalContext.current
@@ -77,6 +80,26 @@ fun GymTabContent(
         if (uiState.sessionVolumes.isNotEmpty()) {
             Text("Session muscle volume", style = MaterialTheme.typography.labelMedium)
             MuscleVolumeChips(entries = uiState.sessionVolumes)
+        }
+        uiState.sessionId?.let { sessionId ->
+            LaunchedEffect(sessionId) {
+                GymActiveSessionForegroundService.start(context, sessionId)
+            }
+            GymSessionPodcastSummary(
+                showName = uiState.mediaTimeline.lastOrNull()?.podcastShowName
+                    ?: liveMedia?.subtitle,
+                episodeTitle = uiState.mediaTimeline.lastOrNull()?.podcastEpisodeTitle
+                    ?: liveMedia?.title,
+                playbackStartedMs = uiState.mediaTimeline.firstOrNull()?.timeMs,
+                playbackEndMs = uiState.mediaTimeline.lastOrNull()?.timeMs,
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+            GymSessionMediaTimelineList(
+                timeline = uiState.mediaTimeline,
+                startedAtMs = uiState.mediaTimeline.firstOrNull()?.timeMs ?: System.currentTimeMillis(),
+                liveSnapshot = liveMedia,
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
         }
         GymScreen(viewModel = viewModel)
     }
