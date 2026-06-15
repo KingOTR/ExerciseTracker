@@ -25,6 +25,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.rungps.MainActivity
 import com.example.rungps.data.Repository
+import com.example.rungps.intervals.Cue
+import com.example.rungps.intervals.WorkoutEngine
+import com.example.rungps.intervals.WorkoutPlan
+import com.example.rungps.intervals.WorkoutPlanResolver
 import com.example.rungps.data.entity.PointEntity
 import com.example.rungps.sync.RunFirestoreSync
 import com.example.rungps.widget.RideRunWidgetUpdater
@@ -112,6 +116,11 @@ class TrackingService : Service() {
     private var targetPaceSecPerKm: Int? = null
     private var goalDistanceM: Double? = null
     private var goalTimeMs: Long? = null
+    private var engine: WorkoutEngine? = null
+    private var activePlan: WorkoutPlan? = null
+    private var currentSegmentLabel: String? = null
+    private var segmentCount: Int? = null
+    private var lastWorkoutProgress: com.example.rungps.intervals.WorkoutProgress? = null
 
     private val stepListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
@@ -202,6 +211,13 @@ class TrackingService : Service() {
         targetPaceSecPerKm = intent.getIntExtra(EXTRA_TARGET_PACE_SEC_PER_KM, -1).takeIf { it > 0 }
         goalDistanceM = intent.getDoubleExtra(EXTRA_GOAL_DISTANCE_M, -1.0).takeIf { it > 0.0 }
         goalTimeMs = intent.getLongExtra(EXTRA_GOAL_TIME_MS, -1L).takeIf { it > 0L }
+        val planJson = intent.getStringExtra(EXTRA_PLAN_JSON)
+        val resolvedPlan = WorkoutPlanResolver.resolve(currentPlanType, planJson, currentTimeSession)
+        activePlan = resolvedPlan
+        engine = resolvedPlan?.let { WorkoutEngine(it) }
+        segmentCount = resolvedPlan?.segments?.size
+        currentSegmentLabel = resolvedPlan?.segments?.firstOrNull()?.label
+        lastWorkoutProgress = null
 
         startedAtMs = System.currentTimeMillis()
         lastMoveAtMs = startedAtMs
@@ -246,7 +262,7 @@ class TrackingService : Service() {
         startLocationUpdates()
         startRecordingClock()
         startRecordingHealth()
-        publishState(segmentLabel = null)
+        publishState()
 
         scope.launch {
             val id = repo.startRun(startedAtMs, currentActivityType)
@@ -254,6 +270,7 @@ class TrackingService : Service() {
             TrackingActiveStore.markActive(this@TrackingService, id, startedAtMs, currentActivityType)
             RecordingHrBridge.onRunStarted(id)
             RideRunWidgetUpdater.refreshAsync(this@TrackingService)
+            engine?.start(0L, 0.0)?.let { emitCues(it) }
         }
     }
 
@@ -404,6 +421,7 @@ class TrackingService : Service() {
                     )
                 }
                 maybeAnnounceElapsed(elapsed)
+                tickWorkoutEngine(elapsed, totalDistanceM)
             }
         }
     }
@@ -488,12 +506,21 @@ class TrackingService : Service() {
                 }
             }
 
-            publishState(segmentLabel = null)
+            tickWorkoutEngine(activeElapsedMs(now), totalDistanceM)
+            publishState()
             if (now - lastNotificationAtMs >= 2000L) {
                 lastNotificationAtMs = now
-                updateNotification(activeElapsedMs(now), totalDistanceM, null)
+                updateNotification(activeElapsedMs(now), totalDistanceM, currentSegmentLabel)
             }
         }
+    }
+
+    private fun tickWorkoutEngine(elapsedMs: Long, distanceM: Double) {
+        val workoutEngine = engine ?: return
+        val (progress, cues) = workoutEngine.onUpdate(elapsedMs, distanceM)
+        lastWorkoutProgress = progress
+        currentSegmentLabel = activePlan?.segments?.getOrNull(progress.segmentIndex)?.label
+        if (cues.isNotEmpty()) emitCues(cues)
     }
 
     private fun smoothLocation(location: Location): Location {
@@ -545,8 +572,8 @@ class TrackingService : Service() {
             lastMoveAtMs = now
             if (voiceAlertsEnabled) speak(RunVoiceAnnouncer.resumed()) else if (vibrationEnabled) vibrateShort()
         }
-        publishState(segmentLabel = null)
-        updateNotification(activeElapsedMs(now), totalDistanceM, null)
+        publishState()
+        updateNotification(activeElapsedMs(now), totalDistanceM, currentSegmentLabel)
     }
 
     private fun markLap() {
@@ -566,7 +593,7 @@ class TrackingService : Service() {
             }
         }
         if (vibrationEnabled) vibrateShort()
-        publishState(segmentLabel = null)
+        publishState()
     }
 
     private fun markHazard() {
@@ -612,6 +639,57 @@ class TrackingService : Service() {
         if (vibrationEnabled) vibrateLong()
     }
 
+    private fun emitCues(cues: List<Cue>) {
+        if (tts == null && !beepEnabled && !vibrationEnabled) return
+        for (cue in cues) {
+            when (cue) {
+                is Cue.Speak -> if (voiceAlertsEnabled) speak(cue.text)
+                is Cue.Beep -> if (beepEnabled || vibrationEnabled) {
+                    when (cue.pattern) {
+                        Cue.Beep.Pattern.Short -> beepShort()
+                        Cue.Beep.Pattern.Long -> beepLong()
+                        Cue.Beep.Pattern.IntervalEndOne -> beepBurst(1)
+                        Cue.Beep.Pattern.IntervalEndTwo -> beepBurst(2)
+                        Cue.Beep.Pattern.IntervalEndThree -> beepBurst(3)
+                        Cue.Beep.Pattern.IntervalStartThree -> beepBurst(3)
+                        Cue.Beep.Pattern.IntervalStartTwo -> beepBurst(2)
+                        Cue.Beep.Pattern.IntervalStartOne -> beepBurst(1)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun beepShort() {
+        if (!beepEnabled && !vibrationEnabled) return
+        if (beepEnabled) {
+            ensureAlarmMaxVolume()
+            tone?.startTone(ToneGenerator.TONE_PROP_BEEP, 180)
+        }
+        if (vibrationEnabled) vibrateShort()
+    }
+
+    private fun beepLong() {
+        if (!beepEnabled && !vibrationEnabled) return
+        if (beepEnabled) {
+            ensureAlarmMaxVolume()
+            tone?.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 260)
+        }
+        if (vibrationEnabled) vibrateLong()
+    }
+
+    private fun beepBurst(count: Int) {
+        if (!beepEnabled && !vibrationEnabled) return
+        ensureAlarmMaxVolume()
+        scope.launch {
+            repeat(count.coerceAtLeast(1)) {
+                if (beepEnabled) tone?.startTone(ToneGenerator.TONE_PROP_BEEP, 120)
+                if (vibrationEnabled) vibrateShort()
+                delay(200L)
+            }
+        }
+    }
+
     private fun ensureAlarmMaxVolume() {
         runCatching {
             val audio = getSystemService(AudioManager::class.java)
@@ -628,9 +706,10 @@ class TrackingService : Service() {
         vibrator?.takeIf { it.hasVibrator() }?.vibrate(VibrationEffect.createOneShot(90L, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 
-    private fun publishState(segmentLabel: String?) {
+    private fun publishState() {
         val elapsed = activeElapsedMs()
         val paused = manualPaused || isAutoPaused
+        val workoutProgress = lastWorkoutProgress
         TrackingState.update(
             TrackingUiState(
                 isRecording = isRunning,
@@ -641,7 +720,14 @@ class TrackingService : Service() {
                 lastLat = lastLoc?.latitude,
                 lastLon = lastLoc?.longitude,
                 planType = currentPlanType,
-                segmentLabel = segmentLabel,
+                segmentLabel = currentSegmentLabel,
+                segmentIndex = workoutProgress?.segmentIndex,
+                segmentCount = segmentCount,
+                segmentElapsedMs = workoutProgress?.segmentElapsedMs,
+                segmentRemainingMs = workoutProgress?.segmentRemainingMs,
+                segmentDistanceM = workoutProgress?.segmentDistanceM,
+                segmentRemainingM = workoutProgress?.segmentRemainingM,
+                workoutFinished = workoutProgress?.finished,
                 isAutoPaused = isAutoPaused,
                 isPaused = paused,
                 currentSplitElapsedMs = (elapsed - splitStartElapsedMs).coerceAtLeast(0L),
