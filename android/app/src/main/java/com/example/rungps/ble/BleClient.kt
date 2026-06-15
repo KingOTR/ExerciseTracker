@@ -84,6 +84,9 @@ class BleClient private constructor(private val context: Context) {
                         )
                     }
                     gatt.discoverServices()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        gatt.requestMtu(512)
+                    }
                 }
                 BluetoothProfile.STATE_DISCONNECTED -> {
                     _status.update {
@@ -97,6 +100,12 @@ class BleClient private constructor(private val context: Context) {
                     }
                     hrChar = null
                 }
+            }
+        }
+
+        override fun onMtuChanged(gatt: BluetoothGatt, mtu: Int, status: Int) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                workoutSync?.setMtu(mtu)
             }
         }
 
@@ -125,7 +134,10 @@ class BleClient private constructor(private val context: Context) {
                     gatt.writeDescriptor(desc)
                 }
             }
-            if (hasMoyoung) requestMoyoungHr()
+            if (hasMoyoung) {
+                workoutSync = MoyoungWorkoutSync(gatt)
+                requestMoyoungHr()
+            }
         }
 
         override fun onCharacteristicChanged(
