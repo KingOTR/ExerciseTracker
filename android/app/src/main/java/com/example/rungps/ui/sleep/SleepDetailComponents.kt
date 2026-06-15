@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,18 +16,31 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.rememberCoroutineScope
 import com.example.rungps.data.entity.SleepEntryEntity
+import com.example.rungps.sleep.SleepAudioClipStore
+import com.example.rungps.sleep.SleepClipPlayer
 import com.example.rungps.sleep.SleepAnalyticsCompact
 import com.example.rungps.sleep.SleepDebtTracker
 import com.example.rungps.sleep.SleepNightAnalytics
 import com.example.rungps.sleep.SleepScoring
 import com.example.rungps.sleep.SleepScience
 import com.example.rungps.sleep.SleepEventMarkersEncoder
+import kotlinx.coroutines.launch
 import com.example.rungps.sleep.SleepHypnogramEncoder
 import com.example.rungps.sleep.SleepStageLabel
 import com.example.rungps.sleep.SleepTrackSample
@@ -69,7 +83,7 @@ fun SleepNightDetailContent(
         )
         SleepNightStatsSection(entry)
         SleepHypnogramChart(entry.hypnogramCompact)
-        SleepDisturbanceTimeline(entry.eventMarkersCompact, entry.hypnogramCompact)
+        SleepDisturbanceTimeline(entry.id, entry.eventMarkersCompact, entry.hypnogramCompact)
         SleepSnoreMetricsCard(entry)
         SleepBreathingDisruptionsCard(entry)
         SleepDebtDetailCard(entry, sleepEntries = allEntries)
@@ -134,12 +148,17 @@ fun SleepHypnogramChart(compact: String?, modifier: Modifier = Modifier) {
 
 @Composable
 fun SleepDisturbanceTimeline(
+    nightId: Long,
     markersCompact: String?,
     hypnogramCompact: String?,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val clipStore = remember(context) { SleepAudioClipStore(context) }
+    val scope = rememberCoroutineScope()
     val events = SleepEventMarkersEncoder.resolve(markersCompact, hypnogramCompact, null)
     if (events.none { it.hasMarker }) return
+    val clips = clipStore.listClips(nightId)
     Card(modifier = modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp)) {
             Text("Disturbances", style = MaterialTheme.typography.titleMedium)
@@ -152,6 +171,31 @@ fun SleepDisturbanceTimeline(
                 if (pause > 0) add("$pause breath-pause min")
             }.joinToString(" · ")
             Text(summary.ifBlank { "Markers recorded" }, modifier = Modifier.padding(top = 4.dp))
+            if (clips.isNotEmpty()) {
+                Row(
+                    Modifier.padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text("${clips.size} audio clip(s)", style = MaterialTheme.typography.bodySmall)
+                    IconButton(
+                        onClick = {
+                            scope.launch {
+                                if (SleepClipPlayer.isPlaying) {
+                                    SleepClipPlayer.stop()
+                                } else {
+                                    SleepClipPlayer.playPcmFile(clips.first())
+                                }
+                            }
+                        },
+                    ) {
+                        Icon(
+                            if (SleepClipPlayer.isPlaying) Icons.Default.Stop else Icons.Default.PlayArrow,
+                            contentDescription = if (SleepClipPlayer.isPlaying) "Stop clip" else "Play disturbance clip",
+                        )
+                    }
+                }
+            }
         }
     }
 }

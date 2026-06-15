@@ -387,6 +387,7 @@ class SleepListenService : Service(), SensorEventListener {
                 sonarMotion = features.sonarMotion,
             )
             SleepOvernightStore.appendSample(this, sample)
+            maybeSaveDisturbanceClip(features.eventTag, features.snoreIntensity, pcmBytes, elapsed)
             bucketCount++
             if (bucketCount == CALIBRATION_BUCKETS) {
                 val avgRms = features.window.rms * baselineAudio
@@ -403,6 +404,18 @@ class SleepListenService : Service(), SensorEventListener {
 
     private fun isNoiseDisturbanceBucket(f: SleepAudioAnalyzer.WindowFeatures): Boolean =
         f.snoreLikelihood < 0.2f && f.rms >= 2.2f && f.quietFraction <= 0.2f
+
+    private fun maybeSaveDisturbanceClip(eventTag: String?, snoreIntensity: Int, pcmBytes: ByteArray, elapsed: Long) {
+        val disturbing = eventTag in setOf("snore", "talk", "cough", "noise") || snoreIntensity >= 1
+        if (!disturbing || pcmBytes.isEmpty()) return
+        val now = System.currentTimeMillis()
+        if (now - lastClipAtMs < 30_000L || clipsThisNight >= 12) return
+        val nightId = SleepOvernightStore.startedAtMs(this)
+        if (nightId <= 0L) return
+        SleepAudioClipStore(this).saveClip(nightId, clipsThisNight, pcmBytes)
+        clipsThisNight++
+        lastClipAtMs = now
+    }
 
     private fun checkAwayFromBed() {
         if (awayFromBedNotified) return
