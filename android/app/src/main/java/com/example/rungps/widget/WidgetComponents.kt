@@ -5,15 +5,18 @@ import android.appwidget.AppWidgetProvider
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.RemoteViews
-import com.exercisetracker.app.R
+import android.util.Log
 
 class GymWidgetRefreshReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent?) {}
+    override fun onReceive(context: Context, intent: Intent?) {
+        GymWidgetUpdater.refreshAsync(context)
+    }
 }
 
 class RideRunWidgetRefreshReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent?) {}
+    override fun onReceive(context: Context, intent: Intent?) {
+        RideRunWidgetUpdater.refreshAsync(context)
+    }
 }
 
 class GymWidgetRestReceiver : BroadcastReceiver() {
@@ -21,17 +24,41 @@ class GymWidgetRestReceiver : BroadcastReceiver() {
 }
 
 class WidgetBootReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent?) {}
-}
-
-abstract class BaseWidgetProvider(private val layoutId: Int) : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
-        ids.forEach { id ->
-            manager.updateAppWidget(id, RemoteViews(context.packageName, layoutId))
-        }
+    override fun onReceive(context: Context, intent: Intent?) {
+        WidgetBootstrap.refreshAllAsync(context)
     }
 }
 
-class GymWidgetProvider : BaseWidgetProvider(R.layout.widget_gym_initial)
-class RideRunWidgetProvider : BaseWidgetProvider(R.layout.widget_ride_run_initial)
-class RecoveryWidgetProvider : BaseWidgetProvider(R.layout.widget_recovery_initial)
+class GymWidgetProvider : AppWidgetProvider() {
+    override fun onEnabled(context: Context) {
+        WidgetBootstrap.onWidgetEnabled(context)
+    }
+
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
+        runCatching { WidgetMinimalBind.bindGym(context, manager, ids) }
+            .onFailure { Log.e("GymWidget", "onUpdate failed", it) }
+    }
+}
+
+class RideRunWidgetProvider : AppWidgetProvider() {
+    override fun onEnabled(context: Context) {
+        WidgetBootstrap.onWidgetEnabled(context)
+    }
+
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
+        runCatching { WidgetMinimalBind.bindRideRun(context, manager, ids) }
+            .onFailure { Log.e("RideRunWidget", "onUpdate failed", it) }
+        RideRunWidgetUpdater.refreshAsync(context)
+    }
+}
+
+class RecoveryWidgetProvider : AppWidgetProvider() {
+    override fun onEnabled(context: Context) {
+        WidgetBootstrap.onWidgetEnabled(context)
+    }
+
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
+        runCatching { WidgetMinimalBind.bindRecovery(context, manager, ids) }
+            .onFailure { Log.e("RecoveryWidget", "onUpdate failed", it) }
+    }
+}

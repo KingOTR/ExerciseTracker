@@ -5,17 +5,24 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.rungps.data.dao.ExerciseTrackerDao
+import com.example.rungps.data.dao.GearDao
+import com.example.rungps.data.dao.RouteDao
 import com.example.rungps.data.dao.SleepDao
+import com.example.rungps.data.dao.TrainingPlanDao
+import com.example.rungps.data.entity.GearEntity
 import com.example.rungps.data.entity.GymSessionEntity
 import com.example.rungps.data.entity.GymSetEntity
 import com.example.rungps.data.entity.KmSplitEntity
 import com.example.rungps.data.entity.PointEntity
+import com.example.rungps.data.entity.RouteEntity
+import com.example.rungps.data.entity.RoutePointEntity
 import com.example.rungps.data.entity.RunEntity
 import com.example.rungps.data.entity.RunHrSampleEntity
 import com.example.rungps.data.entity.SleepEntryEntity
 import com.example.rungps.data.entity.SleepRecordEntity
 import com.example.rungps.data.entity.SleepSoundEventEntity
 import com.example.rungps.data.entity.SoccerSessionEntity
+import com.example.rungps.data.entity.TrainingPlanProgressEntity
 import com.example.rungps.data.entity.UserExerciseOverrideEntity
 
 @Database(
@@ -31,13 +38,20 @@ import com.example.rungps.data.entity.UserExerciseOverrideEntity
         SleepEntryEntity::class,
         SleepSoundEventEntity::class,
         UserExerciseOverrideEntity::class,
+        RouteEntity::class,
+        RoutePointEntity::class,
+        GearEntity::class,
+        TrainingPlanProgressEntity::class,
     ],
-    version = 4,
+    version = 42,
     exportSchema = true,
 )
 abstract class ExerciseTrackerDatabase : RoomDatabase() {
     abstract fun exerciseTrackerDao(): ExerciseTrackerDao
     abstract fun sleepDao(): SleepDao
+    abstract fun routeDao(): RouteDao
+    abstract fun gearDao(): GearDao
+    abstract fun trainingPlanDao(): TrainingPlanDao
 
     companion object {
         @Volatile

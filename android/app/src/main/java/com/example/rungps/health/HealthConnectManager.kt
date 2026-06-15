@@ -8,10 +8,14 @@ import androidx.health.connect.client.PermissionController
 import androidx.health.connect.client.permission.HealthPermission
 import androidx.health.connect.client.records.DistanceRecord
 import androidx.health.connect.client.records.ExerciseSessionRecord
+import androidx.health.connect.client.records.SleepSessionRecord
 import androidx.health.connect.client.records.StepsRecord
 import androidx.health.connect.client.request.ReadRecordsRequest
 import androidx.health.connect.client.time.TimeRangeFilter
 import androidx.health.connect.client.units.Length
+import com.example.rungps.data.entity.SleepEntryEntity
+import com.example.rungps.sleep.SleepHypnogramEncoder
+import com.example.rungps.sleep.SleepStageLabel
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -29,7 +33,9 @@ class HealthConnectManager(private val context: Context) {
         HealthPermission.getWritePermission(ExerciseSessionRecord::class),
         HealthPermission.getWritePermission(DistanceRecord::class),
     )
-    val allRequestedPermissions = stepsReadPermissions + backupWritePermissions
+    val sleepWritePermissions = setOf(HealthPermission.getWritePermission(SleepSessionRecord::class))
+    val sleepReadPermissions = setOf(HealthPermission.getReadPermission(SleepSessionRecord::class))
+    val allRequestedPermissions = stepsReadPermissions + backupWritePermissions + sleepWritePermissions + sleepReadPermissions
 
     fun getSdkStatus(): Int = HealthConnectClient.getSdkStatus(context)
 
@@ -67,6 +73,81 @@ class HealthConnectManager(private val context: Context) {
         val controller = permissionController() ?: return false
         val granted = controller.getGrantedPermissions()
         return granted.containsAll(backupWritePermissions)
+    }
+
+    suspend fun hasSleepWritePermission(): Boolean {
+        val controller = permissionController() ?: return false
+        val granted = controller.getGrantedPermissions()
+        return granted.containsAll(sleepWritePermissions)
+    }
+
+    data class SleepWindow(val startMs: Long, val endMs: Long, val totalSleepMin: Int)
+
+    suspend fun readSleepSessions(daysBack: Int = 7, zoneId: ZoneId = ZoneId.systemDefault()): List<SleepWindow> {
+        val client = clientOrNull ?: return emptyList()
+        val end = Instant.now()
+        val start = end.minusSeconds(daysBack.toLong() * 86_400L)
+        val response = client.readRecords(
+            ReadRecordsRequest(
+                recordType = SleepSessionRecord::class,
+                timeRangeFilter = TimeRangeFilter.between(start, end),
+            ),
+        )
+        return response.records.map { record ->
+            val durationMin = java.time.Duration.between(record.startTime, record.endTime).toMinutes().toInt()
+            SleepWindow(
+                startMs = record.startTime.toEpochMilli(),
+                endMs = record.endTime.toEpochMilli(),
+                totalSleepMin = durationMin.coerceAtLeast(0),
+            )
+        }
+    }
+
+    suspend fun backupSleepSession(entry: SleepEntryEntity): Boolean {
+        val client = clientOrNull ?: return false
+        if (!hasSleepWritePermission()) return false
+        val zone = ZoneId.systemDefault()
+        val start = Instant.ofEpochMilli(entry.startTimeMs)
+        val end = Instant.ofEpochMilli(entry.endTimeMs)
+        val startOffset = zone.rules.getOffset(start)
+        val endOffset = zone.rules.getOffset(end)
+        val stages = hypnogramStagesForWriteback(entry)
+        val session = SleepSessionRecord(
+            startTime = start,
+            startZoneOffset = startOffset,
+            endTime = end,
+            endZoneOffset = endOffset,
+            title = "Exercise Tracker sleep",
+            stages = stages,
+        )
+        return runCatching {
+            client.insertRecords(listOf(session))
+            true
+        }.getOrDefault(false)
+    }
+
+    private fun hypnogramStagesForWriteback(entry: SleepEntryEntity): List<SleepSessionRecord.Stage> {
+        val compact = entry.hypnogramCompact ?: return emptyList()
+        val labels = SleepHypnogramEncoder.decode(compact)
+        if (labels.isEmpty()) return emptyList()
+        val stages = mutableListOf<SleepSessionRecord.Stage>()
+        var i = 0
+        while (i < labels.size) {
+            val label = labels[i]
+            var j = i + 1
+            while (j < labels.size && labels[j] == label) j++
+            val stageStart = Instant.ofEpochMilli(entry.startTimeMs + i * 60_000L)
+            val stageEnd = Instant.ofEpochMilli(entry.startTimeMs + j * 60_000L)
+            val stageType = when (label) {
+                SleepStageLabel.AWAKE -> 7
+                SleepStageLabel.DEEP -> 5
+                SleepStageLabel.REM -> 6
+                else -> 4
+            }
+            stages.add(SleepSessionRecord.Stage(stageStart, stageEnd, stageType))
+            i = j
+        }
+        return stages
     }
 
     suspend fun readStepsForDay(date: LocalDate, zoneId: ZoneId = ZoneId.systemDefault()): Long? {

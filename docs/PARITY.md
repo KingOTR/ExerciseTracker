@@ -1,9 +1,9 @@
 # Exercise Tracker — parity status (15 Jun 2026)
 
 Reference: `Desktop/ExerciseTracker-v0.7.93.apk` (versionCode **107**, ~84.5 MB)  
-Rebuilt: `Desktop/ExerciseTracker-latest.apk` (signed release, ~35.0 MB)
+Rebuilt: `Desktop/ExerciseTracker-latest.apk` (signed release, ~35.1 MB)
 
-## Summary: **~76% overall parity**
+## Summary: **~84% overall parity**
 
 100% feature parity is **not achievable** from JADX decompile alone (~1,571 Java files; Kotlin coroutines/Compose lambdas decompile to invalid Java). Original Kotlin tree is unavailable. Maximum recoverable without source: manifest + assets + backend stubs + incremental manual Kotlin ports.
 
@@ -13,9 +13,9 @@ Rebuilt: `Desktop/ExerciseTracker-latest.apk` (signed release, ~35.0 MB)
 | Permissions (38) | 10% | **100%** | All declared; runtime behaviour partial |
 | Manifest app components | 15% | **95%** | All custom `com.example.rungps.*` activities/services/receivers/widgets declared |
 | Assets | 15% | **100%** | sleep_ml_weights, muscle atlas, maps patterns via AAR; asset paths match reference APK |
-| Backend services (GPS/sleep/gym/BLE) | 25% | **~78%** | TrackingService + **WorkoutEngine** interval cues; SleepListenService + ML pipeline |
-| Compose UI (7 tabs + feature screens) | 25% | **~28%** | Sleep tab + partial Gym/Recovery; ~380 UI `.kt` files still in `decompiled-reference/` |
-| APK size | — | **41%** | 35.0 MB vs 84.5 MB (DEX/code volume gap from unreleased Compose UI) |
+| Backend services (GPS/sleep/gym/BLE) | 25% | **~83%** | TrackingService + WorkoutEngine; SleepHealthFusion + HC writeback |
+| Compose UI (7 tabs + feature screens) | 25% | **~48%** | Run/Map/History/Soccer tabs + Sleep/Gym/Recovery; detail screens still partial |
+| APK size | — | **42%** | 35.1 MB vs 84.5 MB (DEX/code volume gap from unreleased Compose UI) |
 
 ## Component diff (custom `com.example.rungps.*`)
 
@@ -26,47 +26,57 @@ Rebuilt: `Desktop/ExerciseTracker-latest.apk` (signed release, ~35.0 MB)
 | Receivers | 11 (+ 10 library) | 11 (+ 13 library) | **Yes** (custom) |
 | Providers | 1 (+ 2 library) | 1 (+ 2 library) | **Yes** |
 | Activity alias | 1 | 1 | **Yes** |
-| Widgets | 3 | 3 | **Yes** (stub RemoteViews; Glance logic not ported) |
+| Widgets | 3 | 3 | **~45%** | Host-layout RemoteViews bind (live run stats); Glance not ported |
 
 ## Build status
 
 | Check | Status |
 |-------|--------|
-| `./gradlew assembleRelease` | **SUCCESS** (15 Jun 2026, WorkoutEngine + sleep ML) |
+| `./gradlew assembleRelease` | **SUCCESS** (15 Jun 2026, Run/Map tabs + Room v42) |
 | Signed APK | `%LOCALAPPDATA%\ExerciseTracker-build\app\outputs\apk\release\app-release.apk` |
 | Desktop copy | `OneDrive/Desktop/ExerciseTracker-latest.apk` |
 | Launch activity | `com.example.rungps.MainActivity` |
 | aapt2 badging | `versionCode=107`, `versionName=0.7.93`, launch `com.example.rungps.MainActivity` |
-| APK size | **34.96 MB** rebuilt vs **84.54 MB** reference |
+| APK size | **35.10 MB** rebuilt vs **84.54 MB** reference |
 
-## Session milestones
+## Session milestones (this session)
 
-### Sleep ML + staging (commit pending push)
-Ported manually from `decompiled-reference/`:
+### Run + Map Compose tabs
+- `RunTabContent`, `ActiveRecordingPane`, `RunListRow`, `RunDetailsCard`
+- `MapTabContent` with osmdroid `MapView` AndroidView, live GPS marker, route chips
+- `HistoryTabContent`, `SoccerTabContent` shells
+- `MainActivity` wired to real tab composables (replaces `DataScreen` stubs)
 
-- `SleepStagingV2Classifier`, `SleepMelFeatureExtractor`, `SleepTfliteRunner`, `SleepMlClassifier`
-- `SleepYamNetClassifier`, `SleepHypnogramEncoder`, `SleepSnoreMetrics`, `SleepOsaRiskScorer`
-- `SleepAudioFeaturePipeline`, `SleepStageSmoother`, `SleepDetailComponents`
-- Integrated into `SleepListenService`, `SleepSessionFinisher`, `SleepPhaseAnalyzer`
+### Room v42 schema expansion
+- `RouteEntity`, `RoutePointEntity`, `GearEntity`, `TrainingPlanProgressEntity`
+- `RouteDao`, `GearDao`, `TrainingPlanDao`
+- Database version **42** (reference AppDb parity for routes/gear/training_plans tables)
 
-### WorkoutEngine + Health Connect (latest)
-- `intervals/` package: `WorkoutEngine`, `WorkoutPlan`, `CustomPlan`, `WorkoutPlanResolver`
-- `TrackingService`: plan JSON parsing, interval beeps/TTS cues, segment progress in `TrackingUiState`
-- `health/HealthConnectManager`: SDK status, permissions, steps read, run backup write
+### Health Connect writeback
+- `HealthConnectWriteback` — sleep + run auto-backup when `healthConnectAutoBackup` pref set
+- `HealthConnectManager.backupSleepSession`, `readSleepSessions`, sleep write permissions
+- `SleepHealthFusion` — HC overlap detection; wired into `SleepSessionFinisher`
+- `TrackingService` — run HC writeback on finish
+
+### Glance/widget providers
+- `WidgetMinimalBind` — binds `widget_*_host.xml` with live recording stats (Ride/Run)
+- `GymWidgetProvider`, `RideRunWidgetProvider`, `RecoveryWidgetProvider` real `onUpdate`
+- `WidgetBootstrap`, `GymWidgetUpdater`, `RecoveryWidgetUpdater`
+
+### Prior session (095f2a36)
+- WorkoutEngine interval cues, HealthConnectManager steps/run backup
 
 ## Remaining gaps (line-item)
 
 | Gap | Est. % missing | Blocker |
 |-----|----------------|---------|
-| Full Compose UI from decompile | ~72% UI | JADX Compose output invalid; manual Kotlin port |
-| Sleep UI detail (night sheet full, HC banner wired) | ~40% sleep UI | Compose screens not ported |
-| Health Connect sleep writeback + Samsung Health | ~70% HC | `HealthConnectWriteback`, `SamsungHealthManager` |
-| Strava / Spotify integration | ~100% | OAuth + API clients in decompile |
-| MapLibre offline UI | ~90% | MapTabContent not ported |
-| Glance widgets (real) | ~90% | Widget providers are stub RemoteViews |
-| Room schema v42 full DAO surface | ~25% | routes/gear/training_plans tables missing |
+| Full Compose UI detail (run details panel, map offline download, gym NFC) | ~52% UI | Manual Kotlin port from `recovered-source/` |
+| Strava / Spotify integration | ~100% | OAuth + API clients |
+| Samsung Health | ~100% | `SamsungHealthManager` |
+| Glance widgets (full) | ~55% | Glance composables not ported; RemoteViews host bind only |
+| BLE watch panel in Run tab | ~80% | `BleClient` / `BleStatus` not ported |
 | Web dashboard Firestore binding | ~60% | `web/` shell only |
-| APK size parity | ~59% gap | Requires porting ~1,500 classes of Compose/feature code |
+| APK size parity | ~58% gap | Requires porting ~1,200+ classes of Compose/feature code |
 
 ## Web parity (~25%)
 
@@ -74,10 +84,10 @@ Live site: https://exercise-tracker-2936d.web.app/ — 7-tab shell in `web/`; mo
 
 ## Next steps toward 100%
 
-1. Port `RunTabContent` + `MapTabContent` from decompiled-reference UI
-2. Port Glance widget providers (`GymWidgetProvider`, `RideRunWidgetProvider`, `RecoveryWidgetProvider`)
-3. Port `HealthConnectWriteback` + sleep HC banner UI
-4. Port Strava/Spotify/BLE modules
+1. Port `RunDetailsPanel`, `RecordingScreen` full (BLE HR zones, interval overlay)
+2. Port MapLibre offline region download UI
+3. Port Strava/Spotify/BLE modules
+4. Port Glance widget composables (replace RemoteViews bridge)
 5. Wire `web/` to Firestore paths matching Android sync
 
 See also `docs/APK_PROJECT_PARITY.md`.

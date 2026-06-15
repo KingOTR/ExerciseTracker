@@ -1,27 +1,28 @@
 package com.example.rungps.ui.viewmodel
 
 import android.app.Application
+import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rungps.data.ExerciseTrackerDatabase
 import com.example.rungps.data.entity.GymSessionEntity
+import com.example.rungps.data.entity.RouteEntity
 import com.example.rungps.data.repository.ExerciseTrackerRepository
 import com.example.rungps.feature.gym.GymViewModel
 import com.example.rungps.feature.run.RunsViewModel
 import com.example.rungps.sync.CloudSyncManager
 import com.example.rungps.sync.CloudSyncResult
+import com.example.rungps.tracking.TrackingService
+import com.example.rungps.tracking.TrackingState
+import com.example.rungps.tracking.TrackingUiState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-/**
- * Ported from `com.example.rungps.ui.viewmodel.MainViewModel`.
- */
 class MainViewModel(app: Application) : AndroidViewModel(app) {
-    private val repository = ExerciseTrackerRepository(
-        ExerciseTrackerDatabase.get(app).exerciseTrackerDao(),
-    )
+    private val db = ExerciseTrackerDatabase.get(app)
+    private val repository = ExerciseTrackerRepository(db.exerciseTrackerDao())
 
     val runs = RunsViewModel(repository, viewModelScope)
     val gym = GymViewModel(repository, viewModelScope)
@@ -30,10 +31,35 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         repository.observeGymSessions()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    val routes: StateFlow<List<RouteEntity>> =
+        db.routeDao().routesFlow()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val soccerSessions = repository.observeSoccerSessions()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val trackingState: StateFlow<TrackingUiState> = TrackingState.state
+
     fun syncCloud(onResult: (CloudSyncResult) -> Unit = {}) {
         viewModelScope.launch {
             val result = CloudSyncManager.syncAll(getApplication())
             onResult(result)
         }
+    }
+
+    fun startRun(activityType: String = "RUN") {
+        val ctx = getApplication<Application>()
+        ctx.startForegroundService(
+            Intent(ctx, TrackingService::class.java)
+                .setAction(TrackingService.ACTION_START)
+                .putExtra(TrackingService.EXTRA_ACTIVITY_TYPE, activityType),
+        )
+    }
+
+    fun stopRun() {
+        val ctx = getApplication<Application>()
+        ctx.startService(
+            Intent(ctx, TrackingService::class.java).setAction(TrackingService.ACTION_STOP),
+        )
     }
 }

@@ -329,6 +329,9 @@ class TrackingService : Service() {
                 )
                 if (repo.runExists(id)) {
                     runCatching { RunFirestoreSync.pushFinishedRun(this@TrackingService, id) }
+                    repo.runById(id)?.let { run ->
+                        runCatching { com.example.rungps.health.HealthConnectWriteback.maybePushRun(this@TrackingService, run) }
+                    }
                 }
             }
             RecordingHrBridge.onRunStopped()
