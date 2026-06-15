@@ -103,9 +103,6 @@ android {
             excludes += "/META-INF/DEPENDENCIES"
             excludes += "/META-INF/LICENSE*"
             excludes += "/META-INF/NOTICE*"
-            excludes += "assets/dexopt/**"
-            pickFirsts += "assets/dexopt/baseline.prof"
-            pickFirsts += "assets/dexopt/baseline.profm"
             pickFirsts += "assets/mapsforge/default.xml"
             pickFirsts += "assets/mapsforge/osmarender.xml"
         }
@@ -117,6 +114,9 @@ ksp {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":feature:sleep"))
+
     val composeBom = platform("androidx.compose:compose-bom:2024.10.01")
     implementation(composeBom)
     androidTestImplementation(composeBom)

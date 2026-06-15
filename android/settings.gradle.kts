@@ -16,5 +16,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "ExerciseTracker"
 include(":app")
+include(":core:domain")
+include(":feature:sleep")
 // Wear OS stub module — build separately: ./gradlew :wear:assembleRelease
 // include(":wear")
