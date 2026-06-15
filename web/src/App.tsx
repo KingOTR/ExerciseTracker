@@ -4,8 +4,11 @@ import { DashboardLayout } from './components/DashboardLayout';
 import { ensureAuth } from './lib/firebase';
 import { DashboardPage } from './pages/DashboardPage';
 import { GymPage } from './pages/GymPage';
+import { MapPage } from './pages/MapPage';
+import { RecoveryPage } from './pages/RecoveryPage';
 import { RunsPage } from './pages/RunsPage';
-import { SectionPage } from './pages/SectionPage';
+import { SleepPage } from './pages/SleepPage';
+import { SoccerPage } from './pages/SoccerPage';
 import './App.css';
 
 export default function App() {
@@ -20,10 +23,10 @@ export default function App() {
           <Route index element={<DashboardPage />} />
           <Route path="runs" element={<RunsPage />} />
           <Route path="gym" element={<GymPage />} />
-          <Route path="recovery" element={<SectionPage title="Recovery" description="Composite load from runs, gym, soccer, and daily steps." />} />
-          <Route path="sleep" element={<SectionPage title="Sleep" description="Sleep duration, efficiency, and quality scores." />} />
-          <Route path="soccer" element={<SectionPage title="Soccer" description="Matches and training sessions with intensity tracking." />} />
-          <Route path="map" element={<SectionPage title="Map" description="Leaflet map view for routes and regions (offline on Android)." />} />
+          <Route path="recovery" element={<RecoveryPage />} />
+          <Route path="sleep" element={<SleepPage />} />
+          <Route path="soccer" element={<SoccerPage />} />
+          <Route path="map" element={<MapPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

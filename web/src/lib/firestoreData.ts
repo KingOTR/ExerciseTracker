@@ -13,6 +13,15 @@ export function currentUid(): string | null {
   return auth.currentUser?.uid ?? null;
 }
 
+export async function listSoccerSessions(max = 20): Promise<DocumentData[]> {
+  const uid = currentUid();
+  if (!uid) return [];
+  const snap = await getDocs(
+    query(collection(db, 'users', uid, 'soccer_sessions'), orderBy('startTimeMs', 'desc'), limit(max)),
+  );
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
+
 export async function listRuns(max = 50): Promise<DocumentData[]> {
   const uid = currentUid();
   if (!uid) return [];

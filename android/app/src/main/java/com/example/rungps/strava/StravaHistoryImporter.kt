@@ -55,38 +55,41 @@ object StravaHistoryImporter {
 }
 
 object StravaPhotoUpload {
-  suspend fun uploadOverlayPhoto(
-      accessToken: String,
-      activityId: Long,
-      jpegBytes: ByteArray,
-      caption: String? = null,
-  ): Boolean = withContext(Dispatchers.IO) {
-      runCatching {
-          val boundary = "----ExerciseTracker${System.currentTimeMillis()}"
-          val url = java.net.URL("https://www.strava.com/api/v3/activities/$activityId/photos")
-          val conn = (url.openConnection() as java.net.HttpURLConnection).apply {
-              requestMethod = "POST"
-              doOutput = true
-              setRequestProperty("Authorization", "Bearer $accessToken")
-              setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
-          }
-          conn.outputStream.use { out ->
-              fun writeLine(line: String) = out.write("$line\r\n".toByteArray())
-              writeLine("--$boundary")
-              writeLine("Content-Disposition: form-data; name=\"file\"; filename=\"overlay.jpg\"")
-              writeLine("Content-Type: image/jpeg")
-              writeLine("")
-              out.write(jpegBytes)
-              writeLine("")
-              if (!caption.isNullOrBlank()) {
-                  writeLine("--$boundary")
-                  writeLine("Content-Disposition: form-data; name=\"caption\"")
-                  writeLine("")
-                  writeLine(caption)
-              }
-              writeLine("--$boundary--")
-          }
-          conn.responseCode in 200..299
-      }.getOrDefault(false)
-  }
+    suspend fun uploadOverlayPhoto(
+        accessToken: String,
+        activityId: Long,
+        imageBytes: ByteArray,
+        caption: String = "Exercise Tracker",
+    ): Boolean = withContext(Dispatchers.IO) {
+        runCatching {
+            val boundary = "----ExerciseTracker${System.currentTimeMillis()}"
+            val url = java.net.URL("https://www.strava.com/api/v3/activities/$activityId/photos")
+            val conn = (url.openConnection() as java.net.HttpURLConnection).apply {
+                requestMethod = "POST"
+                doOutput = true
+                setRequestProperty("Authorization", "Bearer $accessToken")
+                setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
+            }
+            conn.outputStream.use { out ->
+                fun writeLine(line: String) = out.write("$line\r\n".toByteArray())
+                writeLine("--$boundary")
+                writeLine("Content-Disposition: form-data; name=\"caption\"")
+                writeLine("")
+                writeLine(caption)
+                writeLine("--$boundary")
+                writeLine("Content-Disposition: form-data; name=\"file\"; filename=\"run.png\"")
+                writeLine("Content-Type: image/png")
+                writeLine("")
+                out.write(imageBytes)
+                writeLine("")
+                writeLine("--$boundary--")
+            }
+            val code = conn.responseCode
+            if (code !in 200..299) {
+                val err = conn.errorStream?.bufferedReader()?.readText() ?: ""
+                error("Strava photo HTTP $code: $err")
+            }
+            true
+        }.getOrDefault(false)
+    }
 }

@@ -113,6 +113,14 @@ fun MapTabContent(
         }
 
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            if (live.isRecording) {
+                MapLibreRecordingMap(
+                    routeId = followRouteId ?: 0L,
+                    liveLat = live.lastLat,
+                    liveLon = live.lastLon,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            } else {
             val centerLat = live.lastLat ?: -33.8688
             val centerLon = live.lastLon ?: 151.2093
             AndroidView(
@@ -163,7 +171,8 @@ fun MapTabContent(
                     map.invalidate()
                 },
             )
-            if (showRoutePlanner) {
+            }
+            if (showRoutePlanner && !live.isRecording) {
                 Row(
                     modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

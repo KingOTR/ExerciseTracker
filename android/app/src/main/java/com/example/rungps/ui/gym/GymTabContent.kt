@@ -17,6 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.example.rungps.gym.GymPulleySelection
+import com.example.rungps.gym.GymPulleyStore
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -35,6 +37,7 @@ fun GymTabContent(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var detailMuscleId by remember { mutableStateOf<String?>(null) }
+    var pulleySelection by remember { mutableStateOf(GymPulleySelection.NONE) }
     val context = LocalContext.current
     val taxonomy = remember {
         MuscleRepository(context, ExerciseTrackerDatabase.get(context).exerciseTrackerDao()).taxonomy
@@ -63,6 +66,14 @@ fun GymTabContent(
                 }
             }
         }
+        GymPulleyPanel(
+            selected = pulleySelection,
+            onSelect = { sel ->
+                pulleySelection = sel
+                uiState.sessionId?.let { GymPulleyStore.saveSessionSelection(context, it, sel) }
+            },
+            pinKgPreview = uiState.sets.lastOrNull()?.weightKg,
+        )
         if (uiState.sessionVolumes.isNotEmpty()) {
             Text("Session muscle volume", style = MaterialTheme.typography.labelMedium)
             MuscleVolumeChips(entries = uiState.sessionVolumes)

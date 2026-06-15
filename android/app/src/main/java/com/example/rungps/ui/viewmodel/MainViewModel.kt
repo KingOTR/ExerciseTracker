@@ -9,11 +9,14 @@ import com.example.rungps.data.ExerciseTrackerDatabase
 import com.example.rungps.data.entity.GymSessionEntity
 import com.example.rungps.data.entity.RouteEntity
 import com.example.rungps.data.repository.ExerciseTrackerRepository
+import com.example.rungps.export.RunOverlayHelper
 import com.example.rungps.feature.gym.GymViewModel
 import com.example.rungps.feature.run.RunsViewModel
 import com.example.rungps.sync.CloudSyncManager
 import com.example.rungps.sync.CloudSyncResult
 import com.example.rungps.sync.StravaHistorySync
+import com.example.rungps.strava.StravaPhotoUpload
+import com.example.rungps.strava.StravaRepository
 import com.example.rungps.tracking.TrackingService
 import com.example.rungps.tracking.TrackingState
 import com.example.rungps.tracking.TrackingUiState
@@ -87,12 +90,26 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun uploadRunToStrava(runId: Long, onResult: (String) -> Unit = {}) {
+    fun uploadRunToStrava(runId: Long, withOverlayPhoto: Boolean = true, onResult: (String) -> Unit = {}) {
         viewModelScope.launch {
             _stravaUploading.value = true
             val message = runCatching {
-                val id = runs.uploadToStrava(getApplication(), runId)
-                "Uploaded to Strava (activity $id)"
+                val ctx = getApplication<Application>()
+                val activityId = runs.uploadToStrava(ctx, runId)
+                if (withOverlayPhoto) {
+                    val repo = ExerciseTrackerRepository(db.exerciseTrackerDao())
+                    val png = RunOverlayHelper.renderRunOverlay(ctx, repo, runId)
+                    if (png != null) {
+                        val token = StravaRepository.get(ctx).obtainAccessToken()
+                        val ok = StravaPhotoUpload.uploadOverlayPhoto(token, activityId, png)
+                        if (ok) "Uploaded to Strava with route overlay (activity $activityId)"
+                        else "Uploaded activity $activityId (overlay photo failed)"
+                    } else {
+                        "Uploaded to Strava (activity $activityId)"
+                    }
+                } else {
+                    "Uploaded to Strava (activity $activityId)"
+                }
             }.fold(
                 onSuccess = { it },
                 onFailure = { it.message ?: "Upload failed" },

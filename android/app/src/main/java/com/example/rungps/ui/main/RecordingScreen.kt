@@ -55,17 +55,34 @@ fun ActiveRecordingPane(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        RecordingGpsStrip(hasFix = hasFix)
-        followRouteName?.let {
-            Text("Following: $it", style = MaterialTheme.typography.labelMedium)
+        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            MapLibreRecordingMap(
+                routeId = followRouteId ?: 0L,
+                liveLat = live.lastLat,
+                liveLon = live.lastLon,
+                modifier = Modifier.fillMaxSize(),
+            )
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.92f))
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                RecordingGpsStrip(hasFix = hasFix)
+                followRouteName?.let {
+                    Text("Following: $it", style = MaterialTheme.typography.labelMedium)
+                }
+                RecordingStatsCard(
+                    live = live,
+                    isBike = isBike,
+                    paceSec = paceSec,
+                    hrBpm = hrBpm,
+                    hrZoneLabel = hrZoneLabel,
+                )
+            }
         }
-        RecordingStatsCard(
-            live = live,
-            isBike = isBike,
-            paceSec = paceSec,
-            hrBpm = hrBpm,
-            hrZoneLabel = hrZoneLabel,
-        )
         live.segmentLabel?.let { label ->
             Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)) {
                 Column(Modifier.padding(12.dp)) {

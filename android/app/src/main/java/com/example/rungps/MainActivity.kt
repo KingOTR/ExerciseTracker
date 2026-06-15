@@ -67,6 +67,14 @@ class MainActivity : ComponentActivity() {
                 var selectedRunId by remember { mutableStateOf<Long?>(null) }
                 var followRouteId by remember { mutableStateOf<Long?>(null) }
                 var followRouteName by remember { mutableStateOf<String?>(null) }
+                var overlayRunId by remember { mutableStateOf<Long?>(null) }
+
+                overlayRunId?.let { runId ->
+                    com.example.rungps.ui.run.RunOverlayExportDialog(
+                        runId = runId,
+                        onDismiss = { overlayRunId = null },
+                    )
+                }
 
                 val openTab = intent?.getStringExtra("open_tab")
                 if (openTab != null) {
@@ -153,6 +161,9 @@ class MainActivity : ComponentActivity() {
                                         Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
                                     }
                                 },
+                                onShareOnPhoto = { overlayRunId = it },
+                                followRouteId = followRouteId,
+                                followRouteName = followRouteName,
                                 stravaUploading = stravaUploading,
                             )
                         }

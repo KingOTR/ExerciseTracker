@@ -44,9 +44,12 @@ fun RunTabContent(
     onStop: () -> Unit,
     onGoTab: (String) -> Unit,
     onUploadStrava: (Long) -> Unit,
+    onShareOnPhoto: (Long) -> Unit = {},
     stravaUploading: Boolean = false,
     syncingMoyoung: Boolean = false,
     onSyncMoyoung: () -> Unit = {},
+    followRouteId: Long? = null,
+    followRouteName: String? = null,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -61,7 +64,7 @@ fun RunTabContent(
             runId = selectedRunId,
             onClose = onCloseRun,
             onExport = { /* GPX export wired in future pass */ },
-            onShareOnPhoto = { },
+            onShareOnPhoto = { onShareOnPhoto(selectedRunId) },
             onUploadStrava = onUploadStrava,
             vm = runsViewModel,
             stravaUploading = stravaUploading,
@@ -86,6 +89,8 @@ fun RunTabContent(
         if (live.isRecording) {
             ActiveRecordingPane(
                 live = live,
+                followRouteId = followRouteId,
+                followRouteName = followRouteName,
                 onPauseToggle = {
                     context.startService(
                         Intent(context, TrackingService::class.java).setAction(TrackingService.ACTION_TOGGLE_PAUSE),
