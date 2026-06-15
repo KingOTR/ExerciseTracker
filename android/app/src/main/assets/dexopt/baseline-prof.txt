@@ -1,0 +1,12 @@
+# Baseline profile (dexopt)
+
+AGP generates `assets/dexopt/baseline.prof` at package time via `compileReleaseArtProfile`
+(see `mergeReleaseArtProfile` / startup profile inputs).
+
+Reference copies for reproducibility: `android/assets/dexopt/baseline.prof` (do not duplicate in `app/src/main/assets`).
+
+To regenerate with Macrobenchmark (future):
+
+```bash
+./gradlew :baselineprofile:connectedBenchmarkReleaseAndroidTest
+```

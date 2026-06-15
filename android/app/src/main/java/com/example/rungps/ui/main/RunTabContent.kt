@@ -140,6 +140,7 @@ fun RunTabContent(
                     Button(onClick = onStart) { Text("Start run") }
                     OutlinedButton(onClick = { onGoTab("map") }) { Text("Map") }
                 }
+                RecordingHudFieldSettings(modifier = Modifier.padding(top = 8.dp))
                 if (routes.isNotEmpty()) {
                     Text(
                         "Saved routes: ${routes.size}",

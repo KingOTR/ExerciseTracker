@@ -23,16 +23,26 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.rungps.tracking.HudStatField
+import com.example.rungps.tracking.RecordingHudPreferences
 import com.example.rungps.tracking.TrackingUiState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.math.min
 
 @Composable
@@ -133,28 +143,62 @@ private fun RecordingStatsCard(
     hrBpm: Int?,
     hrZoneLabel: String?,
 ) {
+    val context = LocalContext.current
+    val hudFields by RecordingHudPreferences.fieldsFlow(context).collectAsState(
+        initial = listOf(
+            HudStatField.ELAPSED,
+            HudStatField.DISTANCE,
+            HudStatField.PACE,
+            HudStatField.STEPS,
+            HudStatField.HEART_RATE,
+        ),
+    )
     val paused = live.isPaused || live.isAutoPaused
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(formatElapsed(live.elapsedMs), style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold)
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                StatColumn("Distance", formatDistanceKm(live.distanceM))
-                StatColumn(
-                    if (isBike) "Speed" else "Pace",
-                    if (isBike && paceSec > 0) "%.1f km/h".format(3600.0 / paceSec) else formatPace(paceSec),
+            if (HudStatField.ELAPSED in hudFields) {
+                Text(
+                    formatElapsed(live.elapsedMs),
+                    style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.semantics { contentDescription = "Elapsed time ${formatElapsed(live.elapsedMs)}" },
                 )
-                StatColumn("Steps", formatSteps(live.steps))
             }
-            hrBpm?.let { bpm ->
-                val zone = hrZoneLabel ?: HrZoneHelper.zoneLabel(bpm)
-                val color = HrZoneHelper.zoneColor(bpm)
-                Surface(color = color.copy(alpha = 0.2f), shape = RoundedCornerShape(8.dp)) {
-                    Text(
-                        "♥ $bpm bpm · $zone",
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                        color = color,
-                        style = MaterialTheme.typography.labelLarge,
-                    )
+            val rowFields = hudFields.filter {
+                it != HudStatField.ELAPSED && it != HudStatField.SPLITS && it != HudStatField.LAP
+            }
+            if (rowFields.isNotEmpty()) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    rowFields.forEach { field ->
+                        when (field) {
+                            HudStatField.DISTANCE -> StatColumn("Distance", formatDistanceKm(live.distanceM))
+                            HudStatField.PACE, HudStatField.SPEED -> StatColumn(
+                                if (isBike) "Speed" else "Pace",
+                                if (isBike && paceSec > 0) "%.1f km/h".format(3600.0 / paceSec) else formatPace(paceSec),
+                            )
+                            HudStatField.STEPS -> StatColumn("Steps", formatSteps(live.steps))
+                            HudStatField.HEART_RATE -> hrBpm?.let { bpm ->
+                                StatColumn("Heart rate", "$bpm bpm")
+                            }
+                            else -> Unit
+                        }
+                    }
+                }
+            }
+            if (HudStatField.HEART_RATE in hudFields) {
+                hrBpm?.let { bpm ->
+                    val zone = hrZoneLabel ?: HrZoneHelper.zoneLabel(bpm)
+                    val color = HrZoneHelper.zoneColor(bpm)
+                    Surface(color = color.copy(alpha = 0.2f), shape = RoundedCornerShape(8.dp)) {
+                        Text(
+                            "♥ $bpm bpm · $zone",
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                                .semantics { contentDescription = "Heart rate $bpm beats per minute, zone $zone" },
+                            color = color,
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                    }
                 }
             }
             if (paused) {
@@ -236,4 +280,32 @@ fun intervalPaceSecPerKm(live: TrackingUiState): Double? {
 fun avgPaceSecPerKm(live: TrackingUiState): Double? {
     if (live.distanceM < 10 || live.elapsedMs <= 0) return null
     return live.elapsedMs / 1000.0 / (live.distanceM / 1000.0)
+}
+
+@Composable
+fun RecordingHudFieldSettings(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val fields by RecordingHudPreferences.fieldsFlow(context).collectAsState(
+        initial = listOf(HudStatField.ELAPSED, HudStatField.DISTANCE, HudStatField.PACE, HudStatField.STEPS),
+    )
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text("HUD fields", style = MaterialTheme.typography.titleSmall)
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            HudStatField.entries.forEach { field ->
+                FilterChip(
+                    selected = field in fields,
+                    onClick = {
+                        scope.launch {
+                            RecordingHudPreferences.setFields(
+                                context,
+                                RecordingHudPreferences.toggleField(fields, field),
+                            )
+                        }
+                    },
+                    label = { Text(field.label) },
+                )
+            }
+        }
+    }
 }
