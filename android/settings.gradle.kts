@@ -11,9 +11,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://api.mapbox.com/downloads/v2/releases/maven") }
     }
 }
 
 rootProject.name = "ExerciseTracker"
 include(":app")
+// Wear OS stub module — build separately: ./gradlew :wear:assembleRelease
+// include(":wear")
