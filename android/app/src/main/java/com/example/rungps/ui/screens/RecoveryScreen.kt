@@ -15,18 +15,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rungps.ui.settings.CloudBackupPanel
+import com.example.rungps.ui.settings.ConnectedSettingsSection
 import com.example.rungps.ui.settings.DiagnosticsPanel
 import com.example.rungps.ui.settings.HealthConnectDashboard
 import com.example.rungps.ui.viewmodel.RecoveryViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun RecoveryScreen(
@@ -113,6 +118,7 @@ fun RecoveryScreen(
 
         CloudBackupPanel()
         DiagnosticsPanel()
+        ConnectedSettingsSection()
         HealthConnectDashboard(
             readStatus = mapOf("Sleep" to true, "Steps" to true, "Exercise" to true),
             writeStatus = mapOf("Sleep" to true, "Exercise" to false),
