@@ -11,9 +11,7 @@ object GymWidgetUpdater {
 
     fun refreshAsync(context: Context) {
         scope.launch {
-            runCatching {
-                WidgetMinimalBind.requestUpdate(context.applicationContext, GymWidgetProvider::class.java)
-            }
+            runCatching { GlanceWidgetUpdater.refreshGym(context.applicationContext) }
         }
     }
 }

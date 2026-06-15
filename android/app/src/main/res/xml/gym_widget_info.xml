@@ -5,6 +5,7 @@
     android:minHeight="110dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget_gym_initial"
+    android:previewLayout="@layout/widget_gym_initial"
     android:resizeMode="vertical|horizontal"
     android:minResizeWidth="110dp"
     android:minResizeHeight="40dp"

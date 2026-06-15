@@ -1,7 +1,6 @@
 package com.example.rungps.widget
 
 import android.content.Context
-import com.example.rungps.tracking.TrackingActiveStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -12,13 +11,7 @@ object RideRunWidgetUpdater {
 
     fun refreshAsync(context: Context) {
         scope.launch {
-            runCatching {
-                val appContext = context.applicationContext
-                WidgetMinimalBind.requestUpdate(appContext, RideRunWidgetProvider::class.java)
-                if (TrackingActiveStore.isActive(appContext)) {
-                    // Re-bind on next tracking tick via TrackingService
-                }
-            }
+            runCatching { GlanceWidgetUpdater.refreshRideRun(context.applicationContext) }
         }
     }
 }

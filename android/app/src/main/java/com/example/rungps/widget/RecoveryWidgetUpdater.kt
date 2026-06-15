@@ -11,9 +11,7 @@ object RecoveryWidgetUpdater {
 
     fun refreshAsync(context: Context) {
         scope.launch {
-            runCatching {
-                WidgetMinimalBind.requestUpdate(context.applicationContext, RecoveryWidgetProvider::class.java)
-            }
+            runCatching { GlanceWidgetUpdater.refreshRecovery(context.applicationContext) }
         }
     }
 }
