@@ -17,10 +17,10 @@ object SleepMlPipelineStatus {
         val mlpLoaded = SleepMlClassifier.isLoaded()
         val stagingRunner = SleepTfliteRunner(SleepTfliteRunner.ASSET_STAGING_V2)
         stagingRunner.ensureLoaded(context)
-        val stagingV2Loaded = stagingRunner.isLoaded()
+        val stagingV2Loaded = stagingRunner.isLoaded
         val yamnetRunner = SleepTfliteRunner(SleepTfliteRunner.ASSET_YAMNET)
         yamnetRunner.ensureLoaded(context)
-        val yamnetLoaded = yamnetRunner.isLoaded()
+        val yamnetLoaded = yamnetRunner.isLoaded
         val eventMode = if (yamnetLoaded) "YAMNet TFLite" else "Bedside heuristics (snore/talk/cough/noise)"
         val stagingMode = when {
             stagingV2Loaded -> "Mel epoch TFLite"

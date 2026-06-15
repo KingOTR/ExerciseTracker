@@ -28,8 +28,16 @@ import com.example.rungps.ble.BleClient
 import com.example.rungps.data.entity.RouteEntity
 import com.example.rungps.feature.run.RunsViewModel
 import com.example.rungps.health.HealthConnectManager
+import androidx.compose.runtime.rememberCoroutineScope
+import com.example.rungps.data.ExerciseTrackerDatabase
+import com.example.rungps.data.repo.SleepRepository
+import com.example.rungps.export.RunExportHelper
 import com.example.rungps.tracking.TrackingService
 import com.example.rungps.tracking.TrackingUiState
+import com.example.rungps.sleep.SleepConsistencyScorer
+import com.example.rungps.sleep.SleepDebtTracker
+import com.example.rungps.ui.components.TabEmptyState
+import kotlinx.coroutines.launch
 
 @Composable
 fun RunTabContent(
@@ -53,7 +61,12 @@ fun RunTabContent(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val runs by runsViewModel.runs.collectAsState()
+    val sleepRepo = remember { SleepRepository(ExerciseTrackerDatabase.get(context).sleepDao()) }
+    val sleepEntries by sleepRepo.observeEntries().collectAsState(initial = emptyList())
+    val debtSnapshot = remember(sleepEntries) { SleepDebtTracker.analyze(sleepEntries) }
+    val consistency = remember(sleepEntries) { SleepConsistencyScorer.score(sleepEntries) }
     val hc = HealthConnectManager(context)
     val bleStatus by bleClient.status.collectAsState()
     val hrBpm = live.hrBpm ?: bleStatus.latestHrBpm
@@ -63,7 +76,12 @@ fun RunTabContent(
         RunDetailsPanel(
             runId = selectedRunId,
             onClose = onCloseRun,
-            onExport = { /* GPX export wired in future pass */ },
+            onExport = { runId ->
+                scope.launch {
+                    RunExportHelper.exportGpx(context, runId)
+                        .onSuccess { RunExportHelper.shareFile(context, it, "application/gpx+xml") }
+                }
+            },
             onShareOnPhoto = { onShareOnPhoto(selectedRunId) },
             onUploadStrava = onUploadStrava,
             vm = runsViewModel,
@@ -102,6 +120,15 @@ fun RunTabContent(
             )
         } else {
             HealthConnectBanner(hc = hc)
+            if (sleepEntries.isNotEmpty()) {
+                SleepDebtHomeCard(debt = debtSnapshot, onOpenSleep = { onGoTab("sleep") })
+                SleepRhythmHomeCard(
+                    consistencyScore = consistency.score,
+                    summary = consistency.summary,
+                    onOpenSleep = { onGoTab("sleep") },
+                )
+                SleepGymNudgeCard(debtHours = debtSnapshot.debtHours, onOpenGym = { onGoTab("gym") })
+            }
             BleWatchPanel(
                 bleClient = bleClient,
                 syncingMoyoung = syncingMoyoung,
@@ -124,7 +151,12 @@ fun RunTabContent(
 
             TabSectionCard(title = "Recent runs") {
                 if (runs.isEmpty()) {
-                    Text("No runs yet — tap Start run to record.", style = MaterialTheme.typography.bodyMedium)
+                    TabEmptyState(
+                        title = "No runs yet",
+                        message = "Start your first GPS run to see distance, pace, and splits here.",
+                        actionLabel = "Start run",
+                        onAction = onStart,
+                    )
                 } else {
                     LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         items(runs.take(8), key = { it.id }) { row ->

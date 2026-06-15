@@ -142,7 +142,7 @@ fun SleepTabScreenBody(modifier: Modifier = Modifier, viewModel: SleepViewModel 
         }
     }
 
-    SleepNightDetailSheet(entry = selectedEntry, onDismiss = { selectedEntry = null })
+    SleepNightDetailSheet(entry = selectedEntry, allEntries = entries, onDismiss = { selectedEntry = null })
 }
 
 @Composable

@@ -22,6 +22,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.rungps.data.entity.SleepEntryEntity
 import com.example.rungps.sleep.SleepAnalyticsCompact
+import com.example.rungps.sleep.SleepDebtTracker
+import com.example.rungps.sleep.SleepNightAnalytics
+import com.example.rungps.sleep.SleepScoring
+import com.example.rungps.sleep.SleepScience
 import com.example.rungps.sleep.SleepEventMarkersEncoder
 import com.example.rungps.sleep.SleepHypnogramEncoder
 import com.example.rungps.sleep.SleepStageLabel
@@ -36,17 +40,22 @@ private val nightFmt = DateTimeFormatter.ofPattern("EEE d MMM · HH:mm")
 @Composable
 fun SleepNightDetailSheet(
     entry: SleepEntryEntity?,
+    allEntries: List<SleepEntryEntity> = emptyList(),
     onDismiss: () -> Unit,
 ) {
     if (entry == null) return
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
-        SleepNightDetailContent(entry, onDismiss)
+        SleepNightDetailContent(entry, allEntries, onDismiss)
     }
 }
 
 @Composable
-fun SleepNightDetailContent(entry: SleepEntryEntity, onDismiss: () -> Unit) {
+fun SleepNightDetailContent(
+    entry: SleepEntryEntity,
+    allEntries: List<SleepEntryEntity> = emptyList(),
+    onDismiss: () -> Unit,
+) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -63,6 +72,8 @@ fun SleepNightDetailContent(entry: SleepEntryEntity, onDismiss: () -> Unit) {
         SleepDisturbanceTimeline(entry.eventMarkersCompact, entry.hypnogramCompact)
         SleepSnoreMetricsCard(entry)
         SleepBreathingDisruptionsCard(entry)
+        SleepDebtDetailCard(entry, sleepEntries = allEntries)
+        SleepScienceTipCard(entry)
         entry.notes?.takeIf { it.isNotBlank() }?.let {
             Text(it, style = MaterialTheme.typography.bodySmall)
         }
@@ -226,4 +237,38 @@ private fun stageY(stage: SleepStageLabel, height: Float): Float = when (stage) 
     SleepStageLabel.REM -> height * 0.15f
     SleepStageLabel.LIGHT -> height * 0.35f
     SleepStageLabel.DEEP -> height * 0.55f
+}
+
+@Composable
+fun SleepDebtDetailCard(
+    entry: SleepEntryEntity,
+    sleepEntries: List<SleepEntryEntity>,
+    modifier: Modifier = Modifier,
+) {
+    val debt = SleepDebtTracker.analyze(sleepEntries.ifEmpty { listOf(entry) })
+    val score = SleepScoring.overallScore(entry)
+    val report = SleepNightAnalytics.analyze(entry)
+    Card(modifier = modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text("Sleep score & debt", style = MaterialTheme.typography.titleMedium)
+            StatLine("Night score", "$score/100")
+            StatLine("7-day debt", "${"%.1f".format(debt.debtHours)}h")
+            StatLine("Efficiency", report.efficiencyLabel)
+            if (report.flags.isNotEmpty()) {
+                Text(report.flags.joinToString(" · "), style = MaterialTheme.typography.bodySmall)
+            }
+        }
+    }
+}
+
+@Composable
+fun SleepScienceTipCard(entry: SleepEntryEntity, modifier: Modifier = Modifier) {
+    val stages = SleepHypnogramEncoder.decode(entry.hypnogramCompact)
+    val dominant = stages.groupingBy { it }.eachCount().maxByOrNull { it.value }?.key ?: SleepStageLabel.LIGHT
+    Card(modifier = modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp)) {
+            Text("Sleep science", style = MaterialTheme.typography.titleMedium)
+            Text(SleepScience.tipForStage(dominant), style = MaterialTheme.typography.bodySmall)
+        }
+    }
 }

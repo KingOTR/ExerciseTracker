@@ -38,6 +38,8 @@ import com.example.rungps.nfc.GymNfcController
 import com.example.rungps.ui.gym.GymTabContent
 import com.example.rungps.ui.screens.RecoveryScreen
 import com.example.rungps.ui.sleep.SleepTabScreen
+import com.example.rungps.ui.onboarding.OnboardingPreferences
+import com.example.rungps.ui.onboarding.OnboardingScreen
 import com.example.rungps.ui.theme.ExerciseTrackerTheme
 import com.example.rungps.ui.viewmodel.GymViewModel
 import com.example.rungps.ui.viewmodel.MainViewModel
@@ -54,6 +56,13 @@ class MainActivity : ComponentActivity() {
         handleDeepLinkIntent(intent)
         setContent {
             ExerciseTrackerTheme {
+                var onboardingDone by remember {
+                    mutableStateOf(OnboardingPreferences.isComplete(this@MainActivity))
+                }
+                if (!onboardingDone) {
+                    OnboardingScreen(onComplete = { onboardingDone = true })
+                    return@ExerciseTrackerTheme
+                }
                 val mainViewModel: MainViewModel = viewModel()
                 val navController = rememberNavController()
                 val backStackEntry by navController.currentBackStackEntryAsState()
@@ -152,6 +161,9 @@ class MainActivity : ComponentActivity() {
                                     val route = when (tab) {
                                         "map" -> AppDestination.Map.route
                                         "history" -> AppDestination.History.route
+                                        "gym" -> AppDestination.Gym.route
+                                        "sleep" -> AppDestination.Sleep.route
+                                        "recovery" -> AppDestination.Recovery.route
                                         else -> AppDestination.Home.route
                                     }
                                     navController.navigate(route)
