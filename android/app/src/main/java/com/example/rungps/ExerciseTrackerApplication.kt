@@ -13,5 +13,8 @@ class ExerciseTrackerApplication : Application() {
         super.onCreate()
         ExerciseTrackerDatabase.get(this)
         com.example.rungps.tracking.RecordingHrBridge.init(this)
+        com.example.rungps.maps.MapOfflineRegionManager.init(this)
+        com.example.rungps.ble.BleClient.get(this).refreshEnabled()
+        com.example.rungps.spotify.SpotifyController.refreshLinkedState(this)
     }
 }

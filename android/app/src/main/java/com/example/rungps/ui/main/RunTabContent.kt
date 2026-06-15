@@ -17,12 +17,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.rungps.ble.BleClient
 import com.example.rungps.data.entity.RouteEntity
-import com.example.rungps.feature.run.RunRow
 import com.example.rungps.feature.run.RunsViewModel
 import com.example.rungps.health.HealthConnectManager
 import com.example.rungps.tracking.TrackingService
@@ -34,22 +37,32 @@ fun RunTabContent(
     live: TrackingUiState,
     routes: List<RouteEntity>,
     selectedRunId: Long?,
+    bleClient: BleClient,
     onCloseRun: () -> Unit,
     onSelectRun: (Long) -> Unit,
     onStart: () -> Unit,
     onStop: () -> Unit,
     onGoTab: (String) -> Unit,
+    onUploadStrava: (Long) -> Unit,
+    stravaUploading: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val runs by runsViewModel.runs.collectAsState()
     val hc = HealthConnectManager(context)
+    val bleStatus by bleClient.status.collectAsState()
+    val hrBpm = live.hrBpm ?: bleStatus.latestHrBpm
+    val hrZone = hrBpm?.let { HrZoneHelper.zoneLabel(it) }
 
     if (selectedRunId != null && !live.isRecording) {
-        RunDetailsCard(
+        RunDetailsPanel(
             runId = selectedRunId,
-            runs = runs,
             onClose = onCloseRun,
+            onExport = { /* GPX export wired in future pass */ },
+            onShareOnPhoto = { },
+            onUploadStrava = onUploadStrava,
+            vm = runsViewModel,
+            stravaUploading = stravaUploading,
             modifier = modifier,
         )
         return
@@ -71,15 +84,18 @@ fun RunTabContent(
         if (live.isRecording) {
             ActiveRecordingPane(
                 live = live,
-                onTogglePause = {
+                onPauseToggle = {
                     context.startService(
                         Intent(context, TrackingService::class.java).setAction(TrackingService.ACTION_TOGGLE_PAUSE),
                     )
                 },
                 onStop = onStop,
+                hrBpm = hrBpm,
+                hrZoneLabel = hrZone,
             )
         } else {
             HealthConnectBanner(hc = hc)
+            BleWatchPanel(bleClient = bleClient)
 
             TabSectionCard(title = "Quick start") {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -124,39 +140,7 @@ private fun HealthConnectBanner(hc: HealthConnectManager) {
 }
 
 @Composable
-fun ActiveRecordingPane(
-    live: TrackingUiState,
-    onTogglePause: () -> Unit,
-    onStop: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val paceSec = if (live.distanceM > 0) live.elapsedMs / 1000.0 / (live.distanceM / 1000.0) else 0.0
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Text("Recording", style = MaterialTheme.typography.headlineMedium)
-        Text(formatElapsed(live.elapsedMs), style = MaterialTheme.typography.displaySmall)
-        Text(formatDistanceKm(live.distanceM), style = MaterialTheme.typography.titleLarge)
-        Text(formatPace(paceSec), style = MaterialTheme.typography.bodyLarge)
-        Text(formatSteps(live.steps), style = MaterialTheme.typography.bodyMedium)
-        live.segmentLabel?.let {
-            Text(it, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-        }
-        if (live.isPaused || live.isAutoPaused) {
-            Text("Paused", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.error)
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = onTogglePause) {
-                Text(if (live.isPaused) "Resume" else "Pause")
-            }
-            Button(onClick = onStop) { Text("Stop") }
-        }
-    }
-}
-
-@Composable
-fun RunListRow(row: RunRow, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun RunListRow(row: com.example.rungps.feature.run.RunRow, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -167,26 +151,5 @@ fun RunListRow(row: RunRow, onClick: () -> Unit, modifier: Modifier = Modifier) 
             Text(formatDistanceKm(row.distanceM), style = MaterialTheme.typography.bodyMedium)
         }
         FilterChip(selected = false, onClick = onClick, label = { Text("View") })
-    }
-}
-
-@Composable
-fun RunDetailsCard(
-    runId: Long,
-    runs: List<RunRow>,
-    onClose: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val row = runs.firstOrNull { it.id == runId }
-    Column(
-        modifier = modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        TabHeroHeader(title = "Run details", subtitle = row?.activityType ?: "Run #$runId")
-        if (row != null) {
-            Text(formatDistanceKm(row.distanceM), style = MaterialTheme.typography.headlineSmall)
-            Text(formatElapsed(row.durationMs), style = MaterialTheme.typography.titleMedium)
-        }
-        OutlinedButton(onClick = onClose) { Text("Close") }
     }
 }

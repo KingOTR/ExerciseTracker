@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rungps.ble.BleClient
 import com.example.rungps.data.ExerciseTrackerDatabase
 import com.example.rungps.data.entity.GymSessionEntity
 import com.example.rungps.data.entity.RouteEntity
@@ -15,8 +16,10 @@ import com.example.rungps.sync.CloudSyncResult
 import com.example.rungps.tracking.TrackingService
 import com.example.rungps.tracking.TrackingState
 import com.example.rungps.tracking.TrackingUiState
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -26,6 +29,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     val runs = RunsViewModel(repository, viewModelScope)
     val gym = GymViewModel(repository, viewModelScope)
+    val bleClient: BleClient = BleClient.get(app)
+
+    private val _stravaUploading = MutableStateFlow(false)
+    val stravaUploading: StateFlow<Boolean> = _stravaUploading.asStateFlow()
 
     val gymSessions: StateFlow<List<GymSessionEntity>> =
         repository.observeGymSessions()
@@ -49,6 +56,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun startRun(activityType: String = "RUN") {
         val ctx = getApplication<Application>()
+        bleClient.setRecordingHrPoll(true)
         ctx.startForegroundService(
             Intent(ctx, TrackingService::class.java)
                 .setAction(TrackingService.ACTION_START)
@@ -58,8 +66,24 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     fun stopRun() {
         val ctx = getApplication<Application>()
+        bleClient.setRecordingHrPoll(false)
         ctx.startService(
             Intent(ctx, TrackingService::class.java).setAction(TrackingService.ACTION_STOP),
         )
+    }
+
+    fun uploadRunToStrava(runId: Long, onResult: (String) -> Unit = {}) {
+        viewModelScope.launch {
+            _stravaUploading.value = true
+            val message = runCatching {
+                val id = runs.uploadToStrava(getApplication(), runId)
+                "Uploaded to Strava (activity $id)"
+            }.fold(
+                onSuccess = { it },
+                onFailure = { it.message ?: "Upload failed" },
+            )
+            _stravaUploading.value = false
+            onResult(message)
+        }
     }
 }

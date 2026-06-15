@@ -29,4 +29,6 @@ data class TrackingUiState(
     val lastSplitMs: Long? = null,
     val lapCount: Int = 0,
     val lastLapMs: Long? = null,
+    val hrBpm: Int? = null,
+    val hasGpsFix: Boolean = false,
 )

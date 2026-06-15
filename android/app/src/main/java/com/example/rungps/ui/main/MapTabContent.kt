@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.rungps.data.entity.RouteEntity
+import com.example.rungps.maps.MapOfflineRegionManager
 import com.example.rungps.tracking.TrackingUiState
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -45,9 +50,12 @@ fun MapTabContent(
 ) {
     val context = LocalContext.current
     var showRoutes by remember { mutableStateOf(true) }
+    var showOfflinePanel by remember { mutableStateOf(false) }
+    val offlineState by MapOfflineRegionManager.state.collectAsState()
 
     DisposableEffect(Unit) {
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        MapOfflineRegionManager.refreshRegions(context)
         onDispose { }
     }
 
@@ -70,9 +78,24 @@ fun MapTabContent(
                 style = MaterialTheme.typography.titleMedium,
             )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text("Offline", style = MaterialTheme.typography.labelMedium)
+                Switch(checked = showOfflinePanel, onCheckedChange = { showOfflinePanel = it })
                 Text("Routes", style = MaterialTheme.typography.labelMedium)
                 Switch(checked = showRoutes, onCheckedChange = { showRoutes = it })
             }
+        }
+
+        if (showOfflinePanel) {
+            OfflineDownloadPanel(
+                state = offlineState,
+                centerLat = live.lastLat ?: -33.8688,
+                centerLon = live.lastLon ?: 151.2093,
+                onRefresh = { MapOfflineRegionManager.refreshRegions(context) },
+                onDownload = { name, south, west, north, east ->
+                    MapOfflineRegionManager.downloadRegion(context, name, south, west, north, east)
+                },
+                onDelete = { MapOfflineRegionManager.deleteRegion(context, it) },
+            )
         }
 
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
@@ -130,6 +153,55 @@ fun MapTabContent(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun OfflineDownloadPanel(
+    state: com.example.rungps.maps.OfflineDownloadState,
+    centerLat: Double,
+    centerLon: Double,
+    onRefresh: () -> Unit,
+    onDownload: (String, Double, Double, Double, Double) -> Unit,
+    onDelete: (Long) -> Unit,
+) {
+    val delta = 0.15
+    TabSectionCard(title = "MapLibre offline regions") {
+        Text(state.statusText, style = MaterialTheme.typography.bodySmall)
+        if (state.downloading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp))
+        }
+        state.regions.forEach { region ->
+            Row(
+                Modifier.fillMaxWidth().padding(vertical = 2.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(region.name, style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        if (region.isComplete) "Ready" else "${region.completed}/${region.required} tiles",
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
+                OutlinedButton(onClick = { onDelete(region.id) }) { Text("Delete") }
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(
+                onClick = {
+                    onDownload(
+                        "Area ${"%.2f".format(centerLat)},${"%.2f".format(centerLon)}",
+                        centerLat - delta,
+                        centerLon - delta,
+                        centerLat + delta,
+                        centerLon + delta,
+                    )
+                },
+                enabled = !state.downloading,
+            ) { Text("Download viewport") }
+            OutlinedButton(onClick = onRefresh) { Text("Refresh") }
         }
     }
 }

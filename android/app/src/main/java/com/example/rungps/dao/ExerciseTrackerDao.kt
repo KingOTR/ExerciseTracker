@@ -125,4 +125,13 @@ interface ExerciseTrackerDao {
 
     @Query("SELECT COALESCE(SUM(distanceFromPrevM), 0.0) FROM run_points WHERE runId = :runId")
     suspend fun sumDistanceM(runId: Long): Double?
+
+    @Query("SELECT * FROM km_splits WHERE runId = :runId ORDER BY idx")
+    suspend fun kmSplitsForRun(runId: Long): List<KmSplitEntity>
+
+    @Query("SELECT * FROM run_points WHERE runId = :runId ORDER BY timeMs")
+    suspend fun pointsForRun(runId: Long): List<PointEntity>
+
+    @Query("SELECT * FROM run_hr_samples WHERE runId = :runId ORDER BY timeMs")
+    suspend fun hrSamplesForRun(runId: Long): List<RunHrSampleEntity>
 }

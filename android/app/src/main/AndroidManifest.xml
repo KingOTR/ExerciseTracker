@@ -188,7 +188,7 @@
         </receiver>
 
         <receiver
-            android:name="com.example.rungps.widget.GymWidgetProvider"
+            android:name="com.example.rungps.widget.glance.GymGlanceReceiver"
             android:exported="true"
             android:label="@string/gym_widget_label">
             <intent-filter>
@@ -203,7 +203,7 @@
         </receiver>
 
         <receiver
-            android:name="com.example.rungps.widget.RideRunWidgetProvider"
+            android:name="com.example.rungps.widget.glance.RideRunGlanceReceiver"
             android:exported="true"
             android:label="@string/ride_run_widget_label">
             <intent-filter>
@@ -215,7 +215,7 @@
         </receiver>
 
         <receiver
-            android:name="com.example.rungps.widget.RecoveryWidgetProvider"
+            android:name="com.example.rungps.widget.glance.RecoveryGlanceReceiver"
             android:exported="true"
             android:label="@string/recovery_widget_label">
             <intent-filter>

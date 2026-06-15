@@ -741,6 +741,8 @@ class TrackingService : Service() {
                 lastSplitMs = lastSplitMs,
                 lapCount = lapCount,
                 lastLapMs = lastLapMs,
+                hrBpm = com.example.rungps.ble.BleClient.get(this).status.value.latestHrBpm,
+                hasGpsFix = lastGoodGpsAtMs > 0 && System.currentTimeMillis() - lastGoodGpsAtMs < 15_000L,
             ),
         )
     }

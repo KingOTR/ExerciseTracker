@@ -18,4 +18,29 @@ class ExerciseTrackerRepository(private val dao: ExerciseTrackerDao) {
     suspend fun insertGymSession(session: GymSessionEntity) = dao.insertGymSession(session)
     suspend fun insertGymSets(sets: List<GymSetEntity>) = dao.insertGymSets(sets)
     suspend fun insertRun(run: RunEntity) = dao.insertRun(run)
+
+    suspend fun loadRunDetail(runId: Long): com.example.rungps.feature.run.RunDetail? {
+        val run = dao.runById(runId) ?: return null
+        val points = dao.pointsForRun(runId)
+        val splits = dao.kmSplitsForRun(runId)
+        val hr = dao.hrSamplesForRun(runId)
+        val avg = hr.map { it.bpm }.average().takeIf { !it.isNaN() }?.toInt()
+        val max = hr.maxOfOrNull { it.bpm }
+        return com.example.rungps.feature.run.RunDetail(
+            row = com.example.rungps.feature.run.RunRow(
+                id = run.id,
+                startedAtMs = run.startedAtMs,
+                distanceM = run.totalDistanceM,
+                durationMs = run.totalDurationMs,
+                activityType = run.activityType,
+            ),
+            points = points,
+            splits = splits,
+            hrSamples = hr,
+            avgHrBpm = avg,
+            maxHrBpm = max,
+        )
+    }
+
+    suspend fun deleteRun(runId: Long) = dao.deleteRun(runId)
 }
