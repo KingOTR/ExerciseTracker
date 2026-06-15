@@ -23,6 +23,7 @@ import com.example.rungps.ui.navigation.AppDestination
 import com.example.rungps.ui.screens.DataScreen
 import com.example.rungps.ui.screens.GymScreen
 import com.example.rungps.ui.screens.RecoveryScreen
+import com.example.rungps.ui.sleep.SleepTabScreen
 import com.example.rungps.ui.theme.ExerciseTrackerTheme
 import com.example.rungps.ui.viewmodel.MainViewModel
 
@@ -92,7 +93,7 @@ class MainActivity : ComponentActivity() {
                             RecoveryScreen()
                         }
                         composable(AppDestination.Sleep.route) {
-                            DataScreen("Sleep", "Health Connect import and ML quality scoring")
+                            SleepTabScreen()
                         }
                         composable(AppDestination.Soccer.route) {
                             DataScreen("Soccer", "Matches, training, watch sync")

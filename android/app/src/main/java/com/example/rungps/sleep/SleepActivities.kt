@@ -3,17 +3,48 @@ package com.example.rungps.sleep
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.rungps.ui.theme.ExerciseTrackerTheme
 
 class SleepAlarmActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MaterialTheme { Text("Sleep alarm") } }
+        setContent {
+            ExerciseTrackerTheme {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(24.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text("Good morning", style = MaterialTheme.typography.headlineMedium)
+                    Text("Dismiss alarm to save your night", modifier = Modifier.padding(top = 8.dp, bottom = 24.dp))
+                    Button(onClick = {
+                        SleepAlarmDismiss.dismissAll(this@SleepAlarmActivity)
+                        finish()
+                    }) {
+                        Text("Dismiss")
+                    }
+                }
+            }
+        }
     }
 
-    companion object INSTANCE {
-        @JvmStatic fun closeIfShowing() {}
+    companion object {
+        @Volatile
+        private var showing = false
+
+        fun closeIfShowing() {
+            showing = false
+        }
     }
 }
 

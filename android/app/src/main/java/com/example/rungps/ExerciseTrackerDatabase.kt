@@ -5,13 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.rungps.data.dao.ExerciseTrackerDao
+import com.example.rungps.data.dao.SleepDao
 import com.example.rungps.data.entity.GymSessionEntity
 import com.example.rungps.data.entity.GymSetEntity
 import com.example.rungps.data.entity.KmSplitEntity
 import com.example.rungps.data.entity.PointEntity
 import com.example.rungps.data.entity.RunEntity
 import com.example.rungps.data.entity.RunHrSampleEntity
+import com.example.rungps.data.entity.SleepEntryEntity
 import com.example.rungps.data.entity.SleepRecordEntity
+import com.example.rungps.data.entity.SleepSoundEventEntity
 import com.example.rungps.data.entity.SoccerSessionEntity
 import com.example.rungps.data.entity.UserExerciseOverrideEntity
 
@@ -25,13 +28,16 @@ import com.example.rungps.data.entity.UserExerciseOverrideEntity
         KmSplitEntity::class,
         SoccerSessionEntity::class,
         SleepRecordEntity::class,
+        SleepEntryEntity::class,
+        SleepSoundEventEntity::class,
         UserExerciseOverrideEntity::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = true,
 )
 abstract class ExerciseTrackerDatabase : RoomDatabase() {
     abstract fun exerciseTrackerDao(): ExerciseTrackerDao
+    abstract fun sleepDao(): SleepDao
 
     companion object {
         @Volatile
