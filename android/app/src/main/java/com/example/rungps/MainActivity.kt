@@ -7,18 +7,28 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -26,20 +36,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.rungps.nfc.GymNfcController
 import com.example.rungps.spotify.SpotifyController
 import com.example.rungps.strava.StravaOAuth
 import com.example.rungps.strava.StravaRepository
+import com.example.rungps.ui.components.AppScaffold
+import com.example.rungps.ui.gym.GymTabContent
 import com.example.rungps.ui.main.HistoryTabContent
 import com.example.rungps.ui.main.MapTabContent
 import com.example.rungps.ui.main.RunTabContent
 import com.example.rungps.ui.main.SoccerTabContent
 import com.example.rungps.ui.navigation.AppDestination
-import com.example.rungps.nfc.GymNfcController
-import com.example.rungps.ui.gym.GymTabContent
-import com.example.rungps.ui.screens.RecoveryScreen
-import com.example.rungps.ui.sleep.SleepTabScreen
 import com.example.rungps.ui.onboarding.OnboardingPreferences
 import com.example.rungps.ui.onboarding.OnboardingScreen
+import com.example.rungps.ui.screens.RecoveryScreen
+import com.example.rungps.ui.sleep.SleepTabScreen
 import com.example.rungps.ui.theme.ExerciseTrackerTheme
 import com.example.rungps.ui.viewmodel.GymViewModel
 import com.example.rungps.ui.viewmodel.MainViewModel
@@ -67,6 +78,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val backStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry?.destination?.route
+                val snackbarHostState = remember { SnackbarHostState() }
 
                 val routes by mainViewModel.routes.collectAsState()
                 val live by mainViewModel.trackingState.collectAsState()
@@ -77,12 +89,17 @@ class MainActivity : ComponentActivity() {
                 var followRouteId by remember { mutableStateOf<Long?>(null) }
                 var followRouteName by remember { mutableStateOf<String?>(null) }
                 var overlayRunId by remember { mutableStateOf<Long?>(null) }
+                var visitedTabs by rememberSaveable { mutableStateOf(setOf(AppDestination.Home.route)) }
 
                 overlayRunId?.let { runId ->
                     com.example.rungps.ui.run.RunOverlayExportDialog(
                         runId = runId,
                         onDismiss = { overlayRunId = null },
                     )
+                }
+
+                LaunchedEffect(currentRoute) {
+                    currentRoute?.let { route -> visitedTabs = visitedTabs + route }
                 }
 
                 val openTab = intent?.getStringExtra("open_tab")
@@ -94,8 +111,10 @@ class MainActivity : ComponentActivity() {
                         "recovery" -> AppDestination.Recovery.route
                         "sleep" -> AppDestination.Sleep.route
                         "soccer" -> AppDestination.Soccer.route
+                        "home", "run" -> AppDestination.Home.route
                         else -> AppDestination.Home.route
                     }
+                    visitedTabs = visitedTabs + dest
                     navController.navigate(dest) {
                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true
@@ -104,13 +123,19 @@ class MainActivity : ComponentActivity() {
                     intent.removeExtra("open_tab")
                 }
 
-                Scaffold(
+                AppScaffold(
+                    snackbarHostState = snackbarHostState,
+                    uiEvents = mainViewModel.uiEvents,
                     bottomBar = {
                         NavigationBar {
-                            AppDestination.entries.forEach { destination ->
+                            val destinations = AppDestination.entries
+                            destinations.forEachIndexed { index, destination ->
+                                val selected = currentRoute == destination.route
+                                val tabDesc = "${destination.label}, tab ${index + 1} of ${destinations.size}"
                                 NavigationBarItem(
-                                    selected = currentRoute == destination.route,
+                                    selected = selected,
                                     onClick = {
+                                        visitedTabs = visitedTabs + destination.route
                                         navController.navigate(destination.route) {
                                             popUpTo(navController.graph.findStartDestination().id) {
                                                 saveState = true
@@ -119,7 +144,16 @@ class MainActivity : ComponentActivity() {
                                             restoreState = true
                                         }
                                     },
-                                    icon = { Icon(destination.icon, contentDescription = destination.label) },
+                                    icon = {
+                                        Icon(
+                                            destination.icon,
+                                            contentDescription = null,
+                                            modifier = Modifier.semantics {
+                                                contentDescription = tabDesc
+                                                stateDescription = if (selected) "Selected" else "Not selected"
+                                            },
+                                        )
+                                    },
                                     label = { Text(destination.label) },
                                 )
                             }
@@ -142,15 +176,38 @@ class MainActivity : ComponentActivity() {
                                 onSyncMoyoung = {
                                     syncingMoyoung = true
                                     lifecycleScope.launch {
-                                        val msg = runCatching {
-                                            val workouts = mainViewModel.bleClient.fetchMoyoungWorkouts()
-                                            "Imported ${workouts.size} Moyoung workouts"
-                                        }.fold(
-                                            onSuccess = { it },
-                                            onFailure = { it.message ?: "Moyoung sync failed" },
-                                        )
+                                        val result = runCatching {
+                                            mainViewModel.bleClient.fetchMoyoungWorkouts()
+                                        }
                                         syncingMoyoung = false
-                                        Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
+                                        result.fold(
+                                            onSuccess = { workouts ->
+                                                mainViewModel.showMessage("Imported ${workouts.size} Moyoung workouts")
+                                            },
+                                            onFailure = { err ->
+                                                mainViewModel.showMessage(
+                                                    err.message ?: "Moyoung sync failed",
+                                                    retryLabel = "Retry",
+                                                    onRetry = {
+                                                        syncingMoyoung = true
+                                                        lifecycleScope.launch {
+                                                            val retry = runCatching {
+                                                                mainViewModel.bleClient.fetchMoyoungWorkouts()
+                                                            }
+                                                            syncingMoyoung = false
+                                                            retry.fold(
+                                                                onSuccess = { w ->
+                                                                    mainViewModel.showMessage("Imported ${w.size} Moyoung workouts")
+                                                                },
+                                                                onFailure = { e ->
+                                                                    mainViewModel.showMessage(e.message ?: "Moyoung sync failed")
+                                                                },
+                                                            )
+                                                        }
+                                                    },
+                                                )
+                                            },
+                                        )
                                     }
                                 },
                                 onCloseRun = { selectedRunId = null },
@@ -166,11 +223,19 @@ class MainActivity : ComponentActivity() {
                                         "recovery" -> AppDestination.Recovery.route
                                         else -> AppDestination.Home.route
                                     }
+                                    visitedTabs = visitedTabs + route
                                     navController.navigate(route)
                                 },
                                 onUploadStrava = { runId ->
                                     mainViewModel.uploadRunToStrava(runId) { msg ->
-                                        Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
+                                        val failed = msg.contains("fail", ignoreCase = true)
+                                        mainViewModel.showMessage(
+                                            msg,
+                                            retryLabel = if (failed) "Retry" else null,
+                                            onRetry = if (failed) {
+                                                { mainViewModel.uploadRunToStrava(runId) { m -> mainViewModel.showMessage(m) } }
+                                            } else null,
+                                        )
                                     }
                                 },
                                 onShareOnPhoto = { overlayRunId = it },
@@ -180,44 +245,75 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(AppDestination.Map.route) {
-                            MapTabContent(
-                                live = live,
-                                routes = routes,
-                                followRouteId = followRouteId,
-                                followRouteName = followRouteName,
-                                onSelectFollowRoute = { id, name ->
-                                    followRouteId = id
-                                    followRouteName = name
-                                },
-                            )
+                            if (AppDestination.Map.route in visitedTabs) {
+                                MapTabContent(
+                                    live = live,
+                                    routes = routes,
+                                    followRouteId = followRouteId,
+                                    followRouteName = followRouteName,
+                                    onSelectFollowRoute = { id, name ->
+                                        followRouteId = id
+                                        followRouteName = name
+                                    },
+                                )
+                            } else {
+                                TabLoadingPlaceholder()
+                            }
                         }
                         composable(AppDestination.History.route) {
-                            HistoryTabContent(
-                                runsViewModel = mainViewModel.runs,
-                                onSelectRun = {
-                                    selectedRunId = it
-                                    navController.navigate(AppDestination.Home.route)
-                                },
-                                onImportStrava = {
-                                    mainViewModel.importStravaHistory { msg ->
-                                        Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
-                                    }
-                                },
-                                stravaImporting = stravaImporting,
-                            )
+                            if (AppDestination.History.route in visitedTabs) {
+                                HistoryTabContent(
+                                    runsViewModel = mainViewModel.runs,
+                                    onSelectRun = {
+                                        selectedRunId = it
+                                        navController.navigate(AppDestination.Home.route)
+                                    },
+                                    onImportStrava = {
+                                        mainViewModel.importStravaHistory { msg ->
+                                            val failed = msg.contains("fail", ignoreCase = true)
+                                            mainViewModel.showMessage(
+                                                msg,
+                                                retryLabel = if (failed) "Retry" else null,
+                                                onRetry = if (failed) {
+                                                    { mainViewModel.importStravaHistory { m -> mainViewModel.showMessage(m) } }
+                                                } else null,
+                                            )
+                                        }
+                                    },
+                                    stravaImporting = stravaImporting,
+                                )
+                            } else {
+                                TabLoadingPlaceholder()
+                            }
                         }
                         composable(AppDestination.Gym.route) {
-                            val gymViewModel: GymViewModel = viewModel()
-                            GymTabContent(viewModel = gymViewModel, nfcController = gymNfcController)
+                            if (AppDestination.Gym.route in visitedTabs) {
+                                val gymViewModel: GymViewModel = viewModel()
+                                GymTabContent(viewModel = gymViewModel, nfcController = gymNfcController)
+                            } else {
+                                TabLoadingPlaceholder()
+                            }
                         }
                         composable(AppDestination.Recovery.route) {
-                            RecoveryScreen()
+                            if (AppDestination.Recovery.route in visitedTabs) {
+                                RecoveryScreen()
+                            } else {
+                                TabLoadingPlaceholder()
+                            }
                         }
                         composable(AppDestination.Sleep.route) {
-                            SleepTabScreen()
+                            if (AppDestination.Sleep.route in visitedTabs) {
+                                SleepTabScreen()
+                            } else {
+                                TabLoadingPlaceholder()
+                            }
                         }
                         composable(AppDestination.Soccer.route) {
-                            SoccerTabContent(sessionsFlow = mainViewModel.soccerSessions)
+                            if (AppDestination.Soccer.route in visitedTabs) {
+                                SoccerTabContent(sessionsFlow = mainViewModel.soccerSessions)
+                            } else {
+                                TabLoadingPlaceholder()
+                            }
                         }
                     }
                 }
@@ -269,5 +365,12 @@ class MainActivity : ComponentActivity() {
             }
         }
         intent?.data = null
+    }
+}
+
+@androidx.compose.runtime.Composable
+private fun TabLoadingPlaceholder() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
     }
 }

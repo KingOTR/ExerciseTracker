@@ -20,9 +20,13 @@ import com.example.rungps.strava.StravaRepository
 import com.example.rungps.tracking.TrackingService
 import com.example.rungps.tracking.TrackingState
 import com.example.rungps.tracking.TrackingUiState
+import com.example.rungps.ui.components.UiEvent
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -41,6 +45,15 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     val stravaImportMessage: StateFlow<String?> = _stravaImportMessage.asStateFlow()
     private val _stravaImporting = MutableStateFlow(false)
     val stravaImporting: StateFlow<Boolean> = _stravaImporting.asStateFlow()
+
+    private val _uiEvents = MutableSharedFlow<UiEvent>(extraBufferCapacity = 8)
+    val uiEvents: SharedFlow<UiEvent> = _uiEvents.asSharedFlow()
+
+    fun showMessage(text: String, retryLabel: String? = null, onRetry: (() -> Unit)? = null) {
+        viewModelScope.launch {
+            _uiEvents.emit(UiEvent.Message(text, retryLabel, onRetry))
+        }
+    }
 
     val gymSessions: StateFlow<List<GymSessionEntity>> =
         repository.observeGymSessions()
