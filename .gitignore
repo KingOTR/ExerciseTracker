@@ -25,6 +25,7 @@ android/local.properties
 local.properties
 .env
 .env.*
+!.env.example
 
 # OS
 .DS_Store
@@ -32,3 +33,4 @@ Thumbs.db
 
 # Extracted APK (large, reproducible)
 extracted/
+reference/*.apk

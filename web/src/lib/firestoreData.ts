@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -77,7 +78,6 @@ export async function readBodyProfile(): Promise<DocumentData | null> {
   const uid = currentUid();
   if (!uid) return null;
   const ref = doc(db, 'users', uid, 'prefs', 'body_profile');
-  const snap = await getDocs(query(collection(db, 'users', uid, 'prefs'), limit(5)));
-  const profile = snap.docs.find((d) => d.id === 'body_profile');
-  return profile ? profile.data() : null;
+  const snap = await getDoc(ref);
+  return snap.exists() ? snap.data() : null;
 }
