@@ -133,7 +133,7 @@ class RecoveryLoadEngine(
         }
     }
 
-    private fun unitsForRun(run: RunEntity): Double = run.distanceM / 1000.0
+    private fun unitsForRun(run: RunEntity): Double = run.totalDistanceM / 1000.0
 
     private fun addCardioLoad(
         target: MutableMap<String, Double>,

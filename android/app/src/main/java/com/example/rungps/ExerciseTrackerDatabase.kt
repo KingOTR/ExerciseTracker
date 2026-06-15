@@ -8,7 +8,9 @@ import com.example.rungps.data.dao.ExerciseTrackerDao
 import com.example.rungps.data.entity.GymSessionEntity
 import com.example.rungps.data.entity.GymSetEntity
 import com.example.rungps.data.entity.KmSplitEntity
+import com.example.rungps.data.entity.PointEntity
 import com.example.rungps.data.entity.RunEntity
+import com.example.rungps.data.entity.RunHrSampleEntity
 import com.example.rungps.data.entity.SleepRecordEntity
 import com.example.rungps.data.entity.SoccerSessionEntity
 import com.example.rungps.data.entity.UserExerciseOverrideEntity
@@ -18,12 +20,14 @@ import com.example.rungps.data.entity.UserExerciseOverrideEntity
         GymSessionEntity::class,
         GymSetEntity::class,
         RunEntity::class,
+        PointEntity::class,
+        RunHrSampleEntity::class,
         KmSplitEntity::class,
         SoccerSessionEntity::class,
         SleepRecordEntity::class,
         UserExerciseOverrideEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 abstract class ExerciseTrackerDatabase : RoomDatabase() {

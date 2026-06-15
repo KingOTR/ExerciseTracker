@@ -7,7 +7,9 @@ import androidx.room.Query
 import com.example.rungps.data.entity.GymSessionEntity
 import com.example.rungps.data.entity.GymSetEntity
 import com.example.rungps.data.entity.KmSplitEntity
+import com.example.rungps.data.entity.PointEntity
 import com.example.rungps.data.entity.RunEntity
+import com.example.rungps.data.entity.RunHrSampleEntity
 import com.example.rungps.data.entity.SleepRecordEntity
 import com.example.rungps.data.entity.SoccerSessionEntity
 import com.example.rungps.data.entity.UserExerciseOverrideEntity
@@ -43,7 +45,7 @@ interface ExerciseTrackerDao {
     suspend fun insertGymSets(sets: List<GymSetEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRun(run: RunEntity)
+    suspend fun insertRun(run: RunEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertKmSplits(splits: List<KmSplitEntity>)
@@ -80,4 +82,47 @@ interface ExerciseTrackerDao {
 
     @Query("SELECT * FROM soccer_sessions ORDER BY startTimeMs DESC")
     suspend fun getAllSoccerSessions(): List<SoccerSessionEntity>
+
+    @Query("SELECT * FROM runs WHERE id = :runId LIMIT 1")
+    suspend fun runById(runId: Long): RunEntity?
+
+    @Query("SELECT COUNT(*) FROM runs WHERE id = :runId")
+    suspend fun runExists(runId: Long): Int
+
+    @Query(
+        """
+        UPDATE runs SET
+            endedAtMs = :endedAtMs,
+            totalDistanceM = :totalDistanceM,
+            totalDurationMs = :totalDurationMs,
+            totalSteps = :totalSteps,
+            planType = :planType,
+            timeSession = :timeSession
+        WHERE id = :runId
+        """,
+    )
+    suspend fun finishRun(
+        runId: Long,
+        endedAtMs: Long,
+        totalDistanceM: Double,
+        totalDurationMs: Long,
+        totalSteps: Long,
+        planType: String?,
+        timeSession: String?,
+    )
+
+    @Query("DELETE FROM runs WHERE id = :runId")
+    suspend fun deleteRun(runId: Long)
+
+    @Insert
+    suspend fun insertPoint(point: PointEntity): Long
+
+    @Insert
+    suspend fun insertKmSplit(split: KmSplitEntity): Long
+
+    @Insert
+    suspend fun insertRunHrSample(sample: RunHrSampleEntity): Long
+
+    @Query("SELECT COALESCE(SUM(distanceFromPrevM), 0.0) FROM run_points WHERE runId = :runId")
+    suspend fun sumDistanceM(runId: Long): Double?
 }

@@ -36,8 +36,8 @@ class RunsViewModel(
     private fun RunEntity.toRow() = RunRow(
         id = id,
         startedAtMs = startedAtMs,
-        distanceM = distanceM,
-        durationMs = durationMs,
+        distanceM = totalDistanceM,
+        durationMs = totalDurationMs,
         activityType = activityType,
     )
 }

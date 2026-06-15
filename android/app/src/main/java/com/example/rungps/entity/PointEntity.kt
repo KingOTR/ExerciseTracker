@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "km_splits",
+    tableName = "run_points",
     foreignKeys = [
         ForeignKey(
             entity = RunEntity::class,
@@ -17,12 +17,13 @@ import androidx.room.PrimaryKey
     ],
     indices = [Index("runId")],
 )
-data class KmSplitEntity(
-    @PrimaryKey(autoGenerate = true) val rowId: Long = 0,
+data class PointEntity(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val runId: Long,
-    val kind: String,
-    val idx: Int,
-    val elapsedEndMs: Long = 0,
-    val durationMs: Long,
-    val distanceM: Double,
+    val timeMs: Long,
+    val lat: Double,
+    val lon: Double,
+    val accuracyM: Float,
+    val eleM: Double? = null,
+    val distanceFromPrevM: Double = 0.0,
 )

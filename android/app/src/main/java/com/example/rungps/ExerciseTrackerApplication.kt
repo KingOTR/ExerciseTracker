@@ -12,5 +12,6 @@ class ExerciseTrackerApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         ExerciseTrackerDatabase.get(this)
+        com.example.rungps.tracking.RecordingHrBridge.init(this)
     }
 }

@@ -24,8 +24,8 @@ object RunFirestoreSync {
             "localId" to run.id,
             "startedAtMs" to run.startedAtMs,
             "endedAtMs" to run.endedAtMs,
-            "distanceM" to run.distanceM,
-            "durationMs" to run.durationMs,
+            "distanceM" to run.totalDistanceM,
+            "durationMs" to run.totalDurationMs,
             "activityType" to run.activityType,
             "kmSplits" to splits.map { s ->
                 mapOf("kind" to s.kind, "idx" to s.idx, "durationMs" to s.durationMs, "distanceM" to s.distanceM)
@@ -47,8 +47,8 @@ object RunFirestoreSync {
                     id = localId,
                     startedAtMs = doc.getLong("startedAtMs") ?: continue,
                     endedAtMs = doc.getLong("endedAtMs"),
-                    distanceM = doc.getDouble("distanceM") ?: 0.0,
-                    durationMs = doc.getLong("durationMs") ?: 0L,
+                    totalDistanceM = doc.getDouble("distanceM") ?: 0.0,
+                    totalDurationMs = doc.getLong("durationMs") ?: 0L,
                     activityType = doc.getString("activityType") ?: "RUN",
                 ),
             )
