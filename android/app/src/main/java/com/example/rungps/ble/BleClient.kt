@@ -20,6 +20,8 @@ import android.os.Looper
 import androidx.core.content.ContextCompat
 import com.example.rungps.ble.moyoung.MoyoungConstants
 import com.example.rungps.ble.moyoung.MoyoungHrParser
+import com.example.rungps.ble.moyoung.MoyoungWorkout
+import com.example.rungps.ble.moyoung.MoyoungWorkoutSync
 import com.example.rungps.tracking.RecordingHrBridge
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +51,7 @@ class BleClient private constructor(private val context: Context) {
     private var scanJob: Job? = null
     private var recordingHrPollJob: Job? = null
     private var hrTestJob: Job? = null
+    private var workoutSync: MoyoungWorkoutSync? = null
 
     private val scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
@@ -184,10 +187,18 @@ class BleClient private constructor(private val context: Context) {
         }
     }
 
+    suspend fun fetchMoyoungWorkouts(): List<MoyoungWorkout> {
+        val g = gatt ?: throw IllegalStateException("Connect a Moyoung watch first")
+        if (!_status.value.hasMoyoungService) throw IllegalStateException("No Moyoung service on connected device")
+        val sync = workoutSync ?: MoyoungWorkoutSync(g).also { workoutSync = it }
+        return sync.fetchWorkouts()
+    }
+
     fun disconnect() {
         stopScan()
         recordingHrPollJob?.cancel()
         hrTestJob?.cancel()
+        workoutSync = null
         gatt?.close()
         gatt = null
         hrChar = null
@@ -254,6 +265,7 @@ class BleClient private constructor(private val context: Context) {
 
     private fun parseMoyoungPacket(value: ByteArray) {
         if (value.isEmpty()) return
+        workoutSync?.onNotify(value)
         if (value[0] == MoyoungConstants.WORKOUT_HR_RESPONSE) {
             val points = MoyoungHrParser.parse(value)
             points.lastOrNull()?.let { publishHr(it.bpm) }

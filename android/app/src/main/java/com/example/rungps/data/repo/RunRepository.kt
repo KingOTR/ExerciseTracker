@@ -68,4 +68,8 @@ class RunRepository(private val dao: ExerciseTrackerDao) {
         dao.insertRunHrSample(RunHrSampleEntity(runId = runId, timeMs = timeMs, bpm = bpm))
 
     suspend fun sumDistanceM(runId: Long): Double = dao.sumDistanceM(runId) ?: 0.0
+
+    suspend fun allRuns(): List<RunEntity> = dao.getAllRuns()
+
+    suspend fun insert(run: RunEntity): Long = dao.insertRun(run)
 }

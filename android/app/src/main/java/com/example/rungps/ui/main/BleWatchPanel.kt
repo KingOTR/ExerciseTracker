@@ -25,6 +25,8 @@ import com.example.rungps.ble.BleStatus
 fun BleWatchPanel(
     bleClient: BleClient,
     modifier: Modifier = Modifier,
+    syncingMoyoung: Boolean = false,
+    onSyncMoyoung: () -> Unit = {},
 ) {
     val status by bleClient.status.collectAsState()
 
@@ -79,6 +81,11 @@ fun BleWatchPanel(
                     enabled = status.connectedAddress != null && !status.hrTestRunning,
                 ) {
                     Text(if (status.hrTestRunning) "Testing HR…" else "Test HR")
+                }
+                if (status.hasMoyoungService && status.connectedAddress != null) {
+                    OutlinedButton(onClick = onSyncMoyoung) {
+                        Text(if (syncingMoyoung) "Syncing…" else "Sync workouts")
+                    }
                 }
             }
         }

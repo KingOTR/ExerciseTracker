@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { DashboardLayout } from './components/DashboardLayout';
 import { ensureAuth } from './lib/firebase';
+import { DashboardPage } from './pages/DashboardPage';
 import { GymPage } from './pages/GymPage';
+import { RunsPage } from './pages/RunsPage';
 import { SectionPage } from './pages/SectionPage';
 import './App.css';
 
@@ -15,8 +17,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<DashboardLayout />}>
-          <Route index element={<SectionPage title="Dashboard" description="Overview of runs, gym, recovery, sleep, and soccer activity." />} />
-          <Route path="runs" element={<SectionPage title="Runs" description="GPS run history, splits, and Strava personal bests." />} />
+          <Route index element={<DashboardPage />} />
+          <Route path="runs" element={<RunsPage />} />
           <Route path="gym" element={<GymPage />} />
           <Route path="recovery" element={<SectionPage title="Recovery" description="Composite load from runs, gym, soccer, and daily steps." />} />
           <Route path="sleep" element={<SectionPage title="Sleep" description="Sleep duration, efficiency, and quality scores." />} />

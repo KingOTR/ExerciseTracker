@@ -1,15 +1,7 @@
 package com.example.rungps.ble.moyoung
 
-data class MoyoungWorkout(
-    val watchId: Long,
-    val trainingType: Int,
-    val startEpochSec: Long,
-    val durationSec: Int,
-    val distanceM: Int,
-    val calories: Int,
-    val avgHr: Int?,
-    val maxHr: Int?,
-)
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 object MoyoungTrainingParser {
     fun parseAll(data: ByteArray): List<MoyoungWorkout> {
@@ -32,9 +24,21 @@ object MoyoungTrainingParser {
     }
 
     fun parseDetailPacket(payload: ByteArray): List<MoyoungWorkout>? {
-        if (payload.isEmpty() || payload[0] != 3.toByte()) return null
-        if (payload.size >= 26) {
-            parseOne(payload, 0, 26, true)?.let { return listOf(it) }
+        if (payload.isEmpty() || payload[0] != MoyoungConstants.WORKOUT_DETAIL_RESPONSE) return null
+        parseOne(payload, 0, 26, true)?.let { return listOf(it) }
+        if (payload.size >= 2) {
+            val inner = payload.copyOfRange(1, payload.size)
+            if (inner.size in 22..28) {
+                val padded = ByteArray(26)
+                padded[0] = MoyoungConstants.WORKOUT_DETAIL_RESPONSE
+                System.arraycopy(inner, 0, padded, 2, minOf(inner.size, 24))
+                parseOne(padded, 0, 26, true)?.let { return listOf(it) }
+            }
+            if (inner.size >= 22) {
+                val legacy = ByteArray(24)
+                System.arraycopy(inner, 0, legacy, 0, minOf(inner.size, 24))
+                parseOne(legacy, 0, 24, false)?.let { return listOf(it) }
+            }
         }
         return null
     }
@@ -42,35 +46,43 @@ object MoyoungTrainingParser {
     private fun parseOne(data: ByteArray, offset: Int, entryLen: Int, protocolV2: Boolean): MoyoungWorkout? {
         if (offset + entryLen > data.size) return null
         val slice = data.copyOfRange(offset, offset + entryLen)
-        val header = slice[0].toInt() and 0xFF
-        if (header != 3 && header != 0) return null
-        var idx = if (protocolV2) 2 else 1
-        val watchId = if (protocolV2) {
-            (slice.getOrNull(2)?.toLong() ?: 0) and 0xFF
-        } else {
-            (slice.getOrNull(idx++)?.toLong() ?: 0) and 0xFF
+        if (slice.all { it == 0.toByte() }) return null
+
+        val buffer = ByteBuffer.wrap(slice).order(ByteOrder.LITTLE_ENDIAN)
+        if (protocolV2) {
+            buffer.get()
+            buffer.get()
         }
-        val trainingType = slice.getOrNull(idx++)?.toInt()?.and(0xFF) ?: return null
-        val startEpochSec = readLeInt(slice, idx).also { idx += 4 }.toLong() and 0xFFFFFFFFL
-        val durationSec = readLeShort(slice, idx).also { idx += 2 }
-        val distanceM = readLeShort(slice, idx).also { idx += 2 }
-        val calories = readLeShort(slice, idx).also { idx += 2 }
-        if (durationSec <= 0) return null
-        val avgHr = slice.getOrNull(idx++)?.toInt()?.and(0xFF)?.takeIf { it in 40..220 }
-        val maxHr = slice.getOrNull(idx)?.toInt()?.and(0xFF)?.takeIf { it in 40..220 }
-        return MoyoungWorkout(watchId, trainingType, startEpochSec, durationSec, distanceM, calories, avgHr, maxHr)
-    }
+        val startEpoch = buffer.int
+        val endEpoch = buffer.int
+        var activeSec = buffer.short.toInt() and 0xFFFF
+        val avgHr = if (protocolV2) (buffer.get().toInt() and 0xFF).takeIf { it in 40..220 } else {
+            buffer.get()
+            null
+        }
+        val sportType = buffer.get().toInt() and 0xFF
+        val steps = buffer.int
+        val distanceM = buffer.int
+        val calories = if (protocolV2) buffer.int else buffer.short.toInt() and 0xFFFF
 
-    private fun readLeInt(data: ByteArray, offset: Int): Int {
-        if (offset + 4 > data.size) return 0
-        return (data[offset].toInt() and 0xFF) or
-            ((data[offset + 1].toInt() and 0xFF) shl 8) or
-            ((data[offset + 2].toInt() and 0xFF) shl 16) or
-            ((data[offset + 3].toInt() and 0xFF) shl 24)
-    }
+        if (startEpoch <= 0 && activeSec <= 0 && endEpoch <= 0) return null
+        if (activeSec <= 0) {
+            activeSec = maxOf(endEpoch - startEpoch, 0)
+            if (activeSec <= 0) return null
+        } else if (activeSec in 1..600 && endEpoch - startEpoch > activeSec * 45) {
+            activeSec *= 60
+        }
 
-    private fun readLeShort(data: ByteArray, offset: Int): Int {
-        if (offset + 2 > data.size) return 0
-        return (data[offset].toInt() and 0xFF) or ((data[offset + 1].toInt() and 0xFF) shl 8)
+        val startMs = if (startEpoch > 0) {
+            MoyoungWatchTime.watchEpochSecToLocalMs(startEpoch)
+        } else {
+            System.currentTimeMillis() - activeSec * 1000L
+        }
+        val endMs = when {
+            endEpoch > startEpoch && endEpoch > 0 -> MoyoungWatchTime.watchEpochSecToLocalMs(endEpoch)
+            startEpoch > 0 -> MoyoungWatchTime.watchEpochSecToLocalMs(startEpoch + activeSec)
+            else -> startMs + activeSec * 1000L
+        }
+        return MoyoungWorkout(startMs, endMs, activeSec, sportType, avgHr, steps, distanceM, calories)
     }
 }

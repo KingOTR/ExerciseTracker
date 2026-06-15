@@ -34,16 +34,22 @@ import com.example.rungps.ui.main.MapTabContent
 import com.example.rungps.ui.main.RunTabContent
 import com.example.rungps.ui.main.SoccerTabContent
 import com.example.rungps.ui.navigation.AppDestination
-import com.example.rungps.ui.screens.GymScreen
+import com.example.rungps.nfc.GymNfcController
+import com.example.rungps.ui.gym.GymTabContent
 import com.example.rungps.ui.screens.RecoveryScreen
 import com.example.rungps.ui.sleep.SleepTabScreen
 import com.example.rungps.ui.theme.ExerciseTrackerTheme
+import com.example.rungps.ui.viewmodel.GymViewModel
 import com.example.rungps.ui.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private lateinit var gymNfcController: GymNfcController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        gymNfcController = GymNfcController(this)
+        gymNfcController.onCreateHandleIntent(intent)
         enableEdgeToEdge()
         handleDeepLinkIntent(intent)
         setContent {
@@ -56,6 +62,8 @@ class MainActivity : ComponentActivity() {
                 val routes by mainViewModel.routes.collectAsState()
                 val live by mainViewModel.trackingState.collectAsState()
                 val stravaUploading by mainViewModel.stravaUploading.collectAsState()
+                val stravaImporting by mainViewModel.stravaImporting.collectAsState()
+                var syncingMoyoung by remember { mutableStateOf(false) }
                 var selectedRunId by remember { mutableStateOf<Long?>(null) }
                 var followRouteId by remember { mutableStateOf<Long?>(null) }
                 var followRouteName by remember { mutableStateOf<String?>(null) }
@@ -113,6 +121,21 @@ class MainActivity : ComponentActivity() {
                                 routes = routes,
                                 selectedRunId = selectedRunId,
                                 bleClient = mainViewModel.bleClient,
+                                syncingMoyoung = syncingMoyoung,
+                                onSyncMoyoung = {
+                                    syncingMoyoung = true
+                                    lifecycleScope.launch {
+                                        val msg = runCatching {
+                                            val workouts = mainViewModel.bleClient.fetchMoyoungWorkouts()
+                                            "Imported ${workouts.size} Moyoung workouts"
+                                        }.fold(
+                                            onSuccess = { it },
+                                            onFailure = { it.message ?: "Moyoung sync failed" },
+                                        )
+                                        syncingMoyoung = false
+                                        Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
+                                    }
+                                },
                                 onCloseRun = { selectedRunId = null },
                                 onSelectRun = { selectedRunId = it },
                                 onStart = { mainViewModel.startRun() },
@@ -152,10 +175,17 @@ class MainActivity : ComponentActivity() {
                                     selectedRunId = it
                                     navController.navigate(AppDestination.Home.route)
                                 },
+                                onImportStrava = {
+                                    mainViewModel.importStravaHistory { msg ->
+                                        Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
+                                    }
+                                },
+                                stravaImporting = stravaImporting,
                             )
                         }
                         composable(AppDestination.Gym.route) {
-                            GymScreen()
+                            val gymViewModel: GymViewModel = viewModel()
+                            GymTabContent(viewModel = gymViewModel, nfcController = gymNfcController)
                         }
                         composable(AppDestination.Recovery.route) {
                             RecoveryScreen()
@@ -172,9 +202,20 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (::gymNfcController.isInitialized) gymNfcController.onResume()
+    }
+
+    override fun onPause() {
+        if (::gymNfcController.isInitialized) gymNfcController.onPause()
+        super.onPause()
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        if (::gymNfcController.isInitialized) gymNfcController.onNewIntent(intent)
         handleDeepLinkIntent(intent)
     }
 

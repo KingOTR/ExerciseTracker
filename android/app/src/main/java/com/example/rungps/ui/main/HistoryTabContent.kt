@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,6 +25,8 @@ import com.example.rungps.feature.run.RunsViewModel
 fun HistoryTabContent(
     runsViewModel: RunsViewModel,
     onSelectRun: (Long) -> Unit,
+    onImportStrava: () -> Unit = {},
+    stravaImporting: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     val runs by runsViewModel.runs.collectAsState()
@@ -50,7 +53,14 @@ fun HistoryTabContent(
         }
 
         TabSectionCard(title = "Imports") {
-            Text("Strava PB import — connect in a future update.", style = MaterialTheme.typography.bodySmall)
+            androidx.compose.material3.Button(
+                onClick = onImportStrava,
+                enabled = !stravaImporting,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(if (stravaImporting) "Importing Strava…" else "Import Strava history (90d)")
+            }
+            Text("Syncs activities and personal bests to Firestore.", style = MaterialTheme.typography.bodySmall)
         }
     }
 }

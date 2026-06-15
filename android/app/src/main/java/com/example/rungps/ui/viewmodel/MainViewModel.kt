@@ -13,6 +13,7 @@ import com.example.rungps.feature.gym.GymViewModel
 import com.example.rungps.feature.run.RunsViewModel
 import com.example.rungps.sync.CloudSyncManager
 import com.example.rungps.sync.CloudSyncResult
+import com.example.rungps.sync.StravaHistorySync
 import com.example.rungps.tracking.TrackingService
 import com.example.rungps.tracking.TrackingState
 import com.example.rungps.tracking.TrackingUiState
@@ -33,6 +34,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _stravaUploading = MutableStateFlow(false)
     val stravaUploading: StateFlow<Boolean> = _stravaUploading.asStateFlow()
+    private val _stravaImportMessage = MutableStateFlow<String?>(null)
+    val stravaImportMessage: StateFlow<String?> = _stravaImportMessage.asStateFlow()
+    private val _stravaImporting = MutableStateFlow(false)
+    val stravaImporting: StateFlow<Boolean> = _stravaImporting.asStateFlow()
 
     val gymSessions: StateFlow<List<GymSessionEntity>> =
         repository.observeGymSessions()
@@ -70,6 +75,16 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
         ctx.startService(
             Intent(ctx, TrackingService::class.java).setAction(TrackingService.ACTION_STOP),
         )
+    }
+
+    fun importStravaHistory(daysBack: Int = 90, onResult: (String) -> Unit = {}) {
+        viewModelScope.launch {
+            _stravaImporting.value = true
+            val result = StravaHistorySync.importRecent(getApplication(), daysBack)
+            _stravaImportMessage.value = result.message
+            _stravaImporting.value = false
+            onResult(result.message)
+        }
     }
 
     fun uploadRunToStrava(runId: Long, onResult: (String) -> Unit = {}) {

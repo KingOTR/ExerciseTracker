@@ -45,6 +45,8 @@ fun RunTabContent(
     onGoTab: (String) -> Unit,
     onUploadStrava: (Long) -> Unit,
     stravaUploading: Boolean = false,
+    syncingMoyoung: Boolean = false,
+    onSyncMoyoung: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -95,7 +97,11 @@ fun RunTabContent(
             )
         } else {
             HealthConnectBanner(hc = hc)
-            BleWatchPanel(bleClient = bleClient)
+            BleWatchPanel(
+                bleClient = bleClient,
+                syncingMoyoung = syncingMoyoung,
+                onSyncMoyoung = onSyncMoyoung,
+            )
 
             TabSectionCard(title = "Quick start") {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

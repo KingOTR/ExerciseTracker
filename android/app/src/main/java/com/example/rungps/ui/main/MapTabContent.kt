@@ -22,6 +22,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.rungps.data.entity.RouteEntity
 import com.example.rungps.maps.MapOfflineRegionManager
+import com.example.rungps.ui.map.MapRoutePlannerPanel
 import com.example.rungps.tracking.TrackingUiState
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -51,6 +53,9 @@ fun MapTabContent(
     val context = LocalContext.current
     var showRoutes by remember { mutableStateOf(true) }
     var showOfflinePanel by remember { mutableStateOf(false) }
+    var showRoutePlanner by remember { mutableStateOf(false) }
+    val routeWaypoints = remember { mutableStateListOf<GeoPoint>() }
+    var plannedRoute by remember { mutableStateOf<List<GeoPoint>>(emptyList()) }
     val offlineState by MapOfflineRegionManager.state.collectAsState()
 
     DisposableEffect(Unit) {
@@ -82,7 +87,16 @@ fun MapTabContent(
                 Switch(checked = showOfflinePanel, onCheckedChange = { showOfflinePanel = it })
                 Text("Routes", style = MaterialTheme.typography.labelMedium)
                 Switch(checked = showRoutes, onCheckedChange = { showRoutes = it })
+                Text("Plan", style = MaterialTheme.typography.labelMedium)
+                Switch(checked = showRoutePlanner, onCheckedChange = { showRoutePlanner = it })
             }
+        }
+
+        if (showRoutePlanner) {
+            MapRoutePlannerPanel(
+                waypoints = routeWaypoints,
+                onPlannedRoute = { plannedRoute = it },
+            )
         }
 
         if (showOfflinePanel) {
@@ -113,6 +127,21 @@ fun MapTabContent(
                 },
                 update = { map ->
                     map.overlays.removeAll { it is Marker || it is Polyline }
+                    if (showRoutePlanner) {
+                        routeWaypoints.forEachIndexed { idx, point ->
+                            map.overlays.add(Marker(map).apply {
+                                position = point
+                                title = "WP $idx"
+                            })
+                        }
+                        if (plannedRoute.size >= 2) {
+                            map.overlays.add(Polyline().apply {
+                                setPoints(plannedRoute)
+                                outlinePaint.strokeWidth = 8f
+                                title = "Planned route"
+                            })
+                        }
+                    }
                     if (live.lastLat != null && live.lastLon != null) {
                         val marker = Marker(map).apply {
                             position = GeoPoint(live.lastLat!!, live.lastLon!!)
@@ -134,6 +163,21 @@ fun MapTabContent(
                     map.invalidate()
                 },
             )
+            if (showRoutePlanner) {
+                Row(
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    OutlinedButton(onClick = {
+                        val lat = live.lastLat ?: -33.8688
+                        val lon = live.lastLon ?: 151.2093
+                        routeWaypoints.add(GeoPoint(lat, lon))
+                    }) { Text("Add waypoint") }
+                    OutlinedButton(onClick = { routeWaypoints.clear(); plannedRoute = emptyList() }) {
+                        Text("Clear")
+                    }
+                }
+            }
         }
 
         if (showRoutes && routes.isNotEmpty()) {
